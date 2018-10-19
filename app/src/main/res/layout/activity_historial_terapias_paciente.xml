@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HistorialTerapiasPaciente">
+
+
+    <TextView
+        android:id="@+id/tvDocumentType"
+        android:layout_width="152dp"
+        android:layout_height="32dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/spnDocumentType"
+        android:layout_marginTop="32dp"
+        android:text="@string/documentType" />
+
+    <Spinner
+        android:id="@+id/spnDocumentType"
+        android:layout_width="321dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/etDocument"
+        android:layout_marginTop="76dp" />
+
+    <EditText
+        android:id="@+id/etDocument"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="142dp"
+        android:ems="10"
+        android:hint="@string/document"
+        android:inputType="" />
+
+    <ImageButton
+        android:id="@+id/ibtnSearchPatient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/etDocument"
+        android:layout_marginEnd="71dp"
+        app:srcCompat="@android:drawable/ic_menu_search" />
+
+    <EditText
+        android:id="@+id/etPatientName"
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="@string/Paciente"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/tvTherapiesHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="160dp"
+        android:layout_toEndOf="@+id/etDocument"
+        android:text="Ver terapias" />
+
+</RelativeLayout>
