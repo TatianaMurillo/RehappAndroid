@@ -17,4 +17,6 @@
         android:text="Terapias paciente"
         tools:layout_editor_absoluteX="116dp"
         tools:layout_editor_absoluteY="210dp" />
+
+
 </RelativeLayout>

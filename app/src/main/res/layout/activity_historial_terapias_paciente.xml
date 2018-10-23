@@ -63,6 +63,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="160dp"
         android:layout_toEndOf="@+id/etDocument"
+        android:layout_toRightOf="@id/etDocument"
+        android:onClick="listPatientTherapies"
         android:text="Ver terapias" />
 
 </RelativeLayout>

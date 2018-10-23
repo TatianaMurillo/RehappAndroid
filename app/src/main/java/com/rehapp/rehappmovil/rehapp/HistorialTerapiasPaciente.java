@@ -25,4 +25,8 @@ public class HistorialTerapiasPaciente extends AppCompatActivity {
         });
 
     }
+
+    public void listPatientTherapies(View view) {
+
+    }
 }

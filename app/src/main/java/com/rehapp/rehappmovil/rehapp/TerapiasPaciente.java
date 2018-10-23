@@ -9,5 +9,8 @@ public class TerapiasPaciente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terapias_paciente);
+
+
+
     }
 }
