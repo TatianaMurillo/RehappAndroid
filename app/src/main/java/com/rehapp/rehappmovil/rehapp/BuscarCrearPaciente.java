@@ -5,10 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,7 @@ public class BuscarCrearPaciente extends AppCompatActivity implements Callback<A
 
     private ImageButton ibtnSearchPatient ;
     private ImageButton ibtnAddPatient;
+    private EditText etDocument;
 
 
     @Override
@@ -29,14 +32,23 @@ public class BuscarCrearPaciente extends AppCompatActivity implements Callback<A
 
         ibtnSearchPatient= findViewById(R.id.ibtnSearchPatient);
         ibtnAddPatient= findViewById(R.id.ibtnAddPatient);
+        etDocument= findViewById(R.id.etDocument);
 
-        ibtnSearchPatient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BuscarCrearPaciente.this,HistorialTerapiasPaciente.class);
-                startActivity(intent);
-            }
-        });
+
+
+
+
+
+             ibtnSearchPatient.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+
+                     Intent intent = new Intent(BuscarCrearPaciente.this, HistorialTerapiasPaciente.class);
+                     intent.putExtra( "document",etDocument.getText().toString());
+                     startActivity(intent);
+                 }
+             });
+
 
         ibtnAddPatient.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,9 +59,9 @@ public class BuscarCrearPaciente extends AppCompatActivity implements Callback<A
         });
 
 
-        Call<ArrayList<DocumentType>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
+      //  Call<ArrayList<DocumentType>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
 
-        call.enqueue(this);
+        //call.enqueue(this);
 
     }
 

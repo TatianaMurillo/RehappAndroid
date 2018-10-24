@@ -1,16 +1,99 @@
 package com.rehapp.rehappmovil.rehapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class TerapiasPaciente extends AppCompatActivity {
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Models.Therapy;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class TerapiasPaciente extends AppCompatActivity implements Callback<Therapy> {
+
+    private ListView lvTherapies;
+    private  ArrayList<String> itemExample= new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terapias_paciente);
 
+       lvTherapies= findViewById(R.id.lvTherapies);
 
+        itemExample.add("Terapia 1");
+        itemExample.add("Terapia 2");
+        itemExample.add("Terapia 3");
+        itemExample.add("Terapia 4");
+
+
+
+        ArrayAdapter<String> arrayAdapter =
+                new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, itemExample);
+        // Set The Adapter
+        lvTherapies.setAdapter(arrayAdapter);
+
+
+        lvTherapies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedmovie=itemExample.get(position);
+                Toast.makeText(getApplicationContext(), "therapy selected : "+selectedmovie,   Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(TerapiasPaciente.this,PatientTherapy.class);
+                startActivity(intent);
+            }
+            });
+
+
+        //   Call<Therapy> call = TherapyApiAdapter.getApiService().getTherapies("malaria","json","30022715");
+
+       // call.enqueue(this);
+
+    }
+
+    @Override
+    public void onResponse(Call<Therapy> call, Response<Therapy> response) {
+        if(response.isSuccessful())
+        {
+
+            Therapy therapy= response.body();
+            List<String> therapiesTitle = new ArrayList<String>();
+
+
+            for (int i=0;i<therapy.getResultList().getResult().length;i++){
+
+
+                    Log.d("","el titulo es " + therapy.getResultList().getResult()[i].getTitle());
+                    therapiesTitle.add(therapy.getResultList().getResult()[i].getTitle());
+
+                }
+
+            ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_terapias_paciente, therapiesTitle);
+
+            lvTherapies.setAdapter(adapter);
+
+            }
+
+        }
+
+
+    @Override
+    public void onFailure(Call<Therapy>call, Throwable t) {
+        Log.d("","esta fallando mameeee");
+
+        Log.d("", t.getMessage());
 
     }
 }

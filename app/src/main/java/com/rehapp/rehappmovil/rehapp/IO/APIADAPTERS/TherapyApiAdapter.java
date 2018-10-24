@@ -12,7 +12,7 @@ public class TherapyApiAdapter {
 
     private static TherapyApiService API_SERVICE;
 
-    public  TherapyApiService getApiService() {
+    public static TherapyApiService getApiService() {
 
         // Creamos un interceptor y le indicamos el log level a usar
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -22,7 +22,7 @@ public class TherapyApiAdapter {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);
 
-        String baseUrl = "https://www.ebi.ac.uk/europepmc/webservices/rest/search?";
+        String baseUrl = "https://www.ebi.ac.uk/europepmc/webservices/rest/";
 
         if (API_SERVICE == null) {
             Retrofit retrofit = new Retrofit.Builder()

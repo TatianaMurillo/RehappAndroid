@@ -38,7 +38,7 @@
         android:layout_marginTop="174dp"
         android:ems="10"
         android:hint="@string/document"
-        android:inputType="" />
+        android:inputType="number|text" />
 
     <ImageButton
         android:id="@+id/ibtnAddPatient"

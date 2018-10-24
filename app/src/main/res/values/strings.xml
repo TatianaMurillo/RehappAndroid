@@ -3,4 +3,5 @@
     <string name="document">Documento</string>
     <string name="documentType">Tipo de documento</string>
     <string name="Paciente">Paciente</string>
+    <string name="ParametrosFisiologicos">Parámetros Fisiológicos al inicio de la sesión</string>
 </resources>

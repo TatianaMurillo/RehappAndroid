@@ -1,6 +1,5 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
-import com.rehapp.rehappmovil.rehapp.IO.RESPONSES.DocumentTypesResponse;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
 
 import java.util.ArrayList;

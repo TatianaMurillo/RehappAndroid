@@ -11,8 +11,8 @@ import retrofit2.http.Query;
 public interface TherapyApiService {
 
 
-    @GET("query={query}&format={format}&id={id}")
-    Call<ArrayList<Therapy>> getTherapies(
+    @GET("search?")
+    Call<Therapy> getTherapies(
             @Query("query") String query,
             @Query("format") String format,
             @Query("id") String id);
