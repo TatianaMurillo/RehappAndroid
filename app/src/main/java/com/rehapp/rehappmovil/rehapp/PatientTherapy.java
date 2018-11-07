@@ -1,8 +1,13 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -10,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -75,9 +81,21 @@ public class PatientTherapy extends AppCompatActivity {
         //lyParameter.addView(tvParameter);
         //lyParameter.addView(etParameter);
 
+
+
+        //creo el textView
+        TextView tvExercise  = new TextView(PatientTherapy.this);
+        tvExercise.setText("Ver Ejercicios");
+        tvExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PatientTherapy.this, ExerciseDetails.class);
+            }
+        });
+
+        lyMain.addView(tvExercise);
         lyMain.addView(tlParameter, TableLayout.LayoutParams.MATCH_PARENT);
 
-
-
     }
+
 }

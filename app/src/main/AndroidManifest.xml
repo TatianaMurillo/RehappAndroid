@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CrearPaciente"></activity>
+        <activity android:name=".CrearPaciente" />
         <activity android:name=".BuscarCrearPaciente">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BuscarPaciente"></activity>
+        <activity android:name=".BuscarPaciente" />
         <activity android:name=".HistorialTerapiasPaciente">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,7 +30,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PatientTherapy"></activity>
+        <activity android:name=".PatientTherapy" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ExerciseDetails">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

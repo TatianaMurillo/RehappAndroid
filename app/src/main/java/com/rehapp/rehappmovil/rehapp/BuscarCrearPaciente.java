@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
@@ -23,8 +25,7 @@ public class BuscarCrearPaciente extends AppCompatActivity implements Callback<A
     private ImageButton ibtnSearchPatient ;
     private ImageButton ibtnAddPatient;
     private EditText etDocument;
-
-
+   private  TextView tvExercise;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +34,18 @@ public class BuscarCrearPaciente extends AppCompatActivity implements Callback<A
         ibtnSearchPatient= findViewById(R.id.ibtnSearchPatient);
         ibtnAddPatient= findViewById(R.id.ibtnAddPatient);
         etDocument= findViewById(R.id.etDocument);
+        tvExercise=findViewById(R.id.tvExercise);
+
+        tvExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BuscarCrearPaciente.this, ExerciseDetails.class);
+                startActivity(intent);
+            }
+        });
 
 
-
-
-
-
-             ibtnSearchPatient.setOnClickListener(new View.OnClickListener() {
+        ibtnSearchPatient.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
 
