@@ -63,11 +63,6 @@
         android:layout_marginRight="31dp"
         app:srcCompat="@android:drawable/ic_menu_search" />
 
-        <TextView
-            android:text="@string/VerEjercicios"
-            android:id="@+id/tvExercise"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"></TextView>
 
 
 </RelativeLayout>

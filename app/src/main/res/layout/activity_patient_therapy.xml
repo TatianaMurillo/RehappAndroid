@@ -1,33 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PatientTherapy">
+    tools:context=".PatientTherapy"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:id="@+id/lyMain">
-
-        <TextView
-            android:id="@+id/textView"
+        android:fillViewport="true">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:text="@string/ParametrosFisiologicos"
-            android:textAlignment="center"
-            android:textSize="25sp" />
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tvPhisiologicalParameters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/lyMain"
+                android:text="@string/ParametrosFisiologicos"
+                android:textAlignment="center"
+                android:textSize="15sp" />
 
 
+            <LinearLayout
+                android:id="@+id/lyMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="25dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvWatchExercises"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="105dp"
+                android:layout_below="@id/lyMain"
+                android:text="@string/VerEjercicios"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
 
 
-
-    </LinearLayout>
-
-
-</RelativeLayout>
+    </ScrollView>
+</LinearLayout>

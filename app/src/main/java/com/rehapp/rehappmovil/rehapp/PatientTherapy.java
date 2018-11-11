@@ -25,6 +25,7 @@ public class PatientTherapy extends AppCompatActivity {
 
     private LinearLayout lyMain;
     LinearLayout lyParameter;
+    private TextView tvWatchExercises;
     TextView tvParameter;
     EditText etParameter;
     TableLayout tlParameter;
@@ -38,6 +39,15 @@ public class PatientTherapy extends AppCompatActivity {
         setContentView(R.layout.activity_patient_therapy);
 
         lyMain = findViewById(R.id.lyMain);
+        //creo el textView
+        tvWatchExercises= findViewById(R.id.tvWatchExercises);
+        tvWatchExercises.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PatientTherapy.this, ExerciseDetails.class);
+                startActivity(intent);
+            }
+        });
 
         itemExample.add("FC");
         itemExample.add("Presion Arterial Diastolica");
@@ -82,18 +92,6 @@ public class PatientTherapy extends AppCompatActivity {
         //lyParameter.addView(etParameter);
 
 
-
-        //creo el textView
-        TextView tvExercise  = new TextView(PatientTherapy.this);
-        tvExercise.setText("Ver Ejercicios");
-        tvExercise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PatientTherapy.this, ExerciseDetails.class);
-            }
-        });
-
-        lyMain.addView(tvExercise);
         lyMain.addView(tlParameter, TableLayout.LayoutParams.MATCH_PARENT);
 
     }
