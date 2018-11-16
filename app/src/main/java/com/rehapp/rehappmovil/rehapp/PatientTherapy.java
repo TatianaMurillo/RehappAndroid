@@ -44,7 +44,7 @@ public class PatientTherapy extends AppCompatActivity {
         tvWatchExercises.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PatientTherapy.this, ExerciseDetails.class);
+                Intent intent = new Intent(PatientTherapy.this, TherapyDetail.class);
                 startActivity(intent);
             }
         });

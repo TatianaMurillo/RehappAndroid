@@ -2,7 +2,16 @@
     <string name="app_name">Rehapp</string>
     <string name="document">Documento</string>
     <string name="documentType">Tipo de documento</string>
-    <string name="Paciente">Paciente</string>
-    <string name="ParametrosFisiologicos">Parámetros Fisiológicos al inicio de la sesión</string>
-    <string name="VerEjercicios"> Ver ejercicios</string>
+    <string name="Patient">Paciente</string>
+    <string name="phisiologicalParameters">Parámetros Fisiológicos al inicio de la sesión</string>
+
+    <string name="watchExercises"> Ver ejercicios</string>
+    <string name="forgotYourPassword">¿ Olvidaste tu contraseña ?</string>
+    <string name="register"> ¡Registrate! </string>
+    <string name="user"> Usuario </string>
+    <string name="password"> Contraseña </string>
+    <string name="login"> Iniciar Sesión </string>
+    <string name="watchTherapies"> Ver Terapias </string>
+
+    <string name="welcome"> Bienvenido </string>
 </resources>

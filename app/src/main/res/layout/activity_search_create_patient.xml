@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BuscarCrearPaciente">
+    tools:context=".SearchCreatePatient">
 
 
     <TextView
@@ -13,29 +13,29 @@
         android:layout_height="32dp"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/spnDocumentType"
-        android:layout_alignLeft="@id/spnDocumentType"
-        android:layout_marginTop="53dp"
+        android:layout_alignLeft="@+id/spnDocumentType"
+        android:layout_marginTop="123dp"
         android:text="@string/documentType" />
 
     <Spinner
         android:id="@+id/spnDocumentType"
         android:layout_width="321dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/etDocument"
-        android:layout_alignLeft="@id/etDocument"
-        android:layout_marginTop="99dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="173dp" />
 
     <EditText
         android:id="@+id/etDocument"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="174dp"
+        android:layout_alignStart="@+id/tvDocumentType"
+        android:layout_alignLeft="@+id/tvDocumentType"
+        android:layout_marginTop="239dp"
         android:ems="10"
         android:hint="@string/document"
         android:inputType="number|text" />
@@ -49,6 +49,7 @@
         android:layout_alignTop="@+id/ibtnSearchPatient"
         android:layout_marginEnd="109dp"
         android:layout_marginRight="109dp"
+        android:onClick="createPatient"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <ImageButton
@@ -61,8 +62,20 @@
         android:layout_marginBottom="194dp"
         android:layout_marginEnd="31dp"
         android:layout_marginRight="31dp"
+        android:onClick="searchPatient"
         app:srcCompat="@android:drawable/ic_menu_search" />
 
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="164dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="14dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/welcome" />
 
 
 </RelativeLayout>

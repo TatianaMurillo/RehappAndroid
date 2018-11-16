@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TherapyExerciseDetail"
+    android:orientation="vertical">
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Velocidad"
+        android:layout_margin="10sp"/>
+    <EditText
+        android:id="@+id/etExerciseSpeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_margin="10sp"
+     />
+    <TextView
+        android:id="@+id/tvFrequent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Frecuencia"
+        android:layout_margin="10sp"/>
+    <EditText
+        android:id="@+id/etExerciseFrequent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_margin="10sp"
+   />
+    <TextView
+        android:id="@+id/tvIntensity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Intensidad"
+        android:layout_margin="10sp"/>
+    <EditText
+        android:id="@+id/etExerciseIntensity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_margin="10sp"
+        />
+
+    <TextView
+        android:id="@+id/tvExerciseObservations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Observaciones"
+        android:layout_margin="10sp"/>
+
+    <EditText
+        android:id="@+id/etExerciseObservations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_margin="10sp"
+        />
+
+    <TextView
+        android:id="@+id/tvExerciseConditions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Conditions"
+        android:layout_margin="10sp"
+        />
+    <EditText
+        android:id="@+id/etExerciseConditions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp"
+        />
+    <TextView
+        android:id="@+id/tvExercisePreconditions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Precondiciones"
+        android:layout_margin="10sp"
+        />
+    <EditText
+        android:id="@+id/etExercisePreconditions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_margin="10sp"
+        />
+    <TextView
+        android:id="@+id/tvExerciseVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ver video"
+        android:onClick="watchVideo"
+        android:layout_margin="10sp"
+        android:layout_gravity="end"
+        />
+</LinearLayout>
+</ScrollView>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".TherapyDetail">
+
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="end">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDate"
+        android:layout_margin="5sp"
+        android:text="Hora"
+        />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etDate"
+        android:layout_margin="5sp"
+        android:text=""
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvHour"
+      android:layout_margin="5sp"
+        android:text="Fecha"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etHour"
+        android:layout_margin="5sp"
+        android:text=""
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTherapyDuration"
+        android:layout_margin="5sp"
+        android:text="Duracion"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etTherapyDuration"
+        android:layout_margin="5sp"
+        android:text=""
+        />
+
+    <TextView
+        android:id="@+id/tvIdTherapy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5sp"
+        android:text="codigo terapia" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etIdTherapy"
+        android:layout_margin="5sp"
+        android:text=""
+        />
+
+</LinearLayout>
+
+    <TextView
+        android:id="@+id/tvTherapySequence"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:text="Terapia # 1"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/tvTherapist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:text="TextView" />
+    <Spinner
+        android:id="@+id/spnTherapist"
+        android:layout_width="241dp"
+        android:layout_height="49dp"
+        android:layout_margin="10dp"/>
+
+
+
+    <TextView
+        android:id="@+id/tvInstitucion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:text="Institucion" />
+
+    <Spinner
+        android:id="@+id/spnInstitution"
+        android:layout_width="284dp"
+        android:layout_height="57dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="170dp" />
+
+    <TextView
+        android:id="@+id/tvPhisiologicalParametersIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PhisiologicalParametersIn"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/tvPhisiologicalParametersOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PhisiologicalParametersOut"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/tvWatchExercises"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/watchExercises"
+        android:onClick="watchExercises"
+        android:layout_gravity="end"/>
+
+    <TextView
+        android:id="@+id/tvAdditionalInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Informacion Adicional"
+        android:onClick="therapyAdditionalInfo"
+        android:layout_gravity="center"/>
+</LinearLayout>

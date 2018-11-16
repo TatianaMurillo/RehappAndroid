@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistorialTerapiasPaciente">
+    tools:context=".SearchPatient">
+
+
+
 
 
     <TextView
@@ -58,7 +61,7 @@
         android:layout_centerInParent="true"
         android:ems="10"
         android:enabled="false"
-        android:hint="@string/Paciente"
+        android:hint="@string/Patient"
         android:inputType="textPersonName" />
 
     <TextView
@@ -69,8 +72,8 @@
         android:layout_marginBottom="160dp"
         android:layout_toEndOf="@+id/etDocument"
         android:layout_toRightOf="@id/etDocument"
-        android:clickable="true"
-        android:onClick="listPatientTherapies"
-        android:text="Ver terapias" />
+        android:onClick="watchTherapies"
+        android:text="@string/watchTherapies" />
+
 
 </RelativeLayout>

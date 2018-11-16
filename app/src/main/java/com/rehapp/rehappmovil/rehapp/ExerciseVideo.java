@@ -1,23 +1,16 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.app.ProgressDialog;
-import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-public class ExerciseDetails extends AppCompatActivity  {
+public class ExerciseVideo extends AppCompatActivity {
 
 
     ProgressDialog prgsDialog;
@@ -25,18 +18,19 @@ public class ExerciseDetails extends AppCompatActivity  {
     int position;
     String videoUrl = "https://drive.google.com/drive/folders/13U9F_7WxEOdCWsmGeHlxUsJu6eZ-Ny2I/videoTati.mp4";
     MediaController mediaController;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_exercise_video);
 
-
-        setContentView(R.layout.activity_exercise_details);
 
 
         videoView = findViewById(R.id.videoView);
 
 
-        prgsDialog = new ProgressDialog(ExerciseDetails.this);
+        prgsDialog = new ProgressDialog(ExerciseVideo.this);
 
         prgsDialog.setMessage("Loading...");
 
@@ -50,7 +44,7 @@ public class ExerciseDetails extends AppCompatActivity  {
 
         if (mediaController == null) {
 
-            mediaController = new MediaController(ExerciseDetails.this);
+            mediaController = new MediaController(ExerciseVideo.this);
 
         }
 
@@ -113,5 +107,4 @@ public class ExerciseDetails extends AppCompatActivity  {
 
 
     }
-
 }
