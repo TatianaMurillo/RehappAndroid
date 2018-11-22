@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".TherapyExercises">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Therapy Exercises"
-        tools:layout_editor_absoluteX="135dp"
-        tools:layout_editor_absoluteY="273dp" />
 
     <ListView
         android:id="@+id/lvExercises"

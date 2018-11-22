@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/lyMain"
-                android:text="@string/phisiologicalParameters"
+                android:text="@string/phisiologicalParametersOut"
                 android:textAlignment="center"
                 android:textSize="15sp" />
 

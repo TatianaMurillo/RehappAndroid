@@ -61,7 +61,7 @@
         android:layout_centerInParent="true"
         android:ems="10"
         android:enabled="false"
-        android:hint="@string/Patient"
+        android:hint="@string/patient"
         android:inputType="textPersonName" />
 
     <TextView
