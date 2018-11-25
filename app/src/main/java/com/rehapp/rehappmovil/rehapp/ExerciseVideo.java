@@ -27,6 +27,11 @@ public class ExerciseVideo extends AppCompatActivity {
 
 
 
+
+
+
+
+
         videoView = findViewById(R.id.videoView);
 
 

@@ -1,12 +1,15 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class TherapyDetail extends AppCompatActivity {
@@ -25,9 +28,30 @@ private Toolbar toolbar;
 
         tvTherapySequence.setText("Terapia # " + (therapySelected+1));
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater li = LayoutInflater.from(this);
+        View customView = li.inflate(R.layout.activity_menu_items, null);
+        mActionBar.setCustomView(customView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        ImageButton leftPage = (ImageButton)    customView.findViewById(R.id.left);
+        leftPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ...
+            }
+        });
+
+        ImageButton rightPage = (ImageButton) customView.findViewById(R.id.right);
+        rightPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ...
+            }
+        });
+
+
 
 
     }
@@ -42,34 +66,4 @@ private Toolbar toolbar;
         startActivity(intent);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.menu,menu);
-
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        switch(item.getItemId())
-        {
-            case R.id.back:
-                intent = new Intent(this, TherapyDetail.class);
-                startActivity(intent);
-                break;
-            case R.id.future:
-                 intent = new Intent(this, ExerciseVideo.class);
-                startActivity(intent);
-                break;
-            case R.id.home:
-                intent = new Intent(this, TherapyDetail.class);
-                startActivity(intent);
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -1,12 +1,15 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -59,6 +62,35 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         //   Call<Therapy> call = TherapyApiAdapter.getApiService().getTherapies("malaria","json","30022715");
 
         // call.enqueue(this);
+
+
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater li = LayoutInflater.from(this);
+        View customView = li.inflate(R.layout.activity_menu_items, null);
+        mActionBar.setCustomView(customView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        ImageButton leftPage = (ImageButton)    customView.findViewById(R.id.left);
+        leftPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ...
+            }
+        });
+
+        ImageButton rightPage = (ImageButton) customView.findViewById(R.id.right);
+        rightPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ...
+            }
+        });
+
+
+
+
+
 
 
     }
