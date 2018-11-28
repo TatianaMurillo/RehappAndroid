@@ -59,7 +59,7 @@ public class ExerciseVideo extends AppCompatActivity {
 
 
             mediaController.setAnchorView(videoView);
-            Uri video = Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
+            Uri video = Uri.parse("https://drive.google.com/file/d/1AXhwwXLnYw0ZoXcypDeiyawuoGDe2_TF/view?fbclid=IwAR1aTWcyOgV_N2_3VPDCWCVwnI7e7SjxWOn_HLObVRXNDoK4CE_5pm0OlaQ");
             videoView.setMediaController(mediaController);
             videoView.setVideoURI(video);
 

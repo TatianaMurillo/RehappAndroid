@@ -7,83 +7,99 @@
     tools:context=".TherapyExerciseDetail"
     android:orientation="vertical">
 
- <LinearLayout
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:orientation="vertical">
-
-    <TextView
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+        <TableRow>
+           <TextView
         android:id="@+id/tvSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Velocidad"
+        android:layout_span="1"
         android:layout_margin="10sp"/>
-    <EditText
-        android:id="@+id/etExerciseSpeed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_margin="10sp"
-     />
+           <EditText
+               android:id="@+id/etExerciseSpeed"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_margin="10sp"
+               android:layout_span="4"
+               android:text="" />
+       </TableRow>
+        <TableRow>
     <TextView
         android:id="@+id/tvFrequent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Frecuencia"
+        android:layout_span="1"
         android:layout_margin="10sp"/>
     <EditText
         android:id="@+id/etExerciseFrequent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
+        android:layout_span="4"
         android:layout_margin="10sp"
    />
+    </TableRow>
+    <TableRow>
     <TextView
         android:id="@+id/tvIntensity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Intensidad"
+        android:layout_span="1"
         android:layout_margin="10sp"/>
     <EditText
         android:id="@+id/etExerciseIntensity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
+        android:layout_span="4"
         android:layout_margin="10sp"
         />
-
+    </TableRow>
+    <TableRow >
     <TextView
         android:id="@+id/tvExerciseObservations"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Observaciones"
+        android:layout_span="1"
         android:layout_margin="10sp"/>
-
     <EditText
         android:id="@+id/etExerciseObservations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_span="4"
         android:text=""
         android:layout_margin="10sp"
         />
-
-    <TextView
+    </TableRow>
+    <TableRow >
+        <TextView
         android:id="@+id/tvExerciseConditions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Conditions"
+        android:layout_span="1"
         android:layout_margin="10sp"
         />
-    <EditText
-        android:id="@+id/etExerciseConditions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10sp"
-        />
+        <EditText
+            android:id="@+id/etExerciseConditions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:layout_span="4" />
+    </TableRow>
+    <TableRow >
     <TextView
         android:id="@+id/tvExercisePreconditions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_span="1"
         android:text="Precondiciones"
         android:layout_margin="10sp"
         />
@@ -92,8 +108,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
+        android:layout_span="4"
         android:layout_margin="10sp"
         />
+    </TableRow>
+    <TableRow  >
     <TextView
         android:id="@+id/tvExerciseVideo"
         android:layout_width="wrap_content"
@@ -101,7 +120,10 @@
         android:text="Ver video"
         android:onClick="watchVideo"
         android:layout_margin="10sp"
+        android:layout_span="4"
         android:layout_gravity="end"
         />
-</LinearLayout>
+    </TableRow>
+    </TableLayout>
+
 </ScrollView>

@@ -44,37 +44,37 @@
         android:id="@+id/ibtnAddPatient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/ibtnSearchPatient"
-        android:layout_marginEnd="109dp"
-        android:layout_marginRight="109dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="133dp"
+        android:layout_toEndOf="@+id/etDocument"
+        android:layout_toRightOf="@id/etDocument"
+        android:background="#00000000"
         android:onClick="createPatient"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@drawable/add" />
 
     <ImageButton
         android:id="@+id/ibtnSearchPatient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="194dp"
-        android:layout_marginEnd="31dp"
-        android:layout_marginRight="31dp"
+        android:layout_alignTop="@+id/ibtnAddPatient"
+        android:layout_marginEnd="33dp"
+        android:layout_marginRight="33dp"
+        android:background="#00000000"
         android:onClick="searchPatient"
-        app:srcCompat="@android:drawable/ic_menu_search" />
+        app:srcCompat="@drawable/search" />
 
     <TextView
         android:id="@+id/tvWelcome"
-        android:layout_width="164dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="21dp"
         android:layout_marginEnd="14dp"
         android:layout_marginRight="14dp"
-        android:layout_marginTop="18dp"
         android:text="@string/welcome" />
 
 

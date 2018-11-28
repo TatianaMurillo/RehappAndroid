@@ -12,43 +12,82 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.rehapp.rehappmovil.rehapp.Models.Therapy;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyExercise;
+
 import java.util.ArrayList;
 
 public class TherapyExercises extends AppCompatActivity {
 
     private ListView lvExercises;
-    private ArrayList<String> itemExample = new ArrayList<String>();
+    private ArrayList<TherapyExercise> exercises = new ArrayList<TherapyExercise>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_therapy_exercises);
 
-        itemExample.add("Ejercicio 1");
-        itemExample.add("Ejercicio 2");
-        itemExample.add("Ejercicio 3");
-        itemExample.add("Ejercicio 4");
+
+
+
+        exercises.add(new TherapyExercise(false,"Ejercicio 1"));
+        exercises.add(new TherapyExercise(false,"Ejercicio 2"));
+        exercises.add(new TherapyExercise(false,"Ejercicio 3"));
+        exercises.add(new TherapyExercise(false,"Ejercicio 4"));
 
         lvExercises = findViewById(R.id.lvExercises);
 
-
-        ArrayAdapter<String> arrayAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemExample);
-        // Set The Adapter
-        lvExercises.setAdapter(arrayAdapter);
+        final TherapyExercisesAdapter adapter = new TherapyExercisesAdapter(this,exercises);
+        lvExercises.setAdapter(adapter);
 
 
 
         lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedmovie = itemExample.get(position);
-                Toast.makeText(getApplicationContext(), "Ejercicio selected : " + selectedmovie, Toast.LENGTH_LONG).show();
+
                 Intent intent = new Intent(TherapyExercises.this, TherapyExerciseDetail.class);
                 intent.putExtra( "ejercicioSelected",position);
                 startActivity(intent);
+
             }
         });
 
+        lvExercises.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selectedmovie = exercises.get(position).getExerciseName();
+                Toast.makeText(getApplicationContext(), "Ejercicio selected : " + selectedmovie, Toast.LENGTH_LONG).show();
+
+
+                TherapyExercise model = exercises.get(position);
+
+                if(model.isSelected())
+                {
+                    model.setSelected(false);
+                }else
+                {
+                    model.setSelected(true);
+                }
+
+                exercises.set(position, model);
+
+                adapter.updateRecords(exercises);
+                //Intent intent = new Intent(TherapyExercises.this, TherapyExerciseDetail.class);
+                //intent.putExtra( "ejercicioSelected",position);
+
+                //startActivity(intent);
+
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         ActionBar mActionBar = getSupportActionBar();

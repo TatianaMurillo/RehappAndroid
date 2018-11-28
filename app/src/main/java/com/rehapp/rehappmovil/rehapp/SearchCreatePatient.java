@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
 
@@ -37,7 +38,8 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             tvWelcome = findViewById(R.id.tvWelcome);
 
             userActive = getIntent().getSerializableExtra("userActive").toString();
-            tvWelcome.setText("¡Hola " + userActive +"!");
+            tvWelcome.setText( tvWelcome.getText()  +  userActive +"!");
+
 
 
 
@@ -63,7 +65,20 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             rightPage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // ...
+
+                    // debe antes validar que se haya seleccionado tipo de documento y documento para redirigir
+                    String document = etDocument.getText().toString();
+                    if(!document.isEmpty()) {
+
+                        Intent intent = new Intent(SearchCreatePatient.this, SearchPatient.class);
+                        intent.putExtra("document",document);
+                        startActivity(intent);
+                    }else
+                    {
+                        Toast.makeText(getApplicationContext(),"Debe ingresar el documento del paciente.",Toast.LENGTH_LONG).show();
+
+                    }
+
                 }
             });
 

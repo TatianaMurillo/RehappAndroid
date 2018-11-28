@@ -39,7 +39,9 @@ private Toolbar toolbar;
         leftPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // ...
+                Intent intent = new Intent(TherapyDetail.this, HistoryTherapiesPatient.class);
+                startActivity(intent);
+
             }
         });
 
@@ -47,7 +49,9 @@ private Toolbar toolbar;
         rightPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // ...
+                Intent intent = new Intent(TherapyDetail.this, TherapyExercises.class);
+                startActivity(intent);
+
             }
         });
 

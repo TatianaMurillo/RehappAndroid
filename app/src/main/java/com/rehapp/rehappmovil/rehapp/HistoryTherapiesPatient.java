@@ -25,8 +25,8 @@ import retrofit2.Response;
 public class HistoryTherapiesPatient extends AppCompatActivity implements Callback<Therapy> {
 
     private ListView lvTherapies;
-    private ArrayList<String> itemExample = new ArrayList<String>();
-
+    private ArrayList<Therapy> therapies = new ArrayList<Therapy>();
+    final Therapy therapy= new Therapy();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,14 +35,28 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
         lvTherapies = findViewById(R.id.lvTherapies);
 
-        itemExample.add("Terapia 1");
-        itemExample.add("Terapia 2");
-        itemExample.add("Terapia 3");
-        itemExample.add("Terapia 4");
+
+        therapy.setTherapy_id(1);
+        therapy.setTherapist_id(1);
+        therapy.setPatient_id(1);
+        therapy.setTherapy_institution_id(1);
+        therapy.setTherapy_description("Terapia 1");
+        therapy.setTherapy_date("");
+        therapy.setTherapy_time("");
+        therapy.setTherapy_total_duration(2.2);
+        therapy.setTherapy_observation("");
+        therapy.setTherapy_sequence(2);
+        therapy.setTherapy_achieved_the_goal(true);
 
 
-        ArrayAdapter<String> arrayAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, itemExample);
+        therapies.add(therapy);
+        therapies.add(therapy);
+        therapies.add(therapy);
+        therapies.add(therapy);
+
+
+        ArrayAdapter<Therapy> arrayAdapter =
+                new ArrayAdapter<Therapy>(this, android.R.layout.simple_list_item_1, therapies);
         // Set The Adapter
         lvTherapies.setAdapter(arrayAdapter);
 
@@ -50,10 +64,11 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         lvTherapies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedmovie = itemExample.get(position);
-                Toast.makeText(getApplicationContext(), "therapy selected : " + selectedmovie, Toast.LENGTH_LONG).show();
+                Therapy selectedTherapy = therapies.get(position);
+                Toast.makeText(getApplicationContext(), "therapy selected : " + selectedTherapy.getTherapy_description(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyDetail.class);
-                intent.putExtra( "therapySelected",position);
+                intent.putExtra("TherapySelected", therapy);
+
                 startActivity(intent);
             }
         });
@@ -75,7 +90,9 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         leftPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // ...
+                Intent intent = new Intent(HistoryTherapiesPatient.this, SearchPatient.class);
+                startActivity(intent);
+
             }
         });
 
@@ -83,7 +100,9 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         rightPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // ...
+                Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyExercises.class);
+                startActivity(intent);
+
             }
         });
 
@@ -95,9 +114,19 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
     }
 
-
     @Override
     public void onResponse(Call<Therapy> call, Response<Therapy> response) {
+
+    }
+
+    @Override
+    public void onFailure(Call<Therapy> call, Throwable t) {
+
+    }
+
+/*
+    @Override
+   public void onResponse(Call<Therapy> call, Response<Therapy> response) {
         if (response.isSuccessful()) {
 
             Therapy therapy = response.body();
@@ -124,5 +153,5 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
     }
 
-
+*/
 }
