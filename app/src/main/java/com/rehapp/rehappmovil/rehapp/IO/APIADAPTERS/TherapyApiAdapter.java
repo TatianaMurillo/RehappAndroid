@@ -22,7 +22,7 @@ public class TherapyApiAdapter {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);
 
-        String baseUrl = "https://www.ebi.ac.uk/europepmc/webservices/rest/";
+        String baseUrl = "http://127.0.0.1:8000/";
 
         if (API_SERVICE == null) {
             Retrofit retrofit = new Retrofit.Builder()

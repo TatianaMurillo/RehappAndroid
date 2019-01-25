@@ -7,12 +7,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Models.Therapy;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 
@@ -26,7 +32,12 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
         private ImageButton ibtnAddPatient;
         private TextView tvWelcome;
         private EditText etDocument;
+        private Spinner spnDocumentType;
         private String userActive;
+
+        ArrayList<DocumentType> documentTypes;
+        ArrayList<String> documentTypeNames= new ArrayList<String>();
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -36,16 +47,18 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             ibtnAddPatient= findViewById(R.id.ibtnAddPatient);
             etDocument= findViewById(R.id.etDocument);
             tvWelcome = findViewById(R.id.tvWelcome);
+            spnDocumentType= findViewById(R.id.spnDocumentType);
 
             userActive = getIntent().getSerializableExtra("userActive").toString();
-            tvWelcome.setText( tvWelcome.getText()  +  userActive +"!");
+            tvWelcome.setText( "¡ " +tvWelcome.getText() +" "+  userActive +" !");
 
 
 
 
-            //  Call<ArrayList<DocumentType>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
+            Call<ArrayList<DocumentType>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
 
-            //call.enqueue(this);
+            call.enqueue(this);
+
             ActionBar mActionBar = getSupportActionBar();
             mActionBar.setDisplayShowHomeEnabled(false);
             mActionBar.setDisplayShowTitleEnabled(false);
@@ -92,16 +105,26 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             if(response.isSuccessful())
             {
 
-                ArrayList<DocumentType> documentTypes= response.body();
+                documentTypes= response.body();
 
-                Log.d("","el tamaño es " + documentTypes.size());
 
+
+                documentTypeNames.add("Seleccione...");
+                for(DocumentType documentType: documentTypes)
+                {
+                    documentTypeNames.add(documentType.getDocument_type_name()+"-"+documentType.getDocument_type_description());
+                }
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, documentTypeNames);
+
+                spnDocumentType.setAdapter(arrayAdapter);
+                spnDocumentType.setSelection(0);
             }
         }
 
         @Override
         public void onFailure(Call<ArrayList<DocumentType>> call, Throwable t) {
-
+            Log.d("falló","el error es " + t.getMessage());
         }
 
 

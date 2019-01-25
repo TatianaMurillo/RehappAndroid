@@ -9,7 +9,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Login extends AppCompatActivity {
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Models.User;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class Login extends AppCompatActivity implements Callback<User>{
 
     private EditText etUser;
     private  EditText etpassword;
@@ -31,32 +42,59 @@ public class Login extends AppCompatActivity {
         tvRegister= findViewById(R.id.tvRegister);
 
 
-
-
-
     }
 
     public void login(View view) {
 
-        String user=etUser.getText().toString().trim();
+
+        String username=etUser.getText().toString().trim();
         String password=etpassword.getText().toString().trim();
-        if(user.equals("") || password.equals(""))
+        if(username.equals("") || password.equals(""))
         {
             Toast.makeText(getApplicationContext(), "Por favor ingrese los datos para iniciar sesión ",   Toast.LENGTH_LONG).show();
 
         }else
         {
-            if(user.equals("yuly") && password.equals("1234"))
+
+            User user = new User(username,password);
+            Call<User> call = UserApiAdapter.getApiService().login(user);
+            call.enqueue(this);
+        }
+
+        User user = new User(username,password);
+        Call<User> call = UserApiAdapter.getApiService().login(user);
+        call.enqueue(this);
+
+    }
+
+    @Override
+    public void onResponse(Call<User> call, Response<User> response) {
+
+        if(response.isSuccessful()) {
+
+            User user = response.body();
+
+            if(user.getCode()==200)
             {
                 Intent intent = new Intent(Login.this,SearchCreatePatient.class);
-                intent.putExtra( "userActive",etUser.getText().toString());
+                intent.putExtra( "userActive",user.getName().toString());
                 startActivity(intent);
+
             }else
             {
-                Toast.makeText(getApplicationContext(), "Los datos ingresados no son válidos.",   Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), user.getError(),   Toast.LENGTH_LONG).show();
 
             }
+
+
         }
+
+
+    }
+
+    @Override
+    public void onFailure(Call<User> call, Throwable t) {
+        Toast.makeText(getApplicationContext(), "Error en la aplicacion",   Toast.LENGTH_LONG).show();
 
     }
 }

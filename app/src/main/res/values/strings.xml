@@ -16,4 +16,5 @@
     <string name="institution">Institución </string>
     <string name="therapist">Terapeuta </string>
     <string name="welcome"> Bienvenido </string>
+    <string name="title_activity_maps">Map</string>
 </resources>
