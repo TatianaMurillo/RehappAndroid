@@ -1,11 +1,16 @@
 package com.rehapp.rehappmovil.rehapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -15,8 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.Therapy;
+import com.rehapp.rehappmovil.rehapp.Models.User;
+import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
 import org.w3c.dom.Document;
 
@@ -49,7 +58,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             tvWelcome = findViewById(R.id.tvWelcome);
             spnDocumentType= findViewById(R.id.spnDocumentType);
 
-            userActive = getIntent().getSerializableExtra("userActive").toString();
+            userActive = getIntent().getSerializableExtra(PreferencesData.userActive).toString();
             tvWelcome.setText( "¡ " +tvWelcome.getText() +" "+  userActive +" !");
 
 
@@ -58,44 +67,6 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             Call<ArrayList<DocumentType>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
 
             call.enqueue(this);
-
-            ActionBar mActionBar = getSupportActionBar();
-            mActionBar.setDisplayShowHomeEnabled(false);
-            mActionBar.setDisplayShowTitleEnabled(false);
-            LayoutInflater li = LayoutInflater.from(this);
-            View customView = li.inflate(R.layout.activity_menu_items, null);
-            mActionBar.setCustomView(customView);
-            mActionBar.setDisplayShowCustomEnabled(true);
-            ImageButton leftPage = (ImageButton)    customView.findViewById(R.id.left);
-            leftPage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Debe preguntar si cierra la sesion
-                }
-            });
-
-            ImageButton rightPage = (ImageButton) customView.findViewById(R.id.right);
-            rightPage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // debe antes validar que se haya seleccionado tipo de documento y documento para redirigir
-                    String document = etDocument.getText().toString();
-                    if(!document.isEmpty()) {
-
-                        Intent intent = new Intent(SearchCreatePatient.this, SearchPatient.class);
-                        intent.putExtra("document",document);
-                        startActivity(intent);
-                    }else
-                    {
-                        Toast.makeText(getApplicationContext(),"Debe ingresar el documento del paciente.",Toast.LENGTH_LONG).show();
-
-                    }
-
-                }
-            });
-
-
 
         }
 
@@ -124,7 +95,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
 
         @Override
         public void onFailure(Call<ArrayList<DocumentType>> call, Throwable t) {
-            Log.d("falló","el error es " + t.getMessage());
+            Toast.makeText(getApplicationContext(), PreferencesData.searchPatientListDocumentTypesMgs + t.getMessage(),   Toast.LENGTH_LONG).show();
         }
 
 
@@ -133,8 +104,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
 
     public void searchPatient(View view) {
         Intent intent = new Intent(SearchCreatePatient.this, SearchPatient.class);
-        intent.putExtra( "document",etDocument.getText().toString());
-        //aqui se envia el objeto del paciente
+        intent.putExtra( PreferencesData.PatientDocument,etDocument.getText().toString());
         startActivity(intent);
 
     }
@@ -145,5 +115,33 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
         Intent intent = new Intent(SearchCreatePatient.this,CreatePatient.class);
         startActivity(intent);
 
+    }
+
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu,  menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+            switch (item.getItemId())
+            {
+                case R.id.logout:
+                    UserMethods.Do().Logout(this);
+                    break;
+            }
+
+
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -73,13 +73,6 @@ public class TherapyExercises extends AppCompatActivity {
                 exercises.set(position, model);
 
                 adapter.updateRecords(exercises);
-                //Intent intent = new Intent(TherapyExercises.this, TherapyExerciseDetail.class);
-                //intent.putExtra( "ejercicioSelected",position);
-
-                //startActivity(intent);
-
-
-
 
             }
 

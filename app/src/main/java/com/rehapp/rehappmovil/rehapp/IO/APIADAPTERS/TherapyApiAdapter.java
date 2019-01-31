@@ -1,6 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS;
 
 import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.TherapyApiService;
+import com.rehapp.rehappmovil.rehapp.Utils.GlobalApplication;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -22,7 +23,7 @@ public class TherapyApiAdapter {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);
 
-        String baseUrl = "http://127.0.0.1:8000/";
+        String baseUrl =GlobalApplication.url;
 
         if (API_SERVICE == null) {
             Retrofit retrofit = new Retrofit.Builder()

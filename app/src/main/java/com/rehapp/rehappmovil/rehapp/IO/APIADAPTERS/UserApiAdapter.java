@@ -1,6 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS;
 
 import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.UserApiService;
+import com.rehapp.rehappmovil.rehapp.Utils.GlobalApplication;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -20,7 +21,7 @@ public class UserApiAdapter {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);
 
-        String baseUrl ="http://192.168.0.28/terappmovil/public/api/";
+        String baseUrl =GlobalApplication.url;
 
         if (API_SERVICE == null) {
             Retrofit retrofit = new Retrofit.Builder()

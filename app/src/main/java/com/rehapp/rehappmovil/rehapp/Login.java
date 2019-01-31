@@ -1,6 +1,8 @@
 package com.rehapp.rehappmovil.rehapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,12 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.User;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +28,8 @@ public class Login extends AppCompatActivity implements Callback<User>{
     private TextView tvRegister;
 
 
+    public static final String MyPREFERENCES = PreferencesData.loginKey;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,8 @@ public class Login extends AppCompatActivity implements Callback<User>{
         tvForgotPassword= findViewById(R.id.tvForgotPassword);
         tvRegister= findViewById(R.id.tvRegister);
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
 
     }
 
@@ -51,7 +54,7 @@ public class Login extends AppCompatActivity implements Callback<User>{
         String password=etpassword.getText().toString().trim();
         if(username.equals("") || password.equals(""))
         {
-            Toast.makeText(getApplicationContext(), "Por favor ingrese los datos para iniciar sesión ",   Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), PreferencesData.loginIncorrectDataMgs,   Toast.LENGTH_LONG).show();
 
         }else
         {
@@ -60,11 +63,6 @@ public class Login extends AppCompatActivity implements Callback<User>{
             Call<User> call = UserApiAdapter.getApiService().login(user);
             call.enqueue(this);
         }
-
-        User user = new User(username,password);
-        Call<User> call = UserApiAdapter.getApiService().login(user);
-        call.enqueue(this);
-
     }
 
     @Override
@@ -77,7 +75,13 @@ public class Login extends AppCompatActivity implements Callback<User>{
             if(user.getCode()==200)
             {
                 Intent intent = new Intent(Login.this,SearchCreatePatient.class);
-                intent.putExtra( "userActive",user.getName().toString());
+                intent.putExtra( PreferencesData.userActive,user.getName().toString());
+
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                editor.putString(PreferencesData.loginToken, user.getToken());
+                editor.commit();
+
                 startActivity(intent);
 
             }else
@@ -94,7 +98,18 @@ public class Login extends AppCompatActivity implements Callback<User>{
 
     @Override
     public void onFailure(Call<User> call, Throwable t) {
-        Toast.makeText(getApplicationContext(), "Error en la aplicacion",   Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), PreferencesData.loginFailureMsg,   Toast.LENGTH_LONG).show();
+
+    }
+
+    public void registerUser(View view) {
+
+
+        Intent intent = new Intent(Login.this,Register.class);
+
+        startActivity(intent);
+
+
 
     }
 }

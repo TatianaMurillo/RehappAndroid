@@ -1,17 +1,14 @@
 package com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS;
 
-import android.provider.Settings;
-
 import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.DocumentTypeApiService;
 import com.rehapp.rehappmovil.rehapp.Utils.GlobalApplication;
-import com.rehapp.rehappmovil.rehapp.Utils.Helper;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class DocumentTypeApiAdapter {
+public class PatientApiAdapter {
 
     private static DocumentTypeApiService API_SERVICE;
 

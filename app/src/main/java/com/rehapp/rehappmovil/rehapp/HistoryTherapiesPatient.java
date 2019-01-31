@@ -57,7 +57,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
         ArrayAdapter<Therapy> arrayAdapter =
                 new ArrayAdapter<Therapy>(this, android.R.layout.simple_list_item_1, therapies);
-        // Set The Adapter
+
         lvTherapies.setAdapter(arrayAdapter);
 
 
@@ -74,44 +74,6 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         });
 
 
-        //   Call<Therapy> call = TherapyApiAdapter.getApiService().getTherapies("malaria","json","30022715");
-
-        // call.enqueue(this);
-
-
-        ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
-        LayoutInflater li = LayoutInflater.from(this);
-        View customView = li.inflate(R.layout.activity_menu_items, null);
-        mActionBar.setCustomView(customView);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        ImageButton leftPage = (ImageButton)    customView.findViewById(R.id.left);
-        leftPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HistoryTherapiesPatient.this, SearchPatient.class);
-                startActivity(intent);
-
-            }
-        });
-
-        ImageButton rightPage = (ImageButton) customView.findViewById(R.id.right);
-        rightPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyExercises.class);
-                startActivity(intent);
-
-            }
-        });
-
-
-
-
-
-
-
     }
 
     @Override
@@ -124,34 +86,4 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
     }
 
-/*
-    @Override
-   public void onResponse(Call<Therapy> call, Response<Therapy> response) {
-        if (response.isSuccessful()) {
-
-            Therapy therapy = response.body();
-            List<String> therapiesTitle = new ArrayList<String>();
-
-
-            for (int i = 0; i < therapy.getResultList().getResult().length; i++) {
-
-
-                Log.d("", "el titulo es " + therapy.getResultList().getResult()[i].getTitle());
-                therapiesTitle.add(therapy.getResultList().getResult()[i].getTitle());
-
-            }
-
-            ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_history_therapies_patient, therapiesTitle);
-
-            lvTherapies.setAdapter(adapter);
-
-        }
-    }
-
-    @Override
-    public void onFailure(Call<Therapy> call, Throwable t) {
-
-    }
-
-*/
 }

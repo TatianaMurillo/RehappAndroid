@@ -16,5 +16,10 @@
     <string name="institution">Institución </string>
     <string name="therapist">Terapeuta </string>
     <string name="welcome"> Bienvenido </string>
-    <string name="title_activity_maps">Map</string>
+    <string name="e_mail">Correo</string>
+    <string name="ConfirmEmail">Confirmar correo</string>
+    <string name="ConfirmPassword">Confirmar Contraseña </string>
+    <string name="Save">Guardar</string>
+    <string name="name">Nombre</string>
+
 </resources>

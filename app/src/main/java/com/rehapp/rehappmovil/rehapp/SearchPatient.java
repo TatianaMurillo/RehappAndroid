@@ -32,34 +32,6 @@ Spinner spnDocumentType;
 
 
 
-        ActionBar mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
-        LayoutInflater li = LayoutInflater.from(this);
-        View customView = li.inflate(R.layout.activity_menu_items, null);
-        mActionBar.setCustomView(customView);
-        mActionBar.setDisplayShowCustomEnabled(true);
-        ImageButton leftPage = (ImageButton)    customView.findViewById(R.id.left);
-        leftPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            Intent intent = new Intent(SearchPatient.this,SearchCreatePatient.class);
-            startActivity(intent);
-            }
-        });
-
-        ImageButton rightPage = (ImageButton) customView.findViewById(R.id.right);
-        rightPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchPatient.this,HistoryTherapiesPatient.class);
-                startActivity(intent);
-            }
-        });
-
-
-
-
     }
 
     public void watchTherapies(View view) {

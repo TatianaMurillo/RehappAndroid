@@ -3,20 +3,8 @@ package com.rehapp.rehappmovil.rehapp.Utils;
 import android.app.Application;
 import android.content.Context;
 
-public class GlobalApplication extends Application {
+public class GlobalApplication {
 
-    private static Context appContext;
+    public static String url="http://192.168.0.20/terappmovil/public/api/";
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        appContext = getApplicationContext();
-
-        /* If you has other classes that need context object to initialize when application is created,
-         you can use the appContext here to process. */
-    }
-
-    public static Context getAppContext() {
-        return appContext;
-    }
 }

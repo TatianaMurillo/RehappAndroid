@@ -16,6 +16,12 @@ public interface UserApiService {
     @POST("login")
     Call <User> login(@Body User user);
 
+    @POST("register")
+    Call <User> newUSer(@Body User user);
+
+    @POST("logout")
+    Call <User> logout(@Body User user);
+
 
 
 }
