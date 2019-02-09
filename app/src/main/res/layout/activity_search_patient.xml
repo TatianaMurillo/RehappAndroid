@@ -52,6 +52,7 @@
         android:layout_alignTop="@+id/etDocument"
         android:layout_marginEnd="71dp"
         android:layout_marginRight="71dp"
+        android:onClick="searchPatientByDocument"
         android:background="#00000000"
         app:srcCompat="@drawable/search" />
 

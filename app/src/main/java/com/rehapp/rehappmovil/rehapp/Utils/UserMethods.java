@@ -29,7 +29,7 @@ public class UserMethods extends Activity {
 
        try {
 
-           sharedpreferences = context.getSharedPreferences(Login.MyPREFERENCES, Context.MODE_PRIVATE);
+           sharedpreferences = this.getSharedPreferences(Login.MyPREFERENCES, Context.MODE_PRIVATE);
 
            SharedPreferences.Editor editor = sharedpreferences.edit();
 

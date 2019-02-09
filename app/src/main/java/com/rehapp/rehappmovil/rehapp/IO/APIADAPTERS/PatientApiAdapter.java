@@ -1,6 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS;
 
 import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.DocumentTypeApiService;
+import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.PatientApiService;
 import com.rehapp.rehappmovil.rehapp.Utils.GlobalApplication;
 
 import okhttp3.OkHttpClient;
@@ -10,9 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PatientApiAdapter {
 
-    private static DocumentTypeApiService API_SERVICE;
+    private static PatientApiService API_SERVICE;
 
-    public static DocumentTypeApiService getApiService() {
+    public static PatientApiService getApiService() {
 
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -29,7 +30,7 @@ public class PatientApiAdapter {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient.build()) // <-- usamos el log level
                     .build();
-            API_SERVICE = retrofit.create(DocumentTypeApiService.class);
+            API_SERVICE = retrofit.create(PatientApiService.class);
         }
 
         return API_SERVICE;

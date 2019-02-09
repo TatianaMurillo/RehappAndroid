@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -39,10 +40,12 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
 
         private ImageButton ibtnSearchPatient ;
         private ImageButton ibtnAddPatient;
+
         private TextView tvWelcome;
         private EditText etDocument;
         private Spinner spnDocumentType;
         private String userActive;
+        private int documentTypeSelected, indexDocumentTypeSelected=0;
 
         ArrayList<DocumentType> documentTypes;
         ArrayList<String> documentTypeNames= new ArrayList<String>();
@@ -62,11 +65,26 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             tvWelcome.setText( "¡ " +tvWelcome.getText() +" "+  userActive +" !");
 
 
+            spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    documentTypeSelected = documentTypes.get(position).getDocument_type_id();
+                    indexDocumentTypeSelected=position;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
 
             Call<ArrayList<DocumentType>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
 
             call.enqueue(this);
+
+
+
 
         }
 
@@ -79,11 +97,9 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
                 documentTypes= response.body();
 
 
-
-                documentTypeNames.add("Seleccione...");
                 for(DocumentType documentType: documentTypes)
                 {
-                    documentTypeNames.add(documentType.getDocument_type_name()+"-"+documentType.getDocument_type_description());
+                    documentTypeNames.add(documentType.getDocument_type_name());
                 }
 
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, documentTypeNames);
@@ -103,9 +119,24 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
 
 
     public void searchPatient(View view) {
-        Intent intent = new Intent(SearchCreatePatient.this, SearchPatient.class);
-        intent.putExtra( PreferencesData.PatientDocument,etDocument.getText().toString());
-        startActivity(intent);
+
+        if(!documentTypes.get(indexDocumentTypeSelected).getDocument_type_name().isEmpty() & !etDocument.getText().toString().isEmpty() ) {
+
+            Intent intent = new Intent(SearchCreatePatient.this, SearchPatient.class);
+
+
+            Bundle extras = new Bundle();
+            extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
+            extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
+            intent.putExtras(extras);
+
+
+            startActivity(intent);
+        }else
+        {
+            Toast.makeText(getApplicationContext(), PreferencesData.searchCreatePatientDataMsg,Toast.LENGTH_LONG).show();
+
+        }
 
     }
 
@@ -116,9 +147,6 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
         startActivity(intent);
 
     }
-
-
-
 
 
     @Override

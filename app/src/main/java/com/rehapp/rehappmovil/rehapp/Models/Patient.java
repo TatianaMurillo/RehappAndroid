@@ -16,7 +16,7 @@ public class Patient {
         private float neighborhood_id;
         private float document_type_id;
         private float gender_id;
-        Document_type Document_typeObject;
+        DocumentType Document_typeObject;
         Neighborhood NeighborhoodObject;
 
 
@@ -78,7 +78,7 @@ public class Patient {
             return gender_id;
         }
 
-        public Document_type getDocument_type() {
+        public DocumentType getDocument_type() {
             return Document_typeObject;
         }
 
@@ -144,7 +144,7 @@ public class Patient {
             this.gender_id = gender_id;
         }
 
-        public void setDocument_type(Document_type document_typeObject) {
+        public void setDocument_type(DocumentType document_typeObject) {
             this.Document_typeObject = document_typeObject;
         }
 
@@ -152,81 +152,5 @@ public class Patient {
             this.NeighborhoodObject = neighborhoodObject;
         }
     }
-    public class Neighborhood {
-        private float neighborhood_id;
-        private String neighborhood_description;
-        private String neighborhood_name;
-        private float city_id;
 
-
-        // Getter Methods
-
-        public float getNeighborhood_id() {
-            return neighborhood_id;
-        }
-
-        public String getNeighborhood_description() {
-            return neighborhood_description;
-        }
-
-        public String getNeighborhood_name() {
-            return neighborhood_name;
-        }
-
-        public float getCity_id() {
-            return city_id;
-        }
-
-        // Setter Methods
-
-        public void setNeighborhood_id(float neighborhood_id) {
-            this.neighborhood_id = neighborhood_id;
-        }
-
-        public void setNeighborhood_description(String neighborhood_description) {
-            this.neighborhood_description = neighborhood_description;
-        }
-
-        public void setNeighborhood_name(String neighborhood_name) {
-            this.neighborhood_name = neighborhood_name;
-        }
-
-        public void setCity_id(float city_id) {
-            this.city_id = city_id;
-        }
-    }
-    public class Document_type {
-        private float document_type_id;
-        private String document_type_name;
-        private String document_type_description;
-
-
-        // Getter Methods
-
-        public float getDocument_type_id() {
-            return document_type_id;
-        }
-
-        public String getDocument_type_name() {
-            return document_type_name;
-        }
-
-        public String getDocument_type_description() {
-            return document_type_description;
-        }
-
-        // Setter Methods
-
-        public void setDocument_type_id(float document_type_id) {
-            this.document_type_id = document_type_id;
-        }
-
-        public void setDocument_type_name(String document_type_name) {
-            this.document_type_name = document_type_name;
-        }
-
-        public void setDocument_type_description(String document_type_description) {
-            this.document_type_description = document_type_description;
-        }
-    }
 

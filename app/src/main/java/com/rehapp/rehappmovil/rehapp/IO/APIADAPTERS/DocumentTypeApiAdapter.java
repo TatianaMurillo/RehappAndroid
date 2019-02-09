@@ -30,7 +30,7 @@ public class DocumentTypeApiAdapter {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient.build()) // <-- usamos el log level
+                    .client(httpClient.build())
                     .build();
             API_SERVICE = retrofit.create(DocumentTypeApiService.class);
         }
