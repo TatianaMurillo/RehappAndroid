@@ -1,9 +1,12 @@
 package com.rehapp.rehappmovil.rehapp;
 
+
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,13 +16,14 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.User;
+import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Login extends AppCompatActivity implements Callback<User>{
+public class Login extends AppCompatActivity implements Callback<UserViewModel>{
 
     private EditText etUser;
     private  EditText etpassword;
@@ -30,7 +34,7 @@ public class Login extends AppCompatActivity implements Callback<User>{
 
     public static final String MyPREFERENCES = PreferencesData.loginKey;
     SharedPreferences sharedpreferences;
-
+    private UserViewModel userViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +47,7 @@ public class Login extends AppCompatActivity implements Callback<User>{
         tvRegister= findViewById(R.id.tvRegister);
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
-
+        userViewModel= ViewModelProviders.of(this).get(UserViewModel.class);
     }
 
     public void login(View view) {
@@ -59,34 +62,36 @@ public class Login extends AppCompatActivity implements Callback<User>{
         }else
         {
 
-            User user = new User(username,password);
-            Call<User> call = UserApiAdapter.getApiService().login(user);
+            UserViewModel user = new UserViewModel(username,password);
+            Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);
             call.enqueue(this);
         }
     }
 
     @Override
-    public void onResponse(Call<User> call, Response<User> response) {
+    public void onResponse(Call<UserViewModel> call, Response<UserViewModel> response) {
+
 
         if(response.isSuccessful()) {
 
-            User user = response.body();
+            userViewModel = response.body();
 
-            if(user.getCode()==200)
+            if(userViewModel.getCode()==200)
             {
+                userViewModel.setName(userViewModel.getName().toString());
                 Intent intent = new Intent(Login.this,SearchCreatePatient.class);
-                intent.putExtra( PreferencesData.userActive,user.getName().toString());
+                intent.putExtra( PreferencesData.userActive,userViewModel.getName().toString());
 
                 SharedPreferences.Editor editor = sharedpreferences.edit();
 
-                editor.putString(PreferencesData.loginToken, user.getToken());
+                editor.putString(PreferencesData.loginToken, userViewModel.getToken());
                 editor.commit();
 
                 startActivity(intent);
 
             }else
             {
-                Toast.makeText(getApplicationContext(), user.getError(),   Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), userViewModel.getError(),   Toast.LENGTH_LONG).show();
 
             }
 
@@ -97,7 +102,7 @@ public class Login extends AppCompatActivity implements Callback<User>{
     }
 
     @Override
-    public void onFailure(Call<User> call, Throwable t) {
+    public void onFailure(Call<UserViewModel> call, Throwable t) {
         Toast.makeText(getApplicationContext(), PreferencesData.loginFailureMsg,   Toast.LENGTH_LONG).show();
 
     }

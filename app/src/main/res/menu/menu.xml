@@ -9,6 +9,11 @@
         app:showAsAction="never"
         android:title="Salir" />
 
+    <item
+        android:id="@+id/create-therapy"
+        app:showAsAction="ifRoom"
+        android:title="Crear terapia"
+        android:icon="@drawable/createtherapy"/>
 
 
 

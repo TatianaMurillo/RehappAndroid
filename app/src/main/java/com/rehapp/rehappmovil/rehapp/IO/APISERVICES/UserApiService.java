@@ -1,7 +1,8 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
 import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
-import com.rehapp.rehappmovil.rehapp.Models.User;
+import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
 
 import java.util.ArrayList;
 
@@ -14,13 +15,13 @@ public interface UserApiService {
 
 
     @POST("login")
-    Call <User> login(@Body User user);
+    Call <UserViewModel> login(@Body UserViewModel user);
 
     @POST("register")
-    Call <User> newUSer(@Body User user);
+    Call <UserViewModel> newUSer(@Body UserViewModel user);
 
     @POST("logout")
-    Call <User> logout(@Body User user);
+    Call <UserViewModel> logout(@Body UserViewModel user);
 
 
 

@@ -63,11 +63,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateTherapy">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".HistoryTherapiesPatient">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

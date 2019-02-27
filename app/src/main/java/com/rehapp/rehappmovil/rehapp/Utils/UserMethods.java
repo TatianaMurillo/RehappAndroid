@@ -10,7 +10,7 @@ import android.util.Log;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Login;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.User;
+import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,15 +35,15 @@ public class UserMethods extends Activity {
 
            String token = sharedpreferences.getString(PreferencesData.loginToken, "");
 
-            User user = new User(token);
+            UserViewModel user = new UserViewModel(token);
 
-           Call<User> call = UserApiAdapter.getApiService().logout(user);
+           Call<UserViewModel> call = UserApiAdapter.getApiService().logout(user);
 
-           call.enqueue(new Callback<User>() {
+           call.enqueue(new Callback<UserViewModel>() {
                @Override
-               public void onResponse(Call<User> call, Response<User> response) {
+               public void onResponse(Call<UserViewModel> call, Response<UserViewModel> response) {
 
-                   User user = response.body();
+                   UserViewModel user = response.body();
 
                    if (user.getCode() == 200) {
                        Log.d("Exitoso", "Call1 Succeeded");
@@ -53,7 +53,7 @@ public class UserMethods extends Activity {
                }
 
                @Override
-               public void onFailure(Call<User> call, Throwable t) {
+               public void onFailure(Call<UserViewModel> call, Throwable t) {
                    Log.d("Error en Onfailure", t.getMessage());
                }
            });

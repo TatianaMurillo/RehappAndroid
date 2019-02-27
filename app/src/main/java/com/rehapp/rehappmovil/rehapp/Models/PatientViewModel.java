@@ -1,6 +1,10 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
-public class Patient {
+import android.arch.lifecycle.ViewModel;
+
+import com.google.gson.annotations.SerializedName;
+
+public class PatientViewModel extends ViewModel {
 
         private float patient_id;
         private String patient_first_name;
@@ -16,8 +20,14 @@ public class Patient {
         private float neighborhood_id;
         private float document_type_id;
         private float gender_id;
-        DocumentType Document_typeObject;
-        Neighborhood NeighborhoodObject;
+        private DocumentType Document_typeObject;
+        private Neighborhood NeighborhoodObject;
+
+        @SerializedName("error")
+        private String patient_code_description;
+
+        @SerializedName("code_error")
+        private int patient_code;
 
 
         // Getter Methods

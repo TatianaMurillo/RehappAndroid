@@ -1,6 +1,9 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
-public class User {
+import android.app.Application;
+import android.arch.lifecycle.ViewModel;
+
+public class UserViewModel extends ViewModel {
 
     private String response;
     private String error;
@@ -11,25 +14,29 @@ public class User {
     private String password;
     private String token;
 
-    private User ActualUser;
+    private UserViewModel ActualUser;
 
 
-    public User(String email, String password) {
+    public UserViewModel() {
+    }
+
+    public UserViewModel(String email, String password) {
 
         this.email = email;
         this.password = password;
 
     }
 
-    public User(String email, String password, String name) {
+    public UserViewModel(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;
     }
 
-    public User(String token) {
+    public UserViewModel(String token) {
         this.token=token;
     }
+
     public String getResponse() {
         return response;
     }

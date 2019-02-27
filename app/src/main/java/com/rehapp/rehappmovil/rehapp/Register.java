@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.User;
+import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Register extends AppCompatActivity  implements Callback<User> {
+public class Register extends AppCompatActivity  implements Callback<UserViewModel> {
 
 
     EditText etName;
@@ -76,9 +76,9 @@ public class Register extends AppCompatActivity  implements Callback<User> {
 
             }else
             {
-                User user = new User(email, password, name);
+                UserViewModel user = new UserViewModel(email, password, name);
 
-                Call<User> call = UserApiAdapter.getApiService().newUSer(user);
+                Call<UserViewModel> call = UserApiAdapter.getApiService().newUSer(user);
                 call.enqueue(this);
             }
 
@@ -86,11 +86,11 @@ public class Register extends AppCompatActivity  implements Callback<User> {
 
 
     @Override
-    public void onResponse(Call<User> call, Response<User> response) {
+    public void onResponse(Call<UserViewModel> call, Response<UserViewModel> response) {
 
         if(response.isSuccessful()) {
 
-            User user = response.body();
+            UserViewModel user = response.body();
 
             if(user.getCode()==200)
             {
@@ -110,7 +110,7 @@ public class Register extends AppCompatActivity  implements Callback<User> {
     }
 
     @Override
-    public void onFailure(Call<User> call, Throwable t) {
+    public void onFailure(Call<UserViewModel> call, Throwable t) {
         Toast.makeText(getApplicationContext(), t.getMessage(),   Toast.LENGTH_LONG).show();
 
     }

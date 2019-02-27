@@ -1,5 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
+import android.arch.lifecycle.ViewModel;
+
 import com.rehapp.rehappmovil.rehapp.IO.RESPONSES.TherapyResponses.RequestTherapyResponse;
 import com.rehapp.rehappmovil.rehapp.IO.RESPONSES.TherapyResponses.ResultListTherapyResponse;
 
@@ -9,7 +11,7 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
-public class Therapy implements Serializable {
+public class TherapyViewModel extends ViewModel implements Serializable {
 
 private int Therapy_id;
 private int Therapist_id;
@@ -22,12 +24,25 @@ private double Therapy_total_duration;
 private String Therapy_observation;
 private int Therapy_sequence;
 private boolean Therapy_achieved_the_goal;
+private String action;
 
 
-    public Therapy() {
+
+    public String getAction() {
+        return action;
     }
 
-    public Therapy(int therapy_id, int therapist_id, int patient_id, int therapy_institution_id, String therapy_description, String therapy_date, String therapy_time, double therapy_total_duration, String therapy_observation, int therapy_sequence, boolean therapy_achieved_the_goal) {
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+
+
+
+    public TherapyViewModel() {
+    }
+
+    public TherapyViewModel(int therapy_id, int therapist_id, int patient_id, int therapy_institution_id, String therapy_description, String therapy_date, String therapy_time, double therapy_total_duration, String therapy_observation, int therapy_sequence, boolean therapy_achieved_the_goal) {
         Therapy_id = therapy_id;
         Therapist_id = therapist_id;
         Patient_id = patient_id;
@@ -128,4 +143,6 @@ private boolean Therapy_achieved_the_goal;
     public void setTherapy_achieved_the_goal(boolean therapy_achieved_the_goal) {
         Therapy_achieved_the_goal = therapy_achieved_the_goal;
     }
+
+
 }

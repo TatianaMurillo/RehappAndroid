@@ -13,7 +13,7 @@
     <string name="login"> Iniciar Sesión </string>
     <string name="watchTherapies"> Ver Terapias </string>
     <string name="additionalInfo"> Información adicional </string>
-    <string name="institution">Institución </string>
+    <string name="institute">Institución </string>
     <string name="therapist">Terapeuta </string>
     <string name="welcome"> Bienvenido </string>
     <string name="e_mail">Correo</string>
@@ -21,5 +21,8 @@
     <string name="ConfirmPassword">Confirmar Contraseña </string>
     <string name="Save">Guardar</string>
     <string name="name">Nombre</string>
+    <string name="time">Hora</string>
+    <string name="date">Fecha</string>
+    <string name="duration">Duracion (hrs)</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
-import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
-import com.rehapp.rehappmovil.rehapp.Models.Patient;
+import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 
 import java.util.ArrayList;
 
@@ -13,6 +12,6 @@ public interface PatientApiService {
 
 
     @GET("patients/showbyname/{document}")
-    Call<Patient> getPatient(@Path("document") String document);
+    Call<PatientViewModel> getPatient(@Path("document") String document);
 
 }
