@@ -20,7 +20,7 @@ public class TherapyExerciseDetail extends AppCompatActivity {
 
     public void watchVideo(View view) {
 
-        Intent intent = new Intent(TherapyExerciseDetail.this,ExerciseVideo.class);
+        Intent intent = new Intent(TherapyExerciseDetail.this, YoutubeVideo.class);
         startActivity(intent);
 
     }

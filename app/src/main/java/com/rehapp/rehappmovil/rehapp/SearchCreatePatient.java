@@ -162,6 +162,8 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu,  menu);
+
+        ocultarItems(menu);
         return true;
     }
 
@@ -179,4 +181,14 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void ocultarItems(Menu menu)
+    {
+        MenuItem item;
+        item= menu.findItem(R.id.create_therapy);
+        item.setVisible(false);
+        item= menu.findItem(R.id.save_therapy);
+        item.setVisible(false);
+    }
+
 }

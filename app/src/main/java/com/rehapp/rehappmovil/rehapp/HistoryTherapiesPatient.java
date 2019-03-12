@@ -116,6 +116,7 @@ for (int i=1;i<5;i++) {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        ocultarItems(menu);
         return true;
     }
 
@@ -134,4 +135,13 @@ for (int i=1;i<5;i++) {
                     return super.onOptionsItemSelected(item);
         }
     }
+
+    public void ocultarItems(Menu menu)
+    {
+        MenuItem item;
+
+        item= menu.findItem(R.id.save_therapy);
+        item.setVisible(false);
+    }
+
 }

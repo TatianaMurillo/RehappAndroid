@@ -15,6 +15,10 @@
         android:title="Crear terapia"
         android:icon="@drawable/createtherapy"/>
 
-
+    <item
+        android:id="@+id/save-therapy"
+        app:showAsAction="ifRoom"
+        android:title="Guardar terapia"
+        android:icon="@drawable/savetherapy"/>
 
 </menu>
