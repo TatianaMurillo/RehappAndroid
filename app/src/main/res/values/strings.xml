@@ -24,5 +24,12 @@
     <string name="time">Hora</string>
     <string name="date">Fecha</string>
     <string name="duration">Duracion (hrs)</string>
-
+    <string name="DyspneaMmrc">Disnea mMRC</string>
+    <string name="BorgD">Borg D</string>
+    <string name="BorgE">Borg E</string>
+    <string name="OxygenSaturation">Saturacion oxigeno</string>
+    <string name="FC">FC</string>
+    <string name="Saturation">Saturación</string>
+    <string name="DiastolicPressure">Presión Diastólica</string>
+    <string name="HeartRate">Frecuencia máxima cardiaca</string>
 </resources>

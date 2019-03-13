@@ -116,7 +116,7 @@ public class TherapyExercises extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        ocultarItems(menu);
+        hideShowItems(menu);
         return true;
     }
 
@@ -133,7 +133,7 @@ public class TherapyExercises extends AppCompatActivity {
         }
     }
 
-    public void ocultarItems(Menu menu)
+    public void hideShowItems(Menu menu)
     {
         MenuItem item;
         if(action.equals("DETAIL")) {
@@ -147,6 +147,11 @@ public class TherapyExercises extends AppCompatActivity {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
         }
+    }
+
+    public  void saveExercises()
+    {
+
     }
 
 }

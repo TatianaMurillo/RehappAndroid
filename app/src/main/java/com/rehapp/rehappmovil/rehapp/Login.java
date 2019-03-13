@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
     private TextView tvRegister;
 
 
-    public static final String MyPREFERENCES = PreferencesData.loginKey;
+
     SharedPreferences sharedpreferences;
     private UserViewModel userViewModel;
     @Override
@@ -46,9 +46,10 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
         tvForgotPassword= findViewById(R.id.tvForgotPassword);
         tvRegister= findViewById(R.id.tvRegister);
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        loadPreferences();
         userViewModel= ViewModelProviders.of(this).get(UserViewModel.class);
     }
+
 
     public void login(View view) {
 
@@ -61,6 +62,12 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
 
         }else
         {
+
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(PreferencesData.TherapistEmailLogin, username);
+            editor.putString(PreferencesData.TherapistPasswordlLogin, password);
+            editor.commit();
+
 
             UserViewModel user = new UserViewModel(username,password);
             Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);
@@ -82,8 +89,8 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
                 Intent intent = new Intent(Login.this,SearchCreatePatient.class);
                 intent.putExtra( PreferencesData.userActive,userViewModel.getName().toString());
 
+                sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
-
                 editor.putString(PreferencesData.loginToken, userViewModel.getToken());
                 editor.commit();
 
@@ -117,4 +124,19 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
 
 
     }
+
+    private void loadPreferences() {
+        sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+
+        String therapistEmail=sharedpreferences.getString(PreferencesData.TherapistEmailLogin,"").toString();
+
+        String therapistPassword=sharedpreferences.getString(PreferencesData.TherapistPasswordlLogin,"").toString();
+
+        etUser.setText(therapistEmail);
+        etpassword.setText(therapistPassword);
+
+    }
+
+
+
 }

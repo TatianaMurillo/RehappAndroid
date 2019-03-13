@@ -2,9 +2,14 @@ package com.rehapp.rehappmovil.rehapp.Models;
 
 public class PreferencesData {
 
+    public static final String PreferenceFileName = "infoToRestore";
     public static final String loginKey = "login_info";
     public static final String loginToken = "token";
     public static final String userActive ="userActive";
+
+    public static final String TherapistEmailLogin = "therapistEmailLogin";
+    public static final String TherapistPasswordlLogin = "therapistPasswordlLogin";
+
 
     public static final String PatientDocument ="document";
     public static final String PatientTpoDocument ="tpoDocument";

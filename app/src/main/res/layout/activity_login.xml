@@ -26,7 +26,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="132dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:hint="@string/user" />
 
     <EditText
@@ -37,7 +37,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="208dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textVisiblePassword"
         android:hint="@string/password" />
 
     <Button
