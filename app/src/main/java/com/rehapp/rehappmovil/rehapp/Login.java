@@ -1,7 +1,12 @@
 package com.rehapp.rehappmovil.rehapp;
 
+
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +14,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Login extends AppCompatActivity {
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
+import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
+
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class Login extends AppCompatActivity implements Callback<UserViewModel>{
 
     private EditText etUser;
     private  EditText etpassword;
@@ -19,6 +33,8 @@ public class Login extends AppCompatActivity {
 
 
 
+    SharedPreferences sharedpreferences;
+    private UserViewModel userViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,33 +46,97 @@ public class Login extends AppCompatActivity {
         tvForgotPassword= findViewById(R.id.tvForgotPassword);
         tvRegister= findViewById(R.id.tvRegister);
 
-
-
-
-
+        loadPreferences();
+        userViewModel= ViewModelProviders.of(this).get(UserViewModel.class);
     }
+
 
     public void login(View view) {
 
-        String user=etUser.getText().toString().trim();
+
+        String username=etUser.getText().toString().trim();
         String password=etpassword.getText().toString().trim();
-        if(user.equals("") || password.equals(""))
+        if(username.equals("") || password.equals(""))
         {
-            Toast.makeText(getApplicationContext(), "Por favor ingrese los datos para iniciar sesión ",   Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), PreferencesData.loginIncorrectDataMgs,   Toast.LENGTH_LONG).show();
 
         }else
         {
-            if(user.equals("yuly") && password.equals("1234"))
+
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(PreferencesData.TherapistEmailLogin, username);
+            editor.putString(PreferencesData.TherapistPasswordlLogin, password);
+            editor.commit();
+
+
+            UserViewModel user = new UserViewModel(username,password);
+            Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);
+            call.enqueue(this);
+        }
+    }
+
+    @Override
+    public void onResponse(Call<UserViewModel> call, Response<UserViewModel> response) {
+
+
+        if(response.isSuccessful()) {
+
+            userViewModel = response.body();
+
+            if(userViewModel.getCode()==200)
             {
+                userViewModel.setName(userViewModel.getName().toString());
                 Intent intent = new Intent(Login.this,SearchCreatePatient.class);
-                intent.putExtra( "userActive",etUser.getText().toString());
+                intent.putExtra( PreferencesData.userActive,userViewModel.getName().toString());
+
+                sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(PreferencesData.loginToken, userViewModel.getToken());
+                editor.commit();
+
                 startActivity(intent);
+
             }else
             {
-                Toast.makeText(getApplicationContext(), "Los datos ingresados no son válidos.",   Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), userViewModel.getError(),   Toast.LENGTH_LONG).show();
 
             }
+
+
         }
 
+
     }
+
+    @Override
+    public void onFailure(Call<UserViewModel> call, Throwable t) {
+        Toast.makeText(getApplicationContext(), PreferencesData.loginFailureMsg,   Toast.LENGTH_LONG).show();
+
+    }
+
+    public void registerUser(View view) {
+
+
+        Intent intent = new Intent(Login.this,Register.class);
+
+        startActivity(intent);
+
+
+
+    }
+
+    private void loadPreferences() {
+        sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+
+        String therapistEmail=sharedpreferences.getString(PreferencesData.TherapistEmailLogin,"").toString();
+
+        String therapistPassword=sharedpreferences.getString(PreferencesData.TherapistPasswordlLogin,"").toString();
+
+        etUser.setText(therapistEmail);
+        etpassword.setText(therapistPassword);
+
+    }
+
+
+
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rehapp</string>
+    <string name="app_name"></string>
     <string name="document">Documento</string>
     <string name="documentType">Tipo de documento</string>
     <string name="patient">Paciente</string>
@@ -13,7 +13,23 @@
     <string name="login"> Iniciar Sesión </string>
     <string name="watchTherapies"> Ver Terapias </string>
     <string name="additionalInfo"> Información adicional </string>
-    <string name="institution">Institución </string>
+    <string name="institute">Institución </string>
     <string name="therapist">Terapeuta </string>
     <string name="welcome"> Bienvenido </string>
+    <string name="e_mail">Correo</string>
+    <string name="ConfirmEmail">Confirmar correo</string>
+    <string name="ConfirmPassword">Confirmar Contraseña </string>
+    <string name="Save">Guardar</string>
+    <string name="name">Nombre</string>
+    <string name="time">Hora</string>
+    <string name="date">Fecha</string>
+    <string name="duration">Duracion (hrs)</string>
+    <string name="DyspneaMmrc">Disnea mMRC</string>
+    <string name="BorgD">Borg D</string>
+    <string name="BorgE">Borg E</string>
+    <string name="OxygenSaturation">Saturacion oxigeno</string>
+    <string name="FC">FC</string>
+    <string name="Saturation">Saturación</string>
+    <string name="DiastolicPressure">Presión Diastólica</string>
+    <string name="HeartRate">Frecuencia máxima cardiaca</string>
 </resources>

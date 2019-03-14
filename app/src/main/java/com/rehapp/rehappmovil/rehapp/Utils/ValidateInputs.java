@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class ValidateInputs {
 
-    public  ValidateInputs()
+    public static ValidateInputs  validate()
     {
-
+        return new ValidateInputs();
     }
 
-    public static boolean ValidateString(ArrayList<String> dataInput)
+    public boolean ValidateString(ArrayList<String> dataInput)
     {
             for(String data:dataInput)
             {
@@ -17,7 +17,6 @@ public class ValidateInputs {
                 {
                     return false;
                 }
-
             }
 
             return true;

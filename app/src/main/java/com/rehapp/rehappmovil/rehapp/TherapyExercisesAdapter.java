@@ -46,18 +46,18 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
         ViewHolder holder = null;
-        if(convertView ==null)
+        if(view ==null)
         {
-            convertView = inflater.inflate(R.layout.list_view_item, parent,false);
+            view = inflater.inflate(R.layout.list_view_item, parent,false);
             holder = new ViewHolder();
-            holder.tvExerciseName=(TextView)convertView.findViewById(R.id.tvExerciseName);
-            holder.ivCheckbox=(ImageView) convertView.findViewById(R.id.ivCheckbox);
+            holder.tvExerciseName=(TextView)view.findViewById(R.id.tvExerciseName);
+            holder.ivCheckbox=(ImageView) view.findViewById(R.id.ivCheckbox);
 
-            convertView.setTag(holder);
+            view.setTag(holder);
         }else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) view.getTag();
         }
             TherapyExercise model = exercises.get(position);
 
@@ -70,7 +70,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
             {
                 holder.ivCheckbox.setBackgroundResource(R.drawable.unchecked);
             }
-            return convertView;
+            return view;
         }
 
         public void updateRecords(List<TherapyExercise> exercises)

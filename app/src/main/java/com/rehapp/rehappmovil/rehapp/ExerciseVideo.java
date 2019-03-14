@@ -1,5 +1,6 @@
 package com.rehapp.rehappmovil.rehapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,7 +11,7 @@ import android.util.Log;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-public class ExerciseVideo extends AppCompatActivity {
+public class ExerciseVideo extends Activity {
 
 
     ProgressDialog prgsDialog;

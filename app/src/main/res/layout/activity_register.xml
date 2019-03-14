@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Register">
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="237dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="35dp"
+        android:ems="10"
+        android:hint="@string/name"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="241dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etName"
+        android:layout_alignLeft="@+id/etName"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="102dp"
+        android:ems="10"
+        android:hint="@string/e_mail"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/etConfirmarEmail"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etEmail"
+        android:layout_alignStart="@+id/etEmail"
+        android:layout_alignLeft="@+id/etEmail"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="34dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:hint="@string/ConfirmEmail" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="243dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etEmail"
+        android:layout_alignLeft="@+id/etEmail"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-2dp"
+        android:layout_marginLeft="-2dp"
+        android:layout_marginBottom="218dp"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/etConfirmPassword"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etEmail"
+        android:layout_alignLeft="@+id/etEmail"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="146dp"
+        android:ems="10"
+        android:hint="@string/ConfirmPassword"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="109dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="254dp"
+        android:layout_marginLeft="254dp"
+        android:layout_marginBottom="49dp"
+        android:hint="@string/Save"
+        android:onClick="register"/>
+</RelativeLayout>
