@@ -26,7 +26,14 @@ Spinner spnDocumentType;
         spnDocumentType = findViewById(R.id.spnDocumentType);
         etPatientName= findViewById(R.id.etPatientName);
 
-        documentPatient = getIntent().getSerializableExtra("document").toString();
+
+        if(savedInstanceState!=null) {
+            documentPatient = savedInstanceState.getString("document");
+        }else
+        {
+            documentPatient = getIntent().getSerializableExtra("document").toString();
+        }
+
         etDocument.setText(documentPatient);
         etPatientName.setText("Alvaro Roena");
 

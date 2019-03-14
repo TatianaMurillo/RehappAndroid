@@ -59,7 +59,7 @@ public class ExerciseVideo extends AppCompatActivity {
 
 
             mediaController.setAnchorView(videoView);
-            Uri video = Uri.parse("https://drive.google.com/file/d/1AXhwwXLnYw0ZoXcypDeiyawuoGDe2_TF/view?fbclid=IwAR1aTWcyOgV_N2_3VPDCWCVwnI7e7SjxWOn_HLObVRXNDoK4CE_5pm0OlaQ");
+            Uri video = Uri.parse("https://orangelo.fruithosted.net/dl/n/So692rrOZOfQCKxr/onklkmbpsokcqaco/Xk15YkHY7MemKDp0P_mOgT5dKLqEuI2vKO9LkTNWN3UiwgaVGlw1xZOp_mP3vvSBC4GDBKedMvCv0x0aCbW_dti9dbmZj4xVmdqDJIBDcrQJhDWiETME6JgPxBOBzrqxeAi6OUNo_WsOhAtWjWI196LfCjaDpVn2McgJbTAzCC48MOTDCMai_fa1K6n-PoEBntN0dowWW2b2eR9qgDuD5sgJRpK9UdwWlM8iq6hO0_LYrZd7z7clY_e4sPayVOJyETrBrF75Hvq2CYZhF4eF0PkttNdG3R6piX-xW18GIN6wzUSIkY6jeheizfKmlNJ7haul9kr7zW2Z0yQI0KD1UpAKLfapnVbNLbbr-4gMXgnVqSyMVZNaZ2lEv_js2SQss1Z3yMRtze-R19PwwIU04h64GHoKLeIcsTXOqOBjPMvg9Eb4s_vyMNL_iuRycELR/VID-20181204-WA0027.mp4");
             videoView.setMediaController(mediaController);
             videoView.setVideoURI(video);
 

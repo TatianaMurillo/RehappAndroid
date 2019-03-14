@@ -1,5 +1,8 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.rehapp.rehappmovil.rehapp.IO.RESPONSES.TherapyResponses.RequestTherapyResponse;
 import com.rehapp.rehappmovil.rehapp.IO.RESPONSES.TherapyResponses.ResultListTherapyResponse;
 
@@ -9,7 +12,7 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.List;
 
-public class Therapy implements Serializable {
+public class Therapy implements Parcelable {
 
 private int Therapy_id;
 private int Therapist_id;
@@ -40,6 +43,32 @@ private boolean Therapy_achieved_the_goal;
         Therapy_sequence = therapy_sequence;
         Therapy_achieved_the_goal = therapy_achieved_the_goal;
     }
+
+    protected Therapy(Parcel in) {
+        Therapy_id = in.readInt();
+        Therapist_id = in.readInt();
+        Patient_id = in.readInt();
+        Therapy_institution_id = in.readInt();
+        Therapy_description = in.readString();
+        Therapy_date = in.readString();
+        Therapy_time = in.readString();
+        Therapy_total_duration = in.readDouble();
+        Therapy_observation = in.readString();
+        Therapy_sequence = in.readInt();
+        Therapy_achieved_the_goal = in.readByte() != 0;
+    }
+
+    public static final Creator<Therapy> CREATOR = new Creator<Therapy>() {
+        @Override
+        public Therapy createFromParcel(Parcel in) {
+            return new Therapy(in);
+        }
+
+        @Override
+        public Therapy[] newArray(int size) {
+            return new Therapy[size];
+        }
+    };
 
     public int getTherapy_id() {
         return Therapy_id;
@@ -127,5 +156,25 @@ private boolean Therapy_achieved_the_goal;
 
     public void setTherapy_achieved_the_goal(boolean therapy_achieved_the_goal) {
         Therapy_achieved_the_goal = therapy_achieved_the_goal;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(Therapy_id);
+        dest.writeInt(Therapist_id);
+        dest.writeInt(Patient_id);
+        dest.writeInt(Therapy_institution_id);
+        dest.writeString(Therapy_description);
+        dest.writeString(Therapy_date);
+        dest.writeString(Therapy_time);
+        dest.writeDouble(Therapy_total_duration);
+        dest.writeString(Therapy_observation);
+        dest.writeInt(Therapy_sequence);
+        dest.writeByte((byte) (Therapy_achieved_the_goal ? 1 : 0));
     }
 }

@@ -26,6 +26,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
     private ListView lvTherapies;
     private ArrayList<Therapy> therapies = new ArrayList<Therapy>();
+    private ArrayList<String> therapiesTitles = new ArrayList<String>();
     final Therapy therapy= new Therapy();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +51,18 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
 
         therapies.add(therapy);
+        therapiesTitles.add(therapy.getTherapy_description());
         therapies.add(therapy);
+        therapiesTitles.add(therapy.getTherapy_description());
         therapies.add(therapy);
+        therapiesTitles.add(therapy.getTherapy_description());
         therapies.add(therapy);
 
 
-        ArrayAdapter<Therapy> arrayAdapter =
-                new ArrayAdapter<Therapy>(this, android.R.layout.simple_list_item_1, therapies);
+
+
+        ArrayAdapter<String> arrayAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, therapiesTitles);
         // Set The Adapter
         lvTherapies.setAdapter(arrayAdapter);
 
@@ -67,7 +73,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
                 Therapy selectedTherapy = therapies.get(position);
                 Toast.makeText(getApplicationContext(), "therapy selected : " + selectedTherapy.getTherapy_description(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyDetail.class);
-                intent.putExtra("TherapySelected", therapy);
+                intent.putExtra("TherapySelected", selectedTherapy);
 
                 startActivity(intent);
             }
@@ -86,6 +92,9 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         View customView = li.inflate(R.layout.activity_menu_items, null);
         mActionBar.setCustomView(customView);
         mActionBar.setDisplayShowCustomEnabled(true);
+
+
+
         ImageButton leftPage = (ImageButton)    customView.findViewById(R.id.left);
         leftPage.setOnClickListener(new View.OnClickListener() {
             @Override

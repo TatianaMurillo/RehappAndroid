@@ -12,8 +12,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.rehapp.rehappmovil.rehapp.Models.Therapy;
+
 public class TherapyDetail extends AppCompatActivity {
-private int therapySelected;
+private Therapy therapySelected;
 private TextView tvTherapySequence;
 private Toolbar toolbar;
 
@@ -24,9 +26,16 @@ private Toolbar toolbar;
 
         tvTherapySequence = findViewById(R.id.tvTherapySequence);
 
-        therapySelected = Integer.parseInt(getIntent().getSerializableExtra("therapySelected").toString());
+            Intent intent =getIntent();
+            therapySelected = (Therapy) intent.getParcelableExtra("therapySelected");
 
-        tvTherapySequence.setText("Terapia # " + (therapySelected+1));
+            if(therapySelected!=null) {
+
+                tvTherapySequence.setText("Terapia # " + therapySelected.getTherapy_sequence());
+            }
+
+
+
 
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);

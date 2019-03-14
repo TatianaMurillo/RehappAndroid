@@ -1,6 +1,7 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,8 +38,15 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             etDocument= findViewById(R.id.etDocument);
             tvWelcome = findViewById(R.id.tvWelcome);
 
-            userActive = getIntent().getSerializableExtra("userActive").toString();
-            tvWelcome.setText( tvWelcome.getText()  +  userActive +"!");
+            if(getIntent().getSerializableExtra("userActive")!=null)
+            {
+                userActive = getIntent().getSerializableExtra("userActive").toString();
+
+            }
+
+
+
+                tvWelcome.setText("¡ " + tvWelcome.getText() + " " + userActive + " !");
 
 
 
@@ -53,6 +61,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             View customView = li.inflate(R.layout.activity_menu_items, null);
             mActionBar.setCustomView(customView);
             mActionBar.setDisplayShowCustomEnabled(true);
+
             ImageButton leftPage = (ImageButton)    customView.findViewById(R.id.left);
             leftPage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -67,6 +76,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
                 public void onClick(View view) {
 
                     // debe antes validar que se haya seleccionado tipo de documento y documento para redirigir
+                    //aqui se invoca el metodo de buscar el paciente tambien.
                     String document = etDocument.getText().toString();
                     if(!document.isEmpty()) {
 
@@ -123,4 +133,20 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
         startActivity(intent);
 
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        outState.putString("userActive","");
+
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+            userActive = savedInstanceState.getString("userActive");
+        }
 }
