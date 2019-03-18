@@ -1,6 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
-import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public interface DocumentTypeApiService {
 
 
     @GET("documentTypes")
-    Call<ArrayList<DocumentType>> getDocumentTypes();
+    Call<ArrayList<DocumentTypeViewModel>> getDocumentTypes();
 
 /*
     @FormUrlEncoded

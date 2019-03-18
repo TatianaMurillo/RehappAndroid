@@ -5,7 +5,7 @@ import android.content.Context;
 
 public class GlobalApplication {
 
-    public static String url="http://192.168.0.24/terappmovil/public/api/";
+    public static String url="http://192.168.0.36/terappmovil/public/api/";
 
 
 }

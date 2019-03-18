@@ -17,6 +17,7 @@ public class ValidateInputs {
                 {
                     return false;
                 }
+
             }
 
             return true;

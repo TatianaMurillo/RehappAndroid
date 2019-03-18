@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
     private String documentPatient;
     private PatientViewModel patientViewModel;
     private int documentTypePatientId;
-    private TherapyViewModel therapy;
+    private TherapyMasterDetailViewModel therapy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +42,17 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
         lvTherapies = findViewById(R.id.lvTherapies);
 
+
 for (int i=1;i<5;i++) {
 
-    therapy = new TherapyViewModel();
+    therapy = new TherapyMasterDetailViewModel();
     therapy.setTherapy_id(1);
-    therapy.setTherapist_id(i);
+    therapy.setTherapist_id(1);
     therapy.setPatient_id(1);
-    therapy.setTherapy_institution_id(2);
+    therapy.setInstitution_id(2);
     therapy.setTherapy_description("Terapia cardiovascular sesión "+ i);
-    therapy.setTherapy_date("");
-    therapy.setTherapy_time("");
+    therapy.setCreated_at("");
+    therapy.setUpdated_at("");
     therapy.setTherapy_total_duration(2.2);
     therapy.setTherapy_observation("");
     therapy.setTherapy_sequence(i);
@@ -116,7 +119,7 @@ for (int i=1;i<5;i++) {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        ocultarItems(menu);
+        showHideItems(menu);
         return true;
     }
 
@@ -136,7 +139,7 @@ for (int i=1;i<5;i++) {
         }
     }
 
-    public void ocultarItems(Menu menu)
+    public void showHideItems(Menu menu)
     {
         MenuItem item;
 

@@ -1,7 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
-import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
-import com.rehapp.rehappmovil.rehapp.Models.Therapist;
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 
 import java.util.ArrayList;
 
@@ -12,7 +11,7 @@ public interface TherapistApiService {
 
 
     @GET("therapists")
-    Call<ArrayList<Therapist>> getTherapists();
+    Call<ArrayList<TherapistViewModel>> getTherapists();
 
 /*
     @FormUrlEncoded

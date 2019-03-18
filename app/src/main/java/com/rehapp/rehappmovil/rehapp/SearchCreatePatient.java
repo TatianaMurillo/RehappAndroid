@@ -1,15 +1,9 @@
 package com.rehapp.rehappmovil.rehapp;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +18,7 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.SearchCreatePatientViewModel;
@@ -36,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchCreatePatient extends AppCompatActivity implements Callback<ArrayList<DocumentType>>{
+public class SearchCreatePatient extends AppCompatActivity implements Callback<ArrayList<DocumentTypeViewModel>>{
 
         private ImageButton ibtnSearchPatient ;
         private ImageButton ibtnAddPatient;
@@ -48,7 +42,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
         private SearchCreatePatientViewModel searchCreatePatientViewModel;
         private int documentTypeSelected, indexDocumentTypeSelected=0;
 
-        ArrayList<DocumentType> documentTypes;
+        ArrayList<DocumentTypeViewModel> documentTypes;
         ArrayList<String> documentTypeNames= new ArrayList<String>();
 
         @Override
@@ -78,7 +72,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
                 {
                 }
             });
-            Call<ArrayList<DocumentType>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
+            Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
             call.enqueue(this);
         }
 
@@ -95,14 +89,14 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
     }
 
     @Override
-    public void onResponse(Call<ArrayList<DocumentType>> call, Response<ArrayList<DocumentType>> response)
+    public void onResponse(Call<ArrayList<DocumentTypeViewModel>> call, Response<ArrayList<DocumentTypeViewModel>> response)
     {
             if(response.isSuccessful())
             {
                 documentTypes= response.body();
-                for(DocumentType documentType: documentTypes)
+                for(DocumentTypeViewModel documentTypeViewModel : documentTypes)
                 {
-                    documentTypeNames.add(documentType.getDocument_type_name());
+                    documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
                 }
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, documentTypeNames);
                 spnDocumentType.setAdapter(arrayAdapter);
@@ -110,7 +104,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             }
         }
         @Override
-        public void onFailure(Call<ArrayList<DocumentType>> call, Throwable t)
+        public void onFailure(Call<ArrayList<DocumentTypeViewModel>> call, Throwable t)
         {
             Toast.makeText(getApplicationContext(), PreferencesData.searchPatientListDocumentTypesMgs + t.getMessage(),   Toast.LENGTH_LONG).show();
         }
@@ -131,6 +125,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
                         Bundle extras = new Bundle();
                         extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
                         extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
+                        extras.putString(PreferencesData.userActive, searchCreatePatientViewModel.getActiveUser());
                         intent.putExtras(extras);
                         startActivity(intent);
                     }else{

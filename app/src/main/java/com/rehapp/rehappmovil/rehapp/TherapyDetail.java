@@ -15,9 +15,10 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.InstitutionApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.Institution;
+import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.Therapist;
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
@@ -28,12 +29,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TherapyDetail extends AppCompatActivity {
-private TherapyViewModel therapySelected;
+private TherapyMasterDetailViewModel therapySelected;
 private TextView tvTherapySequence;
 private String action;
 private Spinner spnTherapist;
 private Spinner spnInstitution;
-TherapyViewModel therapyViewModel;
+TherapyMasterDetailViewModel therapyViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +44,8 @@ TherapyViewModel therapyViewModel;
         tvTherapySequence = findViewById(R.id.tvTherapySequence);
         spnInstitution = findViewById(R.id.spnInstitution);
         spnTherapist = findViewById(R.id.spnTherapist);
-        therapyViewModel = ViewModelProviders.of(this).get(TherapyViewModel.class);
+        therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         recoverySendData();
-
     }
 
     public void therapyAdditionalInfo(View view) {
@@ -62,7 +63,6 @@ TherapyViewModel therapyViewModel;
 
     }
 
-
     private void recoverySendData()
     {
         if( getIntent().getExtras()!=null)
@@ -73,7 +73,7 @@ TherapyViewModel therapyViewModel;
                     UnBlockData();
                 }else
                 {
-                    therapySelected = (TherapyViewModel) getIntent().getSerializableExtra(PreferencesData.TherapySelected);
+                    therapySelected = (TherapyMasterDetailViewModel) getIntent().getSerializableExtra(PreferencesData.TherapySelected);
                     tvTherapySequence.setText("Terapia # " + therapySelected.getTherapy_sequence());
                     blockData();
                 }
@@ -93,26 +93,26 @@ TherapyViewModel therapyViewModel;
     }
     public void listTherapists()
     {
-        Call<ArrayList<Therapist>> call = TherapistApiAdapter.getApiService().getTherapists();
-        call.enqueue(new Callback<ArrayList<Therapist>>() {
+        Call<ArrayList<TherapistViewModel>> call = TherapistApiAdapter.getApiService().getTherapists();
+        call.enqueue(new Callback<ArrayList<TherapistViewModel>>() {
             int indexOfTherapist=-1;
 
-            ArrayList<Therapist> therapists= new ArrayList<Therapist>();
+            ArrayList<TherapistViewModel> therapists= new ArrayList<TherapistViewModel>();
             ArrayList<String> therapistNames  = new ArrayList<String>();
 
             @Override
-            public void onResponse(Call<ArrayList<Therapist>> call, Response<ArrayList<Therapist>> response) {
+            public void onResponse(Call<ArrayList<TherapistViewModel>> call, Response<ArrayList<TherapistViewModel>> response) {
                 if(response.isSuccessful())
                 {
                     therapists = response.body();
-                    for(Therapist therapist: therapists)
+                    for(TherapistViewModel therapistViewModel : therapists)
                     {
                         if(therapyViewModel.getAction().equals("DETAIL")) {
-                            if (therapist.getTherapist_id() == therapySelected.getTherapist_id()) {
-                                indexOfTherapist = therapists.indexOf(therapist);
+                            if (therapistViewModel.getTherapist_id() == therapySelected.getTherapist_id()) {
+                                indexOfTherapist = therapists.indexOf(therapistViewModel);
                             }
                         }
-                        therapistNames.add(therapist.getTherapist_first_lastname()+" " +therapist.getTherapist_first_name());
+                        therapistNames.add(therapistViewModel.getTherapist_first_lastname()+" " + therapistViewModel.getTherapist_first_name());
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TherapyDetail.this,android.R.layout.simple_list_item_1,therapistNames);
                     spnTherapist.setAdapter(arrayAdapter);
@@ -128,32 +128,32 @@ TherapyViewModel therapyViewModel;
                 }
             }
             @Override
-            public void onFailure(Call<ArrayList<Therapist>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<TherapistViewModel>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailTherapistListMsg,Toast.LENGTH_LONG).show();
             }
         });
     }
     public void listInstitutions()
     {
-        Call<ArrayList<Institution>> call = InstitutionApiAdapter.getApiService().getInstitutions();
-        call.enqueue(new Callback<ArrayList<Institution>>() {
+        Call<ArrayList<InstitutionViewModel>> call = InstitutionApiAdapter.getApiService().getInstitutions();
+        call.enqueue(new Callback<ArrayList<InstitutionViewModel>>() {
             int indexOfInstitution=-1;
-            ArrayList<Institution> institutions= new ArrayList<Institution>();
+            ArrayList<InstitutionViewModel> institutions= new ArrayList<InstitutionViewModel>();
             ArrayList<String> institutionNames  = new ArrayList<String>();
 
             @Override
-            public void onResponse(Call<ArrayList<Institution>> call, Response<ArrayList<Institution>> response) {
+            public void onResponse(Call<ArrayList<InstitutionViewModel>> call, Response<ArrayList<InstitutionViewModel>> response) {
                 if(response.isSuccessful())
                 {
                     institutions = response.body();
-                    for(Institution institution: institutions)
+                    for(InstitutionViewModel institutionViewModel : institutions)
                     {
                         if(therapyViewModel.getAction().equals("DETAIL")) {
-                            if (institution.getInstitution_id() == therapySelected.getTherapy_institution_id()) {
-                                indexOfInstitution = institutions.indexOf(institution);
+                            if (institutionViewModel.getInstitution_id() == therapySelected.getInstitution_id()) {
+                                indexOfInstitution = institutions.indexOf(institutionViewModel);
                             }
                         }
-                        institutionNames.add(institution.getInstitution_name());
+                        institutionNames.add(institutionViewModel.getInstitution_name());
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TherapyDetail.this,android.R.layout.simple_list_item_1,institutionNames);
                     spnInstitution.setAdapter(arrayAdapter);
@@ -170,21 +170,18 @@ TherapyViewModel therapyViewModel;
 
             }
             @Override
-            public void onFailure(Call<ArrayList<Institution>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<InstitutionViewModel>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailInstitutionListMsg,Toast.LENGTH_LONG).show();
             }
         });
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu,  menu);
-
-        ocultarItems(menu);
+        showHideItems(menu);
         return true;
     }
 
@@ -203,21 +200,41 @@ TherapyViewModel therapyViewModel;
         return super.onOptionsItemSelected(item);
     }
 
-    public void ocultarItems(Menu menu)
+    public void showHideItems(Menu menu)
     {
         MenuItem item;
-        if(action.equals("DETAIL")) {
+        if(therapyViewModel.getAction().equals("DETAIL")) {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
 
             item = menu.findItem(R.id.save_therapy);
             item.setVisible(false);
         }else
-        {
+       {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
-        }
+       }
     }
 
+
+    public void addPhysiologicalParametersIn(View view) {
+        Intent intent = new Intent(TherapyDetail.this, PhysiologicalParameterTherapy.class);
+        Bundle extras = new Bundle();
+        extras.putString(PreferencesData.PhysiologicalParameterAction, "IN");
+        extras.putString(PreferencesData.TherapyAction, action);
+        intent.putExtra(PreferencesData.TherapySelected, therapySelected);
+        intent.putExtras(extras);
+        startActivity(intent);
+    }
+
+    public void addPhysiologicalParametersOut(View view) {
+        Intent intent = new Intent(TherapyDetail.this, PhysiologicalParameterTherapy.class);
+        Bundle extras = new Bundle();
+        extras.putString(PreferencesData.PhysiologicalParameterAction, "OUT");
+        extras.putString(PreferencesData.TherapyAction, action);
+        intent.putExtra(PreferencesData.TherapySelected, therapySelected);
+        intent.putExtras(extras);
+        startActivity(intent);
+    }
 
 }
