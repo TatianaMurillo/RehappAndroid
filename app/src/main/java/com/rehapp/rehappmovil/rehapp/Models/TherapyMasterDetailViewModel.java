@@ -1,6 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TherapyMasterDetailViewModel extends TherapyViewModel {
 
@@ -9,20 +10,25 @@ public class TherapyMasterDetailViewModel extends TherapyViewModel {
     private TherapistViewModel therapist;
     private PatientViewModel patient;
     private InstitutionViewModel institution;
-    private ArrayList<PhysiologicalParameterTherapyViewModel>[] physiologicalParameterViewModel;
+    private List<List<PhysiologicalParameterTherapyViewModel>> physiologicalParameterViewModel;
+    private static TherapyMasterDetailViewModel instance;
 
-    public TherapyMasterDetailViewModel(int therapy_id, String therapy_description, double therapy_total_duration, String therapy_observation, int therapy_sequence, boolean therapy_achieved_the_goal, int therapist_id, int patient_id, int institution_id, String action, TherapistViewModel therapist, PatientViewModel patient, InstitutionViewModel institution, ArrayList<PhysiologicalParameterTherapyViewModel>[] physiologicalParameterViewModel) {
-        super(therapy_id, therapy_description, therapy_total_duration, therapy_observation, therapy_sequence, therapy_achieved_the_goal, therapist_id, patient_id, institution_id);
-        this.action = action;
-        this.therapist = therapist;
-        this.patient = patient;
-        this.institution = institution;
-        this.physiologicalParameterViewModel = physiologicalParameterViewModel;
+
+    public TherapyMasterDetailViewModel()
+    {
     }
 
 
-    public TherapyMasterDetailViewModel() {
+    public static TherapyMasterDetailViewModel getInstance()
+    {
+        if(instance ==null)
+        {
+            instance = new TherapyMasterDetailViewModel();
+        }
+
+        return instance;
     }
+
 
     public String getAction() {
         return action;
@@ -56,11 +62,11 @@ public class TherapyMasterDetailViewModel extends TherapyViewModel {
         this.institution = institution;
     }
 
-    public ArrayList<PhysiologicalParameterTherapyViewModel>[] getPhysiologicalParameterViewModel() {
+    public List<List<PhysiologicalParameterTherapyViewModel>> getPhysiologicalParameterViewModel() {
         return physiologicalParameterViewModel;
     }
 
-    public void setPhysiologicalParameterViewModel(ArrayList<PhysiologicalParameterTherapyViewModel>[] physiologicalParameterViewModel) {
+    public void setPhysiologicalParameterViewModel(List<List<PhysiologicalParameterTherapyViewModel>> physiologicalParameterViewModel) {
         this.physiologicalParameterViewModel = physiologicalParameterViewModel;
     }
 }

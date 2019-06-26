@@ -1,24 +1,18 @@
 package com.rehapp.rehappmovil.rehapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AndroidException;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,12 +21,12 @@ import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterApiAda
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,41 +35,31 @@ import retrofit2.Response;
 public class PhysiologicalParameterTherapy extends AppCompatActivity {
 
     private TextView title;
-    private TextView tvFC;
-    private EditText etFC;
-    private TextView tvDyspneaMmrc;
-    private EditText etDyspneaMmrc;
-    private TextView tvDiastolicPressure;
-    private EditText etDiastolicPressure;
-    private TextView tvSaturation;
-    private EditText etSaturation;
-    private TextView tvOxygenSaturation;
-    private EditText etOxygenSaturation;
-    private TextView tvBorgE;
-    private EditText etBorgE;
-    private TextView tvBorgD;
-    private EditText etBorgD;
-    private TextView tvHeartRate;
-    private EditText etHeartRate;
+
     private String physiologicalParameterAction;
     private String action;
+
+    String json;
     private TherapyViewModel therapySelected;
-    private TableLayout tableContent;
-    private TableRow row;
     private EditText editText;
     private TextView textView;
-    private GridView grid;
+    private GridLayout grid;
     SharedPreferences sharedpreferences;
+
+    ArrayList<PhysiologicalParameterViewModel> options= new ArrayList<PhysiologicalParameterViewModel>();
+
+    private List<PhysiologicalParameterTherapyViewModel> physiologicalParameterViewModelList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_physiological_parameter_therapy);
 
          title = findViewById(R.id.title);
-                 grid = findViewById(R.id.grid);
+         grid = findViewById(R.id.grid);
 
-
-        ArrayList<PhysiologicalParameterViewModel> options= new ArrayList<PhysiologicalParameterViewModel>();
+        recoverySendData();
+        LoadData();
 
         options.add(new PhysiologicalParameterViewModel("FC"));
 
@@ -83,11 +67,23 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
 
         options.add(new PhysiologicalParameterViewModel("BorgD"));
 
-        final PhysiologicalParameterRowAdapter arrayAdapter = new PhysiologicalParameterRowAdapter(PhysiologicalParameterTherapy.this, options);
+        options.add(new PhysiologicalParameterViewModel("BorgE"));
 
-        grid.setAdapter(arrayAdapter);
+        addPhysiologicalParametersView(options);
+
+
     }
 
+    public void LoadData()
+    {
+        if(physiologicalParameterAction.equals(PreferencesData.PhysiologicalParameterTherapySesionIN))
+        {
+            title.setText(R.string.phisiologicalParametersIn);
+        }else if(physiologicalParameterAction.equals(PreferencesData.PhysiologicalParameterTherapySesionOUT))
+        {
+            title.setText(R.string.phisiologicalParametersOut);
+        }
+    }
 
 
     @Override
@@ -115,29 +111,7 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
                if(response.isSuccessful())
                {
                    physiologicalParameters = response.body();
-                   for(PhysiologicalParameterViewModel physiologicalParameterViewModel : physiologicalParameters)
-                   {
-                       row = new TableRow(PhysiologicalParameterTherapy.this);
-
-                       textView = new TextView(PhysiologicalParameterTherapy.this);
-
-                       ViewGroup.LayoutParams params= textView.getLayoutParams();
-                       params.width= LinearLayout.LayoutParams.WRAP_CONTENT;
-                       params.height= LinearLayout.LayoutParams.WRAP_CONTENT;
-
-                       textView.setLayoutParams(params);
-
-                       row.addView(textView);
-
-                       params= editText.getLayoutParams();
-
-                       params.height= LinearLayout.LayoutParams.WRAP_CONTENT;
-
-
-                       row.addView(editText);
-
-                       tableContent.addView(row);
-                   }
+                   addPhysiologicalParametersView(physiologicalParameters);
 
                }
            }
@@ -147,6 +121,8 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
            }
        });
    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -175,44 +151,41 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
 
     public void savePhysiologicalParameterTherapy()
     {
-        String FC=etFC.getText().toString();
-        String DyspneaMmrc=etDyspneaMmrc.getText().toString();
-        String DiastolicPressure=etDiastolicPressure.getText().toString();
-        String Saturation=etSaturation.getText().toString();
-        String OxygenSaturation=etOxygenSaturation.getText().toString();
-        String BorgE=etBorgE.getText().toString();
-        String BorgD=etBorgD.getText().toString();
-        String HeartRate=etHeartRate.getText().toString();
-        PhysiologicalParameterViewModel physiologicalParameter= new PhysiologicalParameterViewModel();
+              getPhysiolocalParametersFromView();
+              saveObjectTherapyMasterDetailViewModel();
 
-
-        Gson gson = new  Gson();
-
-        String json = gson.toJson(physiologicalParameter);
-        sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-
-        if(physiologicalParameterAction.equals("IN")) {
-            editor.putString(PreferencesData.PhysiologicalParameterIn, json);
-            editor.commit();
             Toast.makeText(getApplicationContext(), PreferencesData.PhysiologicalParameterTherapySuccessMgs,   Toast.LENGTH_LONG).show();
+            System.out.print("el objeto grabado es: ".concat(json));
             Intent intent = new Intent(PhysiologicalParameterTherapy.this, TherapyDetail.class);
             intent.putExtra(PreferencesData.TherapyAction,action);
             intent.putExtra(PreferencesData.TherapySelected, therapySelected);
             startActivity(intent);
-        }else if(physiologicalParameterAction.equals("OUT"))
+    }
+
+    private void getPhysiolocalParametersFromView() {
+
+        int childCount = grid.getChildCount();
+        String valueEditText;
+        String valueTextView;
+        Object childEditText;
+        Object childTextView;
+        TextView textView;
+        EditText editText;
+
+        for(int i=1;i<childCount; i+=2)
         {
-            editor.putString(PreferencesData.PhysiologicalParameterOut, json);
-            editor.commit();
-            Toast.makeText(getApplicationContext(), PreferencesData.PhysiologicalParameterTherapySuccessMgs,   Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(PhysiologicalParameterTherapy.this, TherapyDetail.class);
-            intent.putExtra(PreferencesData.TherapyAction,action);
-            intent.putExtra(PreferencesData.TherapySelected, therapySelected);
-            startActivity(intent);
-        }else
-        {
-            Toast.makeText(getApplicationContext(), PreferencesData.PhysiologicalParameterTherapyDataMgsError,   Toast.LENGTH_LONG).show();
+             childEditText = grid.getChildAt(i);
+             childTextView = grid.getChildAt(i-1);
+
+             textView=(TextView) childTextView;
+             valueTextView=textView.getText().toString().trim();
+             editText = (EditText)childEditText;
+
+            valueEditText = editText.getText().toString().trim();
+            physiologicalParameterViewModelList.add(new PhysiologicalParameterTherapyViewModel(0,getIdPhysiologicalParameter(valueTextView),0,valueEditText,physiologicalParameterAction));
+
         }
+
     }
 
     private void recoverySendData()
@@ -224,6 +197,62 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
             action=extras.getString(PreferencesData.TherapyAction);
             therapySelected = (TherapyViewModel) getIntent().getSerializableExtra(PreferencesData.TherapySelected);
         }
+    }
+
+
+    private void addPhysiologicalParametersView( ArrayList<PhysiologicalParameterViewModel> physiologicalParameters)
+    {
+        for(PhysiologicalParameterViewModel physiologicalParameterViewModel : physiologicalParameters)
+        {
+
+            textView = new TextView(PhysiologicalParameterTherapy.this);
+            editText = new EditText(PhysiologicalParameterTherapy.this);
+
+            textView.setText(physiologicalParameterViewModel.getPhysiological_parameter_name());
+            editText.setEms(PreferencesData.PhysiologicalParameterTherapyValueSize);
+            editText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(PreferencesData.PhysiologicalParameterTherapyValueSize) });
+            editText.setSingleLine(true);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            editText.setGravity(Gravity.CENTER);
+            grid.addView(textView);
+            grid.addView(editText);
+        }
+    }
+
+
+    private int getIdPhysiologicalParameter(String name)
+    {
+        for(PhysiologicalParameterViewModel physiologicalParameterTherapy: options )
+        {
+            if(physiologicalParameterTherapy.getPhysiological_parameter_name().equals(name)){
+                return physiologicalParameterTherapy.getPhysiological_parameter_id();
+            }
+        }
+        return 0;
+    }
+
+    private void getObjectTherapyMasterDetailViewModel()
+    {
+        Gson gson = new  Gson();
+        sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+        json= sharedpreferences.getString(PreferencesData.TherapyMasterDetailViewModel,"");
+    }
+
+
+    private void saveObjectTherapyMasterDetailViewModel()
+    {
+        Gson gson = new  Gson();
+        json = gson.toJson(physiologicalParameterViewModelList);
+        sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+        if(physiologicalParameterAction.equals(PreferencesData.PhysiologicalParameterTherapySesionIN)) {
+            editor.putString(PreferencesData.PhysiologicalParameterIn, json);
+        }else
+        {
+            editor.putString(PreferencesData.PhysiologicalParameterOut, json);
+        }
+        editor.commit();
     }
 }
 

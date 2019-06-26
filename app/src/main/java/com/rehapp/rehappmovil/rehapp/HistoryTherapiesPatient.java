@@ -1,6 +1,8 @@
 package com.rehapp.rehappmovil.rehapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
@@ -33,6 +37,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
     private PatientViewModel patientViewModel;
     private int documentTypePatientId;
     private TherapyMasterDetailViewModel therapy;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +133,7 @@ for (int i=1;i<5;i++) {
         switch (item.getItemId())
         {
             case R.id.create_therapy:
+                createTherapyJson();
                 Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyDetail.class);
                 Bundle extras = new Bundle();
                 extras.putString(PreferencesData.TherapyAction, "ADD");
@@ -147,4 +153,17 @@ for (int i=1;i<5;i++) {
         item.setVisible(false);
     }
 
+    public void createTherapyJson()
+    {
+        TherapyMasterDetailViewModel  therapyMasterDetailViewModel;
+
+        therapyMasterDetailViewModel = new TherapyMasterDetailViewModel();
+
+        Gson gson = new  Gson();
+        String json = gson.toJson(therapyMasterDetailViewModel);
+        sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(PreferencesData.TherapyMasterDetailViewModel, json);
+        editor.commit();
+    }
 }

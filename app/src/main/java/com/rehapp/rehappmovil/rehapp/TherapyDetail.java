@@ -1,7 +1,9 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,13 +15,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.InstitutionApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
 import java.util.ArrayList;
@@ -34,7 +36,9 @@ private TextView tvTherapySequence;
 private String action;
 private Spinner spnTherapist;
 private Spinner spnInstitution;
-TherapyMasterDetailViewModel therapyViewModel;
+private TherapyMasterDetailViewModel therapyViewModel;
+private SharedPreferences sharedpreferences;
+private String json;
 
 
     @Override
@@ -45,7 +49,19 @@ TherapyMasterDetailViewModel therapyViewModel;
         spnInstitution = findViewById(R.id.spnInstitution);
         spnTherapist = findViewById(R.id.spnTherapist);
         therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
+        LoadData();
         recoverySendData();
+    }
+
+    private void LoadData() {
+
+        Gson gson = new  Gson();
+        json = gson.toJson(therapyViewModel);
+        sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(PreferencesData.TherapyMasterDetailViewModel, json);
+        editor.commit();
+
     }
 
     public void therapyAdditionalInfo(View view) {
@@ -216,11 +232,10 @@ TherapyMasterDetailViewModel therapyViewModel;
        }
     }
 
-
     public void addPhysiologicalParametersIn(View view) {
         Intent intent = new Intent(TherapyDetail.this, PhysiologicalParameterTherapy.class);
         Bundle extras = new Bundle();
-        extras.putString(PreferencesData.PhysiologicalParameterAction, "IN");
+        extras.putString(PreferencesData.PhysiologicalParameterAction,PreferencesData.PhysiologicalParameterTherapySesionIN);
         extras.putString(PreferencesData.TherapyAction, action);
         intent.putExtra(PreferencesData.TherapySelected, therapySelected);
         intent.putExtras(extras);
@@ -230,11 +245,10 @@ TherapyMasterDetailViewModel therapyViewModel;
     public void addPhysiologicalParametersOut(View view) {
         Intent intent = new Intent(TherapyDetail.this, PhysiologicalParameterTherapy.class);
         Bundle extras = new Bundle();
-        extras.putString(PreferencesData.PhysiologicalParameterAction, "OUT");
+        extras.putString(PreferencesData.PhysiologicalParameterAction, PreferencesData.PhysiologicalParameterTherapySesionOUT);
         extras.putString(PreferencesData.TherapyAction, action);
         intent.putExtra(PreferencesData.TherapySelected, therapySelected);
         intent.putExtras(extras);
         startActivity(intent);
     }
-
 }

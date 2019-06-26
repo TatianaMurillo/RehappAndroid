@@ -137,8 +137,8 @@
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\USUARIO\Documents\iconos app\doctor_login.png" />
-                                      <entry key="outputName" value="login" />
+                                      <entry key="imageAsset" value="C:\Users\USUARIO\Documents\iconos app\iconfinder_stethoscope_38717.png" />
+                                      <entry key="outputName" value="ic_launcher_round" />
                                     </map>
                                   </option>
                                 </PersistentState>

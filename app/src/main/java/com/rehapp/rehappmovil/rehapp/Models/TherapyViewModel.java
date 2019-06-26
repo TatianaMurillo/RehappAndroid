@@ -3,6 +3,8 @@ package com.rehapp.rehappmovil.rehapp.Models;
 import android.arch.lifecycle.ViewModel;
 
 
+import com.rehapp.rehappmovil.rehapp.TherapyDetail;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -17,6 +19,9 @@ public class TherapyViewModel extends ViewModel implements Serializable {
     private int therapist_id;
     private int patient_id;
     private int institution_id;
+
+
+
     private String created_at;
     private String updated_at;
 
