@@ -20,8 +20,8 @@ public class PatientViewModel extends ViewModel {
         private float neighborhood_id;
         private float document_type_id;
         private float gender_id;
-        private DocumentType Document_typeObject;
-        private Neighborhood NeighborhoodObject;
+        private DocumentTypeViewModel Document_typeObject;
+        private NeighborhoodViewModel neighborhoodViewModelObject;
 
         @SerializedName("error")
         private String patient_code_description;
@@ -88,12 +88,12 @@ public class PatientViewModel extends ViewModel {
             return gender_id;
         }
 
-        public DocumentType getDocument_type() {
+        public DocumentTypeViewModel getDocument_type() {
             return Document_typeObject;
         }
 
-        public Neighborhood getNeighborhood() {
-            return NeighborhoodObject;
+        public NeighborhoodViewModel getNeighborhood() {
+            return neighborhoodViewModelObject;
         }
 
         // Setter Methods
@@ -154,12 +154,12 @@ public class PatientViewModel extends ViewModel {
             this.gender_id = gender_id;
         }
 
-        public void setDocument_type(DocumentType document_typeObject) {
+        public void setDocument_type(DocumentTypeViewModel document_typeObject) {
             this.Document_typeObject = document_typeObject;
         }
 
-        public void setNeighborhood(Neighborhood neighborhoodObject) {
-            this.NeighborhoodObject = neighborhoodObject;
+        public void setNeighborhood(NeighborhoodViewModel neighborhoodViewModelObject) {
+            this.neighborhoodViewModelObject = neighborhoodViewModelObject;
         }
     }
 

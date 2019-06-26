@@ -1,6 +1,5 @@
 package com.rehapp.rehappmovil.rehapp;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
@@ -30,7 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchPatient extends AppCompatActivity{
-    String documentPatient;
+    String documentPatient, activeUser;
     PatientViewModel patientViewModel;
     private int documentTypePatientId, indexOfPatientDocument=-1;
     private int documentTypeSelected, indexDocumentTypeSelected=0;
@@ -38,7 +37,7 @@ public class SearchPatient extends AppCompatActivity{
     ImageButton ibtnSearchPatient;
     Spinner spnDocumentType;
     EditText etPatientName;
-    ArrayList<DocumentType> documentTypes;
+    ArrayList<DocumentTypeViewModel> documentTypes;
     ArrayList<String> documentTypeNames= new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -68,20 +67,20 @@ public class SearchPatient extends AppCompatActivity{
     }
     public void listDocumentTypes()
     {
-        Call<ArrayList<DocumentType>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
-        call.enqueue(new Callback<ArrayList<DocumentType>>() {
+        Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
+        call.enqueue(new Callback<ArrayList<DocumentTypeViewModel>>() {
             @Override
-            public void onResponse(Call<ArrayList<DocumentType>> call, Response<ArrayList<DocumentType>> response) {
+            public void onResponse(Call<ArrayList<DocumentTypeViewModel>> call, Response<ArrayList<DocumentTypeViewModel>> response) {
                 if(response.isSuccessful())
                 {
                     documentTypes= response.body();
-                    for(DocumentType documentType: documentTypes)
+                    for(DocumentTypeViewModel documentTypeViewModel : documentTypes)
                     {
-                        if(documentType.getDocument_type_id()==documentTypePatientId)
+                        if(documentTypeViewModel.getDocument_type_id()==documentTypePatientId)
                         {
-                            indexOfPatientDocument=documentTypes.indexOf(documentType);
+                            indexOfPatientDocument=documentTypes.indexOf(documentTypeViewModel);
                         }
-                        documentTypeNames.add(documentType.getDocument_type_name());
+                        documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SearchPatient.this,android.R.layout.simple_list_item_1,documentTypeNames);
                     spnDocumentType.setAdapter(arrayAdapter);
@@ -95,7 +94,7 @@ public class SearchPatient extends AppCompatActivity{
 
             }
             @Override
-            public void onFailure(Call<ArrayList<DocumentType>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<DocumentTypeViewModel>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), PreferencesData.documentTypeList,Toast.LENGTH_LONG).show();
             }
         });
@@ -117,6 +116,7 @@ public class SearchPatient extends AppCompatActivity{
                         if(response.raw().code()==404) {
                             Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatientNonExist, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(SearchPatient.this, SearchCreatePatient.class);
+                            intent.putExtra(PreferencesData.userActive,activeUser);
                             startActivity(intent);
                         }
                     }
@@ -144,6 +144,7 @@ public class SearchPatient extends AppCompatActivity{
             Bundle extras = getIntent().getExtras();
             documentPatient = extras.getString(PreferencesData.PatientDocument);
             documentTypePatientId = Integer.parseInt(extras.getString(PreferencesData.PatientTpoDocument));
+            activeUser=extras.getString(PreferencesData.userActive);
             patientViewModel.setPatient_document(documentPatient);
             patientViewModel.setDocument_type_id(documentTypePatientId);
         }
@@ -165,7 +166,7 @@ public class SearchPatient extends AppCompatActivity{
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu,  menu);
 
-        ocultarItems(menu);
+        showHideItems(menu);
         return true;
     }
 
@@ -184,7 +185,7 @@ public class SearchPatient extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    public void ocultarItems(Menu menu)
+    public void showHideItems(Menu menu)
     {
         MenuItem item;
         item= menu.findItem(R.id.create_therapy);

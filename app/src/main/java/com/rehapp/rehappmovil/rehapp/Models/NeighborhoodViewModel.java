@@ -1,6 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
-public class Neighborhood {
+public class NeighborhoodViewModel {
 
     private float neighborhood_id;
     private String neighborhood_description;

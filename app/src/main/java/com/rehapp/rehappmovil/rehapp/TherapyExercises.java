@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExercise;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 
 import java.util.ArrayList;
@@ -24,13 +25,13 @@ public class TherapyExercises extends AppCompatActivity {
     private ArrayList<TherapyExercise> exercises = new ArrayList<>();
     private boolean isSelected;
     private String action;
-    TherapyViewModel therapyViewModel;
+    TherapyMasterDetailViewModel therapyViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_therapy_exercises);
         lvExercises = findViewById(R.id.lvExercises);
-        therapyViewModel = ViewModelProviders.of(this).get(TherapyViewModel.class);
+        therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         recoverySendData();
         loadData();
         final TherapyExercisesAdapter adapter = new TherapyExercisesAdapter(this,exercises);

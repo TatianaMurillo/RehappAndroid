@@ -1,6 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
-public class DocumentType {
+public class DocumentTypeViewModel {
 
 
     private int document_type_id;

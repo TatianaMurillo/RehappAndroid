@@ -15,7 +15,7 @@
         android:layout_alignStart="@+id/spnDocumentType"
         android:layout_alignLeft="@+id/spnDocumentType"
         android:layout_marginTop="123dp"
-        android:text="@string/documentType" />
+        android:text="@string/documentTypeViewModel" />
 
     <Spinner
         android:id="@+id/spnDocumentType"

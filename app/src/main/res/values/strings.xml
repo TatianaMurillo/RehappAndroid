@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">Rehapp</string>
     <string name="document">Documento</string>
-    <string name="documentType">Tipo de documento</string>
+    <string name="documentTypeViewModel">Tipo de documento</string>
     <string name="patient">Paciente</string>
     <string name="phisiologicalParametersIn">Parámetros Fisiológicos al inicio de la sesión</string>
     <string name="phisiologicalParametersOut">Parámetros Fisiológicos al finalizar de la sesión</string>
@@ -14,7 +14,7 @@
     <string name="watchTherapies"> Ver Terapias </string>
     <string name="additionalInfo"> Información adicional </string>
     <string name="institute">Institución </string>
-    <string name="therapist">Terapeuta </string>
+    <string name="therapistViewModel">Terapeuta </string>
     <string name="welcome"> Bienvenido </string>
     <string name="e_mail">Correo</string>
     <string name="ConfirmEmail">Confirmar correo</string>
