@@ -30,6 +30,8 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
     ArrayList<PhysiologicalParameterViewModel> options= new ArrayList<PhysiologicalParameterViewModel>();
 
+
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -53,11 +55,23 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
                     }
                 });
-
+        grid = view.findViewById(R.id.grid);
+        LoadData();
         return builder.create();
     }
 
+    public void LoadData()
+    {
+        options.add(new PhysiologicalParameterViewModel("FC"));
 
+        options.add(new PhysiologicalParameterViewModel("Heart rate"));
+
+        options.add(new PhysiologicalParameterViewModel("BorgD"));
+
+        options.add(new PhysiologicalParameterViewModel("BorgE"));
+
+        addPhysiologicalParametersView(options);
+    }
 
 
     private void addPhysiologicalParametersView( ArrayList<PhysiologicalParameterViewModel> physiologicalParameters)
