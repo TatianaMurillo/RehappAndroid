@@ -233,13 +233,17 @@ private String json;
     }
 
     public void addPhysiologicalParametersIn(View view) {
-        Intent intent = new Intent(TherapyDetail.this, PhysiologicalParameterTherapy.class);
+        /*Intent intent = new Intent(TherapyDetail.this, PhysiologicalParameterTherapy.class);
         Bundle extras = new Bundle();
         extras.putString(PreferencesData.PhysiologicalParameterAction,PreferencesData.PhysiologicalParameterTherapySesionIN);
         extras.putString(PreferencesData.TherapyAction, action);
         intent.putExtra(PreferencesData.TherapySelected, therapySelected);
         intent.putExtras(extras);
-        startActivity(intent);
+        startActivity(intent);*/
+
+        PhysiologicalParameterTherapyDialog physiologicalParameterTherapyDialog = new  PhysiologicalParameterTherapyDialog();
+        physiologicalParameterTherapyDialog.show(getSupportFragmentManager(),"Parametros fisiologicos.");
+
     }
 
     public void addPhysiologicalParametersOut(View view) {
