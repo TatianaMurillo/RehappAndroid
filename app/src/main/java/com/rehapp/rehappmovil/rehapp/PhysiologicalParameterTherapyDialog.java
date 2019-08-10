@@ -14,10 +14,15 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants;
+import com.rehapp.rehappmovil.rehapp.Utils.ReadCSVFile;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment {
@@ -71,6 +76,7 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
         options.add(new PhysiologicalParameterViewModel("BorgE"));
 
         addPhysiologicalParametersView(options);
+        setPhysiolocalParametersToViewFromTmpFile();
     }
 
 
@@ -93,4 +99,33 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
         }
     }
 
+
+
+    private void setPhysiolocalParametersToViewFromTmpFile() {
+
+        List<PhysiologicalParameterTherapyViewModel>  LObj= (List<PhysiologicalParameterTherapyViewModel>)ReadCSVFile.loadTherapyInformation().get(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN);
+        int childCount = grid.getChildCount();
+        String valueEditText;
+        String valueTextView;
+        Object childEditText;
+        Object childTextView;
+        TextView textView;
+        EditText editText;
+
+        for(int i=1;i<childCount; i+=2)
+        {
+            childEditText = grid.getChildAt(i);
+            childTextView = grid.getChildAt(i-1);
+
+            textView=(TextView) childTextView;
+            valueTextView=textView.getText().toString().trim();
+            editText = (EditText)childEditText;
+
+
+            for (PhysiologicalParameterTherapyViewModel  obj:LObj) {
+                editText.setText(obj.getPhysio_param_thrpy_value());
+            }
+        }
+
+    }
 }

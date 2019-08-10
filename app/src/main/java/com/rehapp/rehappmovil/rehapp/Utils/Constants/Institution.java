@@ -2,22 +2,22 @@ package com.rehapp.rehappmovil.rehapp.Utils.Constants;
 
 public enum Institution {
 
-    DATA(0,1,2,3);
+    DATA(4,0,1,2);
 
-    int row;
+    int rowId;
     int institution_id;
     int institution_name;
     int institution_additional_info;
 
-    Institution(int row, int institution_id, int institution_name, int institution_additional_info) {
-        this.row=row;
+    Institution(int rowId, int institution_id, int institution_name, int institution_additional_info) {
+        this.rowId=rowId;
         this.institution_id = institution_id;
         this.institution_name = institution_name;
         this.institution_additional_info = institution_additional_info;
     }
 
-    public int getRow() {
-        return row;
+    public int getRowId() {
+        return rowId;
     }
 
     public int getInstitution_id() {

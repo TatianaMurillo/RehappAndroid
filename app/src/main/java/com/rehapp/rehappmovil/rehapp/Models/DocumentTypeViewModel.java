@@ -7,6 +7,11 @@ public class DocumentTypeViewModel {
     private String document_type_name;
     private String document_type_description;
 
+    public DocumentTypeViewModel(int document_type_id, String document_type_description, String document_type_name) {
+        this.document_type_id=document_type_id;
+        this.document_type_name = document_type_name;
+        this.document_type_description = document_type_description;
+    }
 
     public int getDocument_type_id() {
         return document_type_id;
