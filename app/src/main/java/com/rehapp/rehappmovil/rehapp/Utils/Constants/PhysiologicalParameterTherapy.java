@@ -3,8 +3,8 @@ package com.rehapp.rehappmovil.rehapp.Utils.Constants;
 public enum PhysiologicalParameterTherapy {
 
 
-    DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN(6,0,1,2,3,4,"*"),
-    DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_OUT(7,0,1,2,3,4,"*");
+    DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN(6,0,1,2,3,4,":"),
+    DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_OUT(7,0,1,2,3,4,":");
 
     int rowId;
     String physiologicalParameterSeparator;

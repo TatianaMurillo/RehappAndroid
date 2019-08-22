@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
+import com.rehapp.rehappmovil.rehapp.Utils.ReadCSVFile;
 
 
 import retrofit2.Call;
@@ -48,6 +49,8 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
 
         loadPreferences();
         userViewModel= ViewModelProviders.of(this).get(UserViewModel.class);
+
+        ReadCSVFile.writeTempTherapyInformation(this.getBaseContext());
     }
 
 

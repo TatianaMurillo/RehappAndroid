@@ -1,9 +1,11 @@
 package com.rehapp.rehappmovil.rehapp.Utils;
 
 
+import android.content.Context;
+import android.net.Uri;
 
 import com.rehapp.rehappmovil.rehapp.Models.*;
-import com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants;
+import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.Utils.Constants.*;
 
 import java.io.*;
@@ -12,8 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReadCSVFile {
 
+import static com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants.TEMP_FILE_PATH;
+import static com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants.ANDROID_RESOURCES_PATH;
+
+public class ReadCSVFile {
 
     private static TherapistViewModel therapist;
     private static InstitutionViewModel institution;
@@ -23,42 +28,59 @@ public class ReadCSVFile {
     private static ExerciseViewModel exercise;
     private static List<ExerciseViewModel> LExercises;
     private static Map<String, Object> data = new HashMap<>();
+    private int tempdata;
 
-    public static TherapistViewModel getTherapistData() {
-        return therapist;
-    }
 
-    public static InstitutionViewModel getInstitutionData() {
-        return institution;
-    }
-
-    public static TherapyViewModel getTherapyData() {
-        return therapy;
+    public static ReadCSVFile connect()
+    {
+        return new ReadCSVFile();
     }
 
 
-    public static PhysiologicalParameterTherapyViewModel getPhysiologicalParameterTherapyOutData() {
-        return physiologicalParameterTherapyOut;
+
+    public static  String writeTempTherapyInformation(Context context) {
+
+        BufferedWriter bw = null;
+
+        String path = Uri.parse(ANDROID_RESOURCES_PATH+ context.getPackageName() +TEMP_FILE_PATH).getPath();
+
+        try {
+            bw = new BufferedWriter(new FileWriter(path));
+
+
+
+
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if (bw != null) {
+                try {
+                    bw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return "";
     }
 
-    public static List<ExerciseViewModel> getExercisesData() {
-        return LExercises;
-    }
-
-    public static Map<String, Object> loadTherapyInformation() {
+    public static  Map<String, Object> loadTempTherapyInformation(Context context) {
 
         String[] values;
 
-
-        String fileName = Constants.TEMP_FILE_URL;
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = Row.DATA.getRowDataSeparator();
         String row;
 
+        String path = Uri.parse(ANDROID_RESOURCES_PATH+ context.getPackageName() +TEMP_FILE_PATH).getPath();
 
         try {
-            br = new BufferedReader(new FileReader(fileName));
+            br = new BufferedReader(new FileReader(path));
 
             while ((line = br.readLine()) != null) {
 
@@ -67,7 +89,7 @@ public class ReadCSVFile {
 
                 if (row.equals(String.valueOf(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getRowId()))) {
 
-                    LPhysiologicalParameterTherapyIn=getPhysiologicalParameterTherapyViewModel(values);
+                    LPhysiologicalParameterTherapyIn = getPhysiologicalParameterTherapyViewModel(values);
 
 
                 } else if (row.equals(String.valueOf(Institution.DATA.getRowId()))) {
@@ -88,11 +110,10 @@ public class ReadCSVFile {
                             getDocumentTypeViewModel(values[Therapist.DATA.getDocumentType()]),
                             getNeighborhoodViewModel(values[Therapist.DATA.getNeighborhood()])
                     );
-                }else if(row.equals(String.valueOf(Exercise.DATA.getRowId())))
-                {
-                    LExercises=getExercisesViewModel(values);
-                }else if(row.equals(String.valueOf(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_OUT.getRowId()))) {
-                    physiologicalParameterTherapyOut= new PhysiologicalParameterTherapyViewModel(
+                } else if (row.equals(String.valueOf(Exercise.DATA.getRowId()))) {
+                    LExercises = getExercisesViewModel(values);
+                } else if (row.equals(String.valueOf(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_OUT.getRowId()))) {
+                    physiologicalParameterTherapyOut = new PhysiologicalParameterTherapyViewModel(
                             Integer.parseInt(values[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_OUT.getPhysio_param_thrpy_id()]),
                             Integer.parseInt(values[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_OUT.getPhysio_param_id()]),
                             Integer.parseInt(values[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_OUT.getTherapy_id()]),
@@ -101,11 +122,11 @@ public class ReadCSVFile {
                     );
                 }
 
-                data.put(Constants.THERAPIST,therapist);
-                data.put(Constants.INSTITUTION,institution);
-                data.put(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN,LPhysiologicalParameterTherapyIn);
-                data.put(Constants.PHYSIOLICAL_PARAMETER_THERAPY_OUT,physiologicalParameterTherapyOut);
-                data.put(Constants.EXERCISES,LExercises);
+                data.put(Constants.THERAPIST, therapist);
+                data.put(Constants.INSTITUTION, institution);
+                data.put(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN, LPhysiologicalParameterTherapyIn);
+                data.put(Constants.PHYSIOLICAL_PARAMETER_THERAPY_OUT, physiologicalParameterTherapyOut);
+                data.put(Constants.EXERCISES, LExercises);
 
 
             }
@@ -114,7 +135,9 @@ public class ReadCSVFile {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        } catch (Exception e) {
+        e.printStackTrace();
+        }finally {
             if (br != null) {
                 try {
                     br.close();
@@ -127,7 +150,6 @@ public class ReadCSVFile {
         return data;
     }
 
-
     private static GenderViewModel getGenderViewModel(String object) {
         String[] values = object.split(Gender.DATA.getGenderObjectSeparator());
         return new GenderViewModel(
@@ -137,7 +159,6 @@ public class ReadCSVFile {
         );
 
     }
-
 
     private static DocumentTypeViewModel getDocumentTypeViewModel(String object) {
         String[] values = object.split(DocumentType.DATA.getDocumentTypeObjectSeparator());
@@ -180,27 +201,34 @@ public class ReadCSVFile {
         return list;
     }
 
-
     private static List<PhysiologicalParameterTherapyViewModel> getPhysiologicalParameterTherapyViewModel(String[] objects) {
 
         String[] objectValues;
         List<PhysiologicalParameterTherapyViewModel> list = new ArrayList<>();
+        try {
+            for (String value : objects) {
+                if (value.contains(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysiologicalParameterSeparator())) {
 
-        for (String value : objects) {
-            objectValues = value.split(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysiologicalParameterSeparator());
+                    objectValues = value.split(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysiologicalParameterSeparator());
 
-            if(objectValues!=null) {
-                list.add(new PhysiologicalParameterTherapyViewModel(
-                        Integer.parseInt(objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysio_param_thrpy_id()]),
-                        Integer.parseInt(objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysio_param_id()]),
-                        Integer.parseInt(objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getTherapy_id()]),
-                        objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysio_param_thrpy_value()],
-                        objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysio_param_thrpy_in_out()]
-                ));
+                    if (objectValues != null) {
+                        list.add(new PhysiologicalParameterTherapyViewModel(
+                                Integer.parseInt(objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysio_param_thrpy_id()]),
+                                Integer.parseInt(objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysio_param_id()]),
+                                Integer.parseInt(objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getTherapy_id()]),
+                                objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysio_param_thrpy_value()],
+                                objectValues[PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysio_param_thrpy_in_out()]
+                        ));
+                    }
+                }
             }
+
+
+            return list;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
 
-        return list;
     }
-
 }

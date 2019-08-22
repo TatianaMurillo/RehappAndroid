@@ -35,8 +35,6 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
     ArrayList<PhysiologicalParameterViewModel> options= new ArrayList<PhysiologicalParameterViewModel>();
 
-
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -101,9 +99,10 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
 
 
-    private void setPhysiolocalParametersToViewFromTmpFile() {
+    private  void setPhysiolocalParametersToViewFromTmpFile() {
 
-        List<PhysiologicalParameterTherapyViewModel>  LObj= (List<PhysiologicalParameterTherapyViewModel>)ReadCSVFile.loadTherapyInformation().get(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN);
+
+        List<PhysiologicalParameterTherapyViewModel>  LObj= (List<PhysiologicalParameterTherapyViewModel>)ReadCSVFile.loadTempTherapyInformation(this.getContext()).get(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN);
         int childCount = grid.getChildCount();
         String valueEditText;
         String valueTextView;

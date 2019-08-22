@@ -2,8 +2,9 @@ package com.rehapp.rehappmovil.rehapp.Utils.Constants;
 
 public class Constants {
 
-    public static final String TEMP_FILE_URL = System.getProperty("user.dir") + "com//rehapp//rehappmovil//rehapp//filesdata//tempData.csv";
 
+    public static final String ANDROID_RESOURCES_PATH = "android.resource://";
+    public static final String TEMP_FILE_PATH = "/filesdata/tempdata.csv";
     public static final String THERAPIST = "terapist";
     public static final String THERAPY = "terapy";
     public static final String INSTITUTION = "institution";
