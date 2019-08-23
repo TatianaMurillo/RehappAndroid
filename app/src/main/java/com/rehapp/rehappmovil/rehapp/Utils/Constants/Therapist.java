@@ -2,7 +2,7 @@ package com.rehapp.rehappmovil.rehapp.Utils.Constants;
 
 public enum Therapist {
 
-    DATA(8,0, 1, 2, 3, 4, 5, 6, 7, 8);
+    DATA(8,0, 1, 2, 3, 4, 5, 6, 7, 8,":");
 
 
     int rowId;
@@ -15,8 +15,9 @@ public enum Therapist {
     int gender;
     int documentType;
     int neighborhood;
+    String therapistSeparator;
 
-    Therapist(int rowId, int therapist_id, int therapist_first_name, int therapist_second_name, int therapist_first_lastname, int therapist_second_lastname, int therapist_age, int gender, int documentType, int neighborhood) {
+    Therapist(int rowId, int therapist_id, int therapist_first_name, int therapist_second_name, int therapist_first_lastname, int therapist_second_lastname, int therapist_age, int gender, int documentType, int neighborhood,String therapistSeparator) {
         this.rowId = rowId;
         this.therapist_id = therapist_id;
         this.therapist_first_name = therapist_first_name;
@@ -27,6 +28,7 @@ public enum Therapist {
         this.gender = gender;
         this.documentType = documentType;
         this.neighborhood = neighborhood;
+        this.therapistSeparator=therapistSeparator;
     }
 
     public int getRowId() {
@@ -67,5 +69,10 @@ public enum Therapist {
 
     public int getNeighborhood() {
         return neighborhood;
+    }
+
+    public String getTherapistSeparator()
+    {
+        return therapistSeparator;
     }
 }

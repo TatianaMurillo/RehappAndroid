@@ -38,16 +38,94 @@ public class ReadCSVFile {
 
 
 
-    public static  String writeTempTherapyInformation(Context context) {
+    public static String writeTempTherapyInformation(Context context,int rowId,Object object) {
 
+
+        try {
+            loadTempTherapyInformation(context);
+            if (rowId==PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getRowId()) {
+                data.put(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN,object);
+            }else if(rowId==PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_OUT.getRowId()) {
+                data.put(Constants.PHYSIOLICAL_PARAMETER_THERAPY_OUT,object);
+            }else if(rowId==Therapist.DATA.getRowId()){
+                data.put(Constants.THERAPIST,object);
+            }
+
+            storeDataInTempFile(context);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String storeDataInTempFile(Context context)
+    {
         BufferedWriter bw = null;
+        loadTempTherapyInformation(context);
 
         String path = Uri.parse(ANDROID_RESOURCES_PATH+ context.getPackageName() +TEMP_FILE_PATH).getPath();
 
         try {
             bw = new BufferedWriter(new FileWriter(path));
+            String key;
+            Object object;
+            StringBuilder sb;
+            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                key = entry.getKey();
+                object = entry.getValue();
+                sb= new StringBuilder();
+
+                if (key.equals(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN)) {
+                    List<PhysiologicalParameterTherapyViewModel> objects=(List<PhysiologicalParameterTherapyViewModel>)object;
+
+                    sb.append(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getRowId());
+
+                    for (PhysiologicalParameterTherapyViewModel objectData : objects) {
+                        sb.append(Row.DATA.getRowDataSeparator());
+                        sb.append(objectData.getPhysio_param_thrpy_id());
+                        sb.append(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysiologicalParameterSeparator());
+                        sb.append(objectData.getPhysio_param_id());
+                        sb.append(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysiologicalParameterSeparator());
+                        sb.append(objectData.getTherapy_id());
+                        sb.append(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysiologicalParameterSeparator());
+                        sb.append(objectData.getPhysio_param_thrpy_value());
+                        sb.append(PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getPhysiologicalParameterSeparator());
+                        sb.append(objectData.getPhysio_param_thrpy_in_out());
+                    }
+
+                }if (key.equals(Constants.THERAPIST)) {
+                    /*
+                        TherapistViewModel therapist = (TherapistViewModel) object;
+                        sb.append(Therapist.DATA.getRowId());
+                        sb.append(Row.DATA.getRowDataSeparator());
+
+                        sb.append(therapist.getTherapist_id());
+                        sb.append(Therapist.DATA.getTherapistSeparator());
+
+                        sb.append(therapist.getTherapist_first_name());
+                        sb.append(Therapist.DATA.getTherapistSeparator());
+
+                        sb.append(therapist.getTherapist_second_name());
+                        sb.append(Therapist.DATA.getTherapistSeparator());
+
+                        sb.append(therapist.getTherapist_first_lastname());
+                        sb.append(Therapist.DATA.getTherapistSeparator());
+
+                        sb.append(therapist.getTherapist_second_lastname());
+                        sb.append(Therapist.DATA.getTherapistSeparator());
+                    */
 
 
+                }
+
+
+
+
+                bw.write(sb.toString());
+
+            }
 
 
         }catch (FileNotFoundException e) {
@@ -231,4 +309,9 @@ public class ReadCSVFile {
         }
 
     }
+
+
+
+
+
 }
