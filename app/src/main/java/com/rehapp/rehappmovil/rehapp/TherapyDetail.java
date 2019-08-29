@@ -49,8 +49,8 @@ private String json;
         spnInstitution = findViewById(R.id.spnInstitution);
         spnTherapist = findViewById(R.id.spnTherapist);
         therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
-        LoadData();
-        recoverySendData();
+        //LoadData();
+        //recoverySendData();
     }
 
     private void LoadData() {
@@ -218,7 +218,7 @@ private String json;
 
     public void showHideItems(Menu menu)
     {
-        MenuItem item;
+       /* MenuItem item;
         if(therapyViewModel.getAction().equals("DETAIL")) {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
@@ -229,7 +229,7 @@ private String json;
        {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
-       }
+       }*/
     }
 
     public void addPhysiologicalParametersIn(View view) {
@@ -240,8 +240,11 @@ private String json;
         intent.putExtra(PreferencesData.TherapySelected, therapySelected);
         intent.putExtras(extras);
         startActivity(intent);*/
+        Bundle args = new Bundle();
+        args.putString(PreferencesData.PhysiologicalParameterAction,PreferencesData.PhysiologicalParameterTherapySesionIN);
 
         PhysiologicalParameterTherapyDialog physiologicalParameterTherapyDialog = new  PhysiologicalParameterTherapyDialog();
+        physiologicalParameterTherapyDialog.setArguments(args);
         physiologicalParameterTherapyDialog.show(getSupportFragmentManager(),"Parametros fisiologicos.");
 
     }

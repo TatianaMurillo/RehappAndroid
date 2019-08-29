@@ -31,13 +31,6 @@ public class ReadCSVFile {
     private int tempdata;
 
 
-    public static ReadCSVFile connect()
-    {
-        return new ReadCSVFile();
-    }
-
-
-
     public static String writeTempTherapyInformation(Context context,int rowId,Object object) {
 
 
@@ -60,15 +53,21 @@ public class ReadCSVFile {
         return "";
     }
 
-    public static String storeDataInTempFile(Context context)
+    private static String storeDataInTempFile(Context context)
     {
-        BufferedWriter bw = null;
+        //BufferedWriter bw = null;
         loadTempTherapyInformation(context);
-
-        String path = Uri.parse(ANDROID_RESOURCES_PATH+ context.getPackageName() +TEMP_FILE_PATH).getPath();
+        FileOutputStream fileOutputStream=null;
+        //String path = Uri.parse(ANDROID_RESOURCES_PATH+ context.getPackageName() +TEMP_FILE_PATH).getPath();
 
         try {
-            bw = new BufferedWriter(new FileWriter(path));
+
+            fileOutputStream=  context.openFileOutput(TEMP_FILE_PATH,context.MODE_PRIVATE);
+
+            //bw = new BufferedWriter(new FileWriter(path));
+
+
+
             String key;
             Object object;
             StringBuilder sb;
@@ -122,22 +121,31 @@ public class ReadCSVFile {
 
 
 
-
-                bw.write(sb.toString());
+                fileOutputStream.write(sb.toString().getBytes());
+               // bw.write(sb.toString());
 
             }
 
 
         }catch (FileNotFoundException e) {
             e.printStackTrace();
+            return "";
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
-            if (bw != null) {
+            /*if (bw != null) {
                 try {
                     bw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }*/
+
+            if (fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -155,10 +163,17 @@ public class ReadCSVFile {
         String cvsSplitBy = Row.DATA.getRowDataSeparator();
         String row;
 
-        String path = Uri.parse(ANDROID_RESOURCES_PATH+ context.getPackageName() +TEMP_FILE_PATH).getPath();
+        InputStream inputStream = context.getResources().openRawResource(R.raw.tempdata);
+
+        InputStreamReader inputreader = new InputStreamReader(inputStream);
+
+
+        String path = Uri.parse(ANDROID_RESOURCES_PATH+ context.getPackageName() +TEMP_FILE_PATH).getPath();//.getPath();
 
         try {
-            br = new BufferedReader(new FileReader(path));
+            br = new BufferedReader(new InputStreamReader(context.openFileInput(TEMP_FILE_PATH)));
+
+            //br = new BufferedReader(new InputStreamReader(inputStream));
 
             while ((line = br.readLine()) != null) {
 
@@ -211,6 +226,7 @@ public class ReadCSVFile {
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return data;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {

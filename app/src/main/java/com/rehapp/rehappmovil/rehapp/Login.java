@@ -49,8 +49,6 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
 
         loadPreferences();
         userViewModel= ViewModelProviders.of(this).get(UserViewModel.class);
-
-        ReadCSVFile.writeTempTherapyInformation(this.getBaseContext());
     }
 
 

@@ -18,8 +18,11 @@ import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewMod
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants;
+import com.rehapp.rehappmovil.rehapp.Utils.Constants.PhysiologicalParameterTherapy;
 import com.rehapp.rehappmovil.rehapp.Utils.ReadCSVFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,7 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
     private EditText editText;
     private TextView textView;
     private GridLayout grid;
+    private String physiologicalParameterAction;
 
 
     ArrayList<PhysiologicalParameterViewModel> options= new ArrayList<PhysiologicalParameterViewModel>();
@@ -38,6 +42,7 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        physiologicalParameterAction = getArguments().getString(PreferencesData.PhysiologicalParameterAction);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -55,7 +60,7 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        setPhysiolocalParametersFromViewToTmpFile();
                     }
                 });
         grid = view.findViewById(R.id.grid);
@@ -101,8 +106,9 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
     private  void setPhysiolocalParametersToViewFromTmpFile() {
 
-
         List<PhysiologicalParameterTherapyViewModel>  LObj= (List<PhysiologicalParameterTherapyViewModel>)ReadCSVFile.loadTempTherapyInformation(this.getContext()).get(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN);
+        setPhysiolocalParametersFromViewToTmpFile();
+
         int childCount = grid.getChildCount();
         String valueEditText;
         String valueTextView;
@@ -127,4 +133,48 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
         }
 
     }
+
+
+    private void setPhysiolocalParametersFromViewToTmpFile() {
+
+        List<PhysiologicalParameterTherapyViewModel> data= new ArrayList<>();
+
+        int childCount = grid.getChildCount();
+        String valueEditText;
+        String valueTextView;
+        Object childEditText;
+        Object childTextView;
+        TextView textView;
+        EditText editText;
+
+        for(int i=1;i<childCount; i+=2)
+        {
+            childEditText = grid.getChildAt(i);
+            childTextView = grid.getChildAt(i-1);
+
+            textView=(TextView) childTextView;
+            valueTextView=textView.getText().toString().trim();
+            editText = (EditText)childEditText;
+
+            valueEditText = editText.getText().toString().trim();
+            data.add(new PhysiologicalParameterTherapyViewModel(0,getIdPhysiologicalParameter(valueTextView),0,valueEditText,physiologicalParameterAction));
+
+        }
+
+
+        ReadCSVFile.writeTempTherapyInformation(this.getContext(), PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getRowId(),data);
+
+    }
+
+    private int getIdPhysiologicalParameter(String name)
+    {
+        for(PhysiologicalParameterViewModel physiologicalParameterTherapy: options )
+        {
+            if(physiologicalParameterTherapy.getPhysiological_parameter_name().equals(name)){
+                return physiologicalParameterTherapy.getPhysiological_parameter_id();
+            }
+        }
+        return 0;
+    }
+
 }
