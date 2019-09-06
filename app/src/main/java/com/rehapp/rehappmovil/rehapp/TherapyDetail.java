@@ -64,20 +64,8 @@ private String json;
 
     }
 
-    public void therapyAdditionalInfo(View view) {
 
-        //Intent intent = new Intent(TherapyDetail.this, TherapyAdditionalInfo.class);
-    }
 
-    public void watchExercises(View view) {
-
-        Intent intent = new Intent(TherapyDetail.this, TherapyExercises.class);
-        Bundle extras = new Bundle();
-        extras.putString(PreferencesData.TherapyAction,therapyViewModel.getAction());
-        intent.putExtras(extras);
-        startActivity(intent);
-
-    }
 
     private void recoverySendData()
     {
@@ -233,29 +221,41 @@ private String json;
     }
 
     public void addPhysiologicalParametersIn(View view) {
-        /*Intent intent = new Intent(TherapyDetail.this, PhysiologicalParameterTherapy.class);
-        Bundle extras = new Bundle();
-        extras.putString(PreferencesData.PhysiologicalParameterAction,PreferencesData.PhysiologicalParameterTherapySesionIN);
-        extras.putString(PreferencesData.TherapyAction, action);
-        intent.putExtra(PreferencesData.TherapySelected, therapySelected);
-        intent.putExtras(extras);
-        startActivity(intent);*/
         Bundle args = new Bundle();
         args.putString(PreferencesData.PhysiologicalParameterAction,PreferencesData.PhysiologicalParameterTherapySesionIN);
 
         PhysiologicalParameterTherapyDialog physiologicalParameterTherapyDialog = new  PhysiologicalParameterTherapyDialog();
         physiologicalParameterTherapyDialog.setArguments(args);
-        physiologicalParameterTherapyDialog.show(getSupportFragmentManager(),"Parametros fisiologicos.");
+        physiologicalParameterTherapyDialog.show(getSupportFragmentManager(),"");
 
     }
 
     public void addPhysiologicalParametersOut(View view) {
-        Intent intent = new Intent(TherapyDetail.this, PhysiologicalParameterTherapy.class);
-        Bundle extras = new Bundle();
-        extras.putString(PreferencesData.PhysiologicalParameterAction, PreferencesData.PhysiologicalParameterTherapySesionOUT);
-        extras.putString(PreferencesData.TherapyAction, action);
-        intent.putExtra(PreferencesData.TherapySelected, therapySelected);
-        intent.putExtras(extras);
-        startActivity(intent);
+        Bundle args = new Bundle();
+        args.putString(PreferencesData.PhysiologicalParameterAction,PreferencesData.PhysiologicalParameterTherapySesionOUT);
+
+        PhysiologicalParameterTherapyDialog physiologicalParameterTherapyDialog = new  PhysiologicalParameterTherapyDialog();
+        physiologicalParameterTherapyDialog.setArguments(args);
+        physiologicalParameterTherapyDialog.show(getSupportFragmentManager(),"");
     }
+
+    public void addAdditionalInformation(View view) {
+
+        TherapyAdditionalInformationDialog therapyAdditionalInformationDialog = new  TherapyAdditionalInformationDialog();
+        therapyAdditionalInformationDialog.show(getSupportFragmentManager(),"");
+
+    }
+
+    public void watchExercises(View view) {
+
+        Bundle args = new Bundle();
+        args.putString(PreferencesData.TherapyAction,action);
+
+        TherapyExercisesDialog therapyExercisesDialog = new  TherapyExercisesDialog();
+        therapyExercisesDialog.setArguments(args);
+        therapyExercisesDialog.show(getSupportFragmentManager(),"");
+
+    }
+
+
 }

@@ -13,12 +13,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants;
 import com.rehapp.rehappmovil.rehapp.Utils.Constants.PhysiologicalParameterTherapy;
+import com.rehapp.rehappmovil.rehapp.Utils.DBHelper;
+import com.rehapp.rehappmovil.rehapp.Utils.DBHelper2;
 import com.rehapp.rehappmovil.rehapp.Utils.ReadCSVFile;
 
 import java.io.File;
@@ -50,14 +53,14 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
         builder
                 .setView(view)
-                .setTitle(R.string.phisiologicalParametersIn)
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setTitle(getTitle())
+                .setNegativeButton(R.string.CancelButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
                 })
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.SaveButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         setPhysiolocalParametersFromViewToTmpFile();
@@ -66,6 +69,14 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
         grid = view.findViewById(R.id.grid);
         LoadData();
         return builder.create();
+    }
+
+    private int getTitle() {
+        if (physiologicalParameterAction.equals(PreferencesData.PhysiologicalParameterTherapySesionIN))
+        { return R.string.phisiologicalParametersIn;
+        }else if(physiologicalParameterAction.equals(PreferencesData.PhysiologicalParameterTherapySesionOUT))
+        { return R.string.phisiologicalParametersOut; }
+        return -1;
     }
 
     public void LoadData()
@@ -79,6 +90,7 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
         options.add(new PhysiologicalParameterViewModel("BorgE"));
 
         addPhysiologicalParametersView(options);
+
         setPhysiolocalParametersToViewFromTmpFile();
     }
 
@@ -103,37 +115,35 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
     }
 
 
-
     private  void setPhysiolocalParametersToViewFromTmpFile() {
 
-        List<PhysiologicalParameterTherapyViewModel>  LObj= (List<PhysiologicalParameterTherapyViewModel>)ReadCSVFile.loadTempTherapyInformation(this.getContext()).get(Constants.PHYSIOLICAL_PARAMETER_THERAPY_IN);
-        setPhysiolocalParametersFromViewToTmpFile();
+        List<PhysiologicalParameterTherapyViewModel> LObj = DBHelper2.connect(this.getContext()).listPhysiologicalParametersInRegister();
 
-        int childCount = grid.getChildCount();
-        String valueEditText;
-        String valueTextView;
-        Object childEditText;
-        Object childTextView;
-        TextView textView;
-        EditText editText;
+        if(LObj!=null){
+                int childCount = grid.getChildCount();
+                String valueEditText;
+                String valueTextView;
+                Object childEditText;
+                Object childTextView;
+                TextView textView;
+                EditText editText;
 
-        for(int i=1;i<childCount; i+=2)
-        {
+        for (int i = 1; i < childCount; i += 2) {
             childEditText = grid.getChildAt(i);
-            childTextView = grid.getChildAt(i-1);
+            childTextView = grid.getChildAt(i - 1);
 
-            textView=(TextView) childTextView;
-            valueTextView=textView.getText().toString().trim();
-            editText = (EditText)childEditText;
+            textView = (TextView) childTextView;
+            valueTextView = textView.getText().toString().trim();
+            editText = (EditText) childEditText;
 
 
-            for (PhysiologicalParameterTherapyViewModel  obj:LObj) {
+            for (PhysiologicalParameterTherapyViewModel obj : LObj) {
                 editText.setText(obj.getPhysio_param_thrpy_value());
             }
         }
-
     }
 
+    }
 
     private void setPhysiolocalParametersFromViewToTmpFile() {
 
@@ -161,8 +171,9 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
         }
 
+        DBHelper2.connect(this.getContext()).addPhysiologicalParametersInRegister(data);
 
-        ReadCSVFile.writeTempTherapyInformation(this.getContext(), PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getRowId(),data);
+        //ReadCSVFile.writeTempTherapyInformation(this.getContext(), PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getRowId(),data);
 
     }
 

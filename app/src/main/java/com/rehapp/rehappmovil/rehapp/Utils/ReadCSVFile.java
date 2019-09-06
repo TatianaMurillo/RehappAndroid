@@ -2,6 +2,9 @@ package com.rehapp.rehappmovil.rehapp.Utils;
 
 
 import android.content.Context;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 import com.rehapp.rehappmovil.rehapp.Models.*;
@@ -18,7 +21,7 @@ import java.util.Map;
 import static com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants.TEMP_FILE_PATH;
 import static com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants.ANDROID_RESOURCES_PATH;
 
-public class ReadCSVFile {
+public class ReadCSVFile extends SQLiteOpenHelper {
 
     private static TherapistViewModel therapist;
     private static InstitutionViewModel institution;
@@ -30,6 +33,13 @@ public class ReadCSVFile {
     private static Map<String, Object> data = new HashMap<>();
     private int tempdata;
 
+    public ReadCSVFile(Context context,String name,SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+    public ReadCSVFile(Context context,String name,SQLiteDatabase.CursorFactory factory, int version,DatabaseErrorHandler errorHandler) {
+        super(context, name, factory, version, errorHandler);
+    }
 
     public static String writeTempTherapyInformation(Context context,int rowId,Object object) {
 
@@ -120,8 +130,9 @@ public class ReadCSVFile {
                 }
 
 
-
-                fileOutputStream.write(sb.toString().getBytes());
+                String data =sb.toString();
+                byte[] bytes = data.getBytes("UTF-8");
+                fileOutputStream.write(bytes);
                // bw.write(sb.toString());
 
             }
@@ -226,7 +237,6 @@ public class ReadCSVFile {
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return data;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -327,7 +337,13 @@ public class ReadCSVFile {
     }
 
 
+    @Override
+    public void onCreate(SQLiteDatabase db) {
 
+    }
 
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
 }

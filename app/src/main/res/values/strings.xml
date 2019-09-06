@@ -6,6 +6,7 @@
     <string name="phisiologicalParametersIn">Parámetros Fisiológicos al inicio de la sesión</string>
     <string name="phisiologicalParametersOut">Parámetros Fisiológicos al finalizar de la sesión</string>
     <string name="watchExercises"> Ver ejercicios</string>
+    <string name="ChooseRoutines">Elija los ejercicios para su terapia.</string>
     <string name="forgotYourPassword">¿ Olvidaste tu contraseña ?</string>
     <string name="register"> ¡Registrate! </string>
     <string name="user"> Usuario </string>
@@ -32,4 +33,8 @@
     <string name="Saturation">Saturación</string>
     <string name="DiastolicPressure">Presión Diastólica</string>
     <string name="HeartRate">Frecuencia máxima cardiaca</string>
+    <string name="CancelButton">Cancelar</string>
+    <string name="SaveButton">Guardar</string>
+    <string name="AddditionalInformationHint">Ingrese información adicional que desee para la terapia.</string>
+    <string name="AddditionalInformationTitle">Información adicional</string>
 </resources>

@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExercise;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 
 import java.util.ArrayList;
 
@@ -26,42 +25,17 @@ public class TherapyExercises extends AppCompatActivity {
     private boolean isSelected;
     private String action;
     TherapyMasterDetailViewModel therapyViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_therapy_exercises);
-        lvExercises = findViewById(R.id.lvExercises);
+
+
         therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         recoverySendData();
         loadData();
-        final TherapyExercisesAdapter adapter = new TherapyExercisesAdapter(this,exercises);
-        lvExercises.setAdapter(adapter);
-
-        if(action.equals("ADD")) {
-            lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String selectedRoutine = exercises.get(position).getExerciseName();
-                    Toast.makeText(getApplicationContext(), selectedRoutine, Toast.LENGTH_LONG).show();
-                    TherapyExercise model = exercises.get(position);
-                    if (model.isSelected()) {
-                        model.setSelected(false);
-                    } else {
-                        model.setSelected(true);
-                    }
-                    exercises.set(position, model);
-                    adapter.updateRecords(exercises);
-                }
-            });
-        }else {
-            lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(TherapyExercises.this, TherapyExerciseDetail.class);
-                    startActivity(intent);
-                }
-            });
-        }
 
     }
     private void recoverySendData()
@@ -81,35 +55,6 @@ public class TherapyExercises extends AppCompatActivity {
     }
     private void loadData()
     {
-        exercises.add(new TherapyExercise(isSelected,"Ejercicio 1"));
-        exercises.add(new TherapyExercise(isSelected,"Ejercicio 2"));
-        exercises.add(new TherapyExercise(isSelected,"Ejercicio 3"));
-        exercises.add(new TherapyExercise(isSelected,"Ejercicio 4"));
-    }
-
-    public void blockRowsInExercisesList()
-    {
-        if(therapyViewModel.getAction().equals("ADD"))
-        {
-            unBlockItems();
-        }else
-        {
-            blockItems();
-        }
-    }
-    public void blockItems()
-    {
-        for (int i=0;i< exercises.size();i++)
-        {
-            lvExercises.setEnabled(false);
-        }
-    }
-    public void unBlockItems()
-    {
-        for (int i=0;i< exercises.size();i++)
-        {
-            lvExercises.setEnabled(true);
-        }
     }
 
 
@@ -126,8 +71,6 @@ public class TherapyExercises extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.save_therapy:
-
-                Toast.makeText(this,"ha pulsado salvar ejercicios",Toast.LENGTH_LONG   ).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -150,9 +93,5 @@ public class TherapyExercises extends AppCompatActivity {
         }
     }
 
-    public  void saveExercises()
-    {
-
-    }
 
 }

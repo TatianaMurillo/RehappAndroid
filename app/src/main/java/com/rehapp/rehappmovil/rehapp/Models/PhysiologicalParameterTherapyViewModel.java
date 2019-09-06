@@ -1,5 +1,9 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
+import android.content.ContentValues;
+
+import com.rehapp.rehappmovil.rehapp.Utils.TherapyDBHelperEntry;
+import static com.rehapp.rehappmovil.rehapp.Utils.TherapyDBHelperEntry.PhysiologicalParameterTherapyEntry;
 public class PhysiologicalParameterTherapyViewModel {
 
 
@@ -56,5 +60,14 @@ public class PhysiologicalParameterTherapyViewModel {
 
     public void setPhysio_param_thrpy_in_out(String physio_param_thrpy_in_out) {
         this.physio_param_thrpy_in_out = physio_param_thrpy_in_out;
+    }
+
+    public static ContentValues toContentValues(PhysiologicalParameterTherapyViewModel physiologicalParameterTherapyViewModel) {
+        ContentValues values = new ContentValues();
+        values.put(PhysiologicalParameterTherapyEntry.PHYSIO_PARAM_ID, physiologicalParameterTherapyViewModel.getPhysio_param_id());
+        values.put(PhysiologicalParameterTherapyEntry.PHYSIO_PARAM_THERAPY_ID, physiologicalParameterTherapyViewModel.getPhysio_param_thrpy_id());
+        values.put(PhysiologicalParameterTherapyEntry.THERAPY_ID, physiologicalParameterTherapyViewModel.getTherapy_id());
+        values.put(PhysiologicalParameterTherapyEntry.THERAPY_VALUE, physiologicalParameterTherapyViewModel.getPhysio_param_thrpy_value());
+        return values;
     }
 }
