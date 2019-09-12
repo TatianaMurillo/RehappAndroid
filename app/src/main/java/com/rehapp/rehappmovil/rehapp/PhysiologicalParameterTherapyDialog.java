@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants;
 import com.rehapp.rehappmovil.rehapp.Utils.Constants.PhysiologicalParameterTherapy;
 import com.rehapp.rehappmovil.rehapp.Utils.DBHelper;
@@ -57,13 +58,14 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
                 .setNegativeButton(R.string.CancelButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        dialog.dismiss();
                     }
                 })
                 .setPositiveButton(R.string.SaveButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         setPhysiolocalParametersFromViewToTmpFile();
+                        dialog.dismiss();
                     }
                 });
         grid = view.findViewById(R.id.grid);
@@ -171,7 +173,14 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
         }
 
-        DBHelper2.connect(this.getContext()).addPhysiologicalParametersInRegister(data);
+        TherapyViewModel therapy = new TherapyViewModel();
+        therapy.setPhysiologicalParametersIn(data);
+
+        //UserMethods.saveTherapy(therapy,getContext());
+
+        Toast.makeText(getContext(), PreferencesData.PhysiologicalParameterTherapySuccessMgs, Toast.LENGTH_LONG).show();
+
+        //DBHelper2.connect(this.getContext()).addPhysiologicalParametersInRegister(data);
 
         //ReadCSVFile.writeTempTherapyInformation(this.getContext(), PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getRowId(),data);
 

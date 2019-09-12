@@ -52,7 +52,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_therapy_exercises,null);
 
-        therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
+        //therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         recoverySendData();
         loadData();
 

@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Login;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
 
 import retrofit2.Call;
@@ -66,5 +70,49 @@ public class UserMethods extends Activity {
            Log.d("Error en logout", ex.getMessage());
        }
        }
+
+       public static void saveTherapy(TherapyViewModel therapy, final Context context)
+       {
+
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapy(therapy);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+
+                Toast.makeText(context, PreferencesData.therapyCreationFailedMsg, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                Toast.makeText(context, PreferencesData.therapyCreationSuccessMsg, Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+       }
+
+
+    public static void getTherapy(TherapyViewModel therapy, final Context context)
+    {
+
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy();
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+
+                Toast.makeText(context, PreferencesData.therapyCreationFailedMsg, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                Toast.makeText(context, PreferencesData.therapyCreationSuccessMsg, Toast.LENGTH_LONG).show();
+
+            }
+        });
+
     }
+
+
+
+}
 

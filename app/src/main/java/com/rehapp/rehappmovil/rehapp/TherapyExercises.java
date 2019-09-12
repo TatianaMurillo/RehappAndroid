@@ -33,7 +33,7 @@ public class TherapyExercises extends AppCompatActivity {
         setContentView(R.layout.activity_therapy_exercises);
 
 
-        therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
+        //therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         recoverySendData();
         loadData();
 

@@ -7,9 +7,32 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.GenderViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.NeighborhoodViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
+import com.rehapp.rehappmovil.rehapp.Utils.Constants.DocumentType;
+import com.rehapp.rehappmovil.rehapp.Utils.Constants.Therapy;
+import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment {
 
+    EditText etAdditionalInformacion;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -24,16 +47,18 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
                 .setNegativeButton(R.string.CancelButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        dialog.dismiss();
                     }
                 })
                 .setPositiveButton(R.string.SaveButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        addAdditionalInformation();
+                        dialog.dismiss();
                     }
                 });
         LoadData();
+        etAdditionalInformacion=view.findViewById(R.id.etAdditionalInformacion);
         return builder.create();
     }
 
@@ -43,4 +68,37 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
 
     public void LoadData() { }
 
-}
+    public void addAdditionalInformation()
+    {
+        /*TherapyViewModel therapy = new TherapyViewModel(
+                1,
+                1,
+                1,
+                false,
+                "",
+                1,
+                1,
+                5,
+                "",
+                "",
+                "",
+                "",
+                new InstitutionViewModel(1,"ad","f") ,
+                new PatientViewModel(),
+                new TherapistViewModel(1,"dfgvb","asdf","asdf","vbn",1,new GenderViewModel(1,"123","1234"),new DocumentTypeViewModel(2,"2wsd","sdf"),new NeighborhoodViewModel(2,"qwe","123e",1))
+        );*/
+        TherapyViewModel therapy = new TherapyViewModel();
+        therapy.setTherapy_additional_information(etAdditionalInformacion.getText().toString());
+        Gson gson = new Gson();
+        String json = gson.toJson(therapy);
+
+        //UserMethods.saveTherapy(therapy,getContext());
+
+        Toast.makeText(getContext(), PreferencesData.therapyAddAdditionalInformationSuccessMsg, Toast.LENGTH_LONG).show();
+
+
+    }
+
+
+    }
+

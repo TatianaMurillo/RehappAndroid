@@ -40,6 +40,9 @@ public class PreferencesData {
     public static final String searchCreatePatientDataMsg="Diligenciar todos los datos por favor.";
 
 
+    public static final String therapyAddAdditionalInformationSuccessMsg ="Datos guardados correctamente.";
+    public static final String therapyCreationSuccessMsg ="Se creó la terapia con éxito.";
+    public static final String therapyCreationFailedMsg ="Falló al crear terapia.";
     public static final String therapyDetailTherapistListMsg ="Hubo un error al listar terapeutas.";
     public static final String therapyDetailInstitutionListMsg ="Hubo un error al listar instituciones.";
     public static final String therapyDetailInstitutionNonExist="No se encontró la institución seleccionada.";
@@ -48,8 +51,8 @@ public class PreferencesData {
 
     public static final int PhysiologicalParameterTherapyValueSize=5;
     public static final int PhysiologicalParameterTherapyINPositionArray=0;
-
     public static final int PhysiologicalParameterTherapyOUTPositionArray=1;
 
+    public static final String therapyDetailWatchVideo="Ver.";
 
 }

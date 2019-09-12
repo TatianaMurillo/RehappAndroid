@@ -4,6 +4,7 @@ public class TherapyExercise {
 
     boolean isSelected;
     String exerciseName;
+    String exerciseUrl;
 
     public TherapyExercise(boolean isSelected, String exerciseName) {
         this.isSelected = isSelected;
@@ -25,5 +26,13 @@ public class TherapyExercise {
 
     public void setExerciseName(String exerciseName) {
         this.exerciseName = exerciseName;
+    }
+
+    public String getExerciseUrl() {
+        return exerciseUrl;
+    }
+
+    public void setExerciseUrl(String exerciseUrl) {
+        this.exerciseUrl = exerciseUrl;
     }
 }

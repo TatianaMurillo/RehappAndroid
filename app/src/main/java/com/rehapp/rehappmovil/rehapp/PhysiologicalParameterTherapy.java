@@ -158,7 +158,7 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
             System.out.print("el objeto grabado es: ".concat(json));
             Intent intent = new Intent(PhysiologicalParameterTherapy.this, TherapyDetail.class);
             intent.putExtra(PreferencesData.TherapyAction,action);
-            intent.putExtra(PreferencesData.TherapySelected, therapySelected);
+            //intent.putExtra(PreferencesData.TherapySelected, therapySelected);
             startActivity(intent);
     }
 

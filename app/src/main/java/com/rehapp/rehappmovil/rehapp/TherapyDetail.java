@@ -48,7 +48,7 @@ private String json;
         tvTherapySequence = findViewById(R.id.tvTherapySequence);
         spnInstitution = findViewById(R.id.spnInstitution);
         spnTherapist = findViewById(R.id.spnTherapist);
-        therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
+        //therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         //LoadData();
         //recoverySendData();
     }

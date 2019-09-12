@@ -30,7 +30,7 @@ public class TherapyApiAdapter {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(getUnsafeOkHttpClient().build()) // <-- usamos el log level
+                    .client(getUnsafeOkHttpClient().build())
                     .build();
             API_SERVICE = retrofit.create(TherapyApiService.class);
         }

@@ -50,7 +50,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
 for (int i=1;i<5;i++) {
 
-    therapy = new TherapyMasterDetailViewModel();
+    /*therapy = new TherapyMasterDetailViewModel();
     therapy.setTherapy_id(1);
     therapy.setTherapist_id(1);
     therapy.setPatient_id(1);
@@ -62,7 +62,7 @@ for (int i=1;i<5;i++) {
     therapy.setTherapy_observation("");
     therapy.setTherapy_sequence(i);
     therapy.setTherapy_achieved_the_goal(true);
-
+*/
     therapies.add(therapy);
 
 }
@@ -74,7 +74,7 @@ for (int i=1;i<5;i++) {
                 TherapyViewModel selectedTherapy = therapies.get(position);
                 Toast.makeText(getApplicationContext(), "therapy selected : " + selectedTherapy.getTherapy_description(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyDetail.class);
-                intent.putExtra(PreferencesData.TherapySelected, selectedTherapy);
+                //intent.putExtra(PreferencesData.TherapySelected, selectedTherapy);
                 intent.putExtra(PreferencesData.TherapyAction, "DETAIL");
                 startActivity(intent);
             }
@@ -157,13 +157,13 @@ for (int i=1;i<5;i++) {
     {
         TherapyMasterDetailViewModel  therapyMasterDetailViewModel;
 
-        therapyMasterDetailViewModel = new TherapyMasterDetailViewModel();
+       /* therapyMasterDetailViewModel = new TherapyMasterDetailViewModel();
 
         Gson gson = new  Gson();
         String json = gson.toJson(therapyMasterDetailViewModel);
         sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(PreferencesData.TherapyMasterDetailViewModel, json);
-        editor.commit();
+        editor.commit();*/
     }
 }
