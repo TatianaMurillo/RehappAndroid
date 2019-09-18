@@ -1,6 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ValidateInputs {
 
@@ -9,7 +10,7 @@ public class ValidateInputs {
         return new ValidateInputs();
     }
 
-    public boolean ValidateString(ArrayList<String> dataInput)
+    public boolean ValidateString(List<String> dataInput)
     {
             for(String data:dataInput)
             {
@@ -17,7 +18,6 @@ public class ValidateInputs {
                 {
                     return false;
                 }
-
             }
 
             return true;
