@@ -5,16 +5,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Login;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,6 +76,7 @@ public class UserMethods extends Activity {
        }
        }
 
+
        public static void saveTherapy(TherapyViewModel therapy, final Context context)
        {
 
@@ -111,6 +117,51 @@ public class UserMethods extends Activity {
         });
 
     }
+
+    public static UserMethods getInstance()
+    {
+        return  new UserMethods();
+    }
+    public  ArrayList<DocumentTypeViewModel> getDocumentTypes()
+    {
+        DocumentTypes documentTypes= new DocumentTypes();
+        documentTypes.loadDocumentTypes();
+        return documentTypes.getDocumentTypes();
+    }
+
+    class DocumentTypes
+    {
+
+        ArrayList<DocumentTypeViewModel> documentTypes;
+
+        public void loadDocumentTypes()
+        {
+
+            Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
+            call.enqueue(new Callback<ArrayList<DocumentTypeViewModel>>() {
+
+                             @Override
+                             public void onResponse(Call<ArrayList<DocumentTypeViewModel>> call, Response<ArrayList<DocumentTypeViewModel>> response) {
+                                 if(response.isSuccessful())
+                                 {
+                                     documentTypes= response.body();
+                                 }
+                             }
+                             @Override
+                             public void onFailure(Call<ArrayList<DocumentTypeViewModel>> call, Throwable t) {
+                                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+
+                             }
+                         }
+            );
+        }
+
+        public ArrayList<DocumentTypeViewModel> getDocumentTypes()
+        {
+            return documentTypes;
+        }
+    }
+
 
 
 

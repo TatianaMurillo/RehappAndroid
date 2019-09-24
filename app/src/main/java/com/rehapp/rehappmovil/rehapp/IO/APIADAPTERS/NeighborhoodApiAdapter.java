@@ -1,7 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS;
 
 import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.DocumentTypeApiService;
-import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.PatientApiService;
+import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.NeighborhoodApiService;
 import com.rehapp.rehappmovil.rehapp.Utils.GlobalApplication;
 
 import java.security.cert.CertificateException;
@@ -18,11 +18,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PatientApiAdapter {
+public class NeighborhoodApiAdapter {
 
-    private static PatientApiService API_SERVICE;
+    private static NeighborhoodApiService API_SERVICE;
 
-    public static PatientApiService getApiService() {
+    public static NeighborhoodApiService getApiService() {
 
         String baseUrl =GlobalApplication.url;
 
@@ -32,7 +32,7 @@ public class PatientApiAdapter {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(getUnsafeOkHttpClient().build())
                     .build();
-            API_SERVICE = retrofit.create(PatientApiService.class);
+            API_SERVICE = retrofit.create(NeighborhoodApiService.class);
         }
 
         return API_SERVICE;

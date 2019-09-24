@@ -49,6 +49,7 @@ public class SearchPatient extends AppCompatActivity{
         etPatientName= findViewById(R.id.etPatientName);
         patientViewModel = ViewModelProviders.of(this).get(PatientViewModel.class);
         recoverySendData();
+
         spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override

@@ -12,7 +12,7 @@ public class PatientViewModel extends ViewModel {
         private String patient_first_lastname;
         private String patient_second_lastname;
         private String patient_document;
-        private float patient_age;
+        private int patient_age;
         private String patient_address;
         private String patient_mobile_number;
         private String patient_landline_phone;
@@ -56,7 +56,7 @@ public class PatientViewModel extends ViewModel {
             return patient_document;
         }
 
-        public float getPatient_age() {
+        public int getPatient_age() {
             return patient_age;
         }
 
@@ -122,7 +122,7 @@ public class PatientViewModel extends ViewModel {
             this.patient_document = patient_document;
         }
 
-        public void setPatient_age(float patient_age) {
+        public void setPatient_age(int patient_age) {
             this.patient_age = patient_age;
         }
 

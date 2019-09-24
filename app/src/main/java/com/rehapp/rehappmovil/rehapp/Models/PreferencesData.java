@@ -49,6 +49,13 @@ public class PreferencesData {
 
     public static final String therapyDetailTherapistNonExist="No se encontró el terapeuta seleccionado.";
 
+    public static final String listDocumentTypesFailed="No se pudieron cargar los tipos de documento correctamente.";
+    public static final String listNeighborhoodFailed="No se pudieron cargar los barrios correctamente.";
+    public static final String listGenderFailed="No se pudieron cargar los géneros correctamente.";
+
+    public static final String storePatientSuccess="Paciente creado exitosamente";
+    public static final String storePatientFailed="Error al crear paciente.";
+
     public static final int PhysiologicalParameterTherapyValueSize=5;
     public static final int PhysiologicalParameterTherapyINPositionArray=0;
     public static final int PhysiologicalParameterTherapyOUTPositionArray=1;

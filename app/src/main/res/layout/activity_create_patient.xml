@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context=".CreatePatient">
 
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -90,7 +94,7 @@
             android:text="Género" />
 
         <Spinner
-            android:id="@+id/spnGenner"
+            android:id="@+id/spnGender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_span="4"/>
@@ -142,6 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_span="4"
+            android:inputType="number"
             android:hint="Ingrese edad" />
 
     </TableRow>
@@ -215,14 +220,18 @@
             android:hint="Ingrese telefono fijo" />
 
     </TableRow>
+        <TableRow>
+            <Button
+                android:id="@+id/btnSavePatient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="savePatient"
+                android:layout_span="5"
+                android:text="@string/SaveButton" />
+        </TableRow>
 
     </TableLayout>
 
-    <Button
-        android:id="@+id/btnSavePatient"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="savePatient"
-        android:text="@string/SaveButton" />
 
+</ScrollView>
 </LinearLayout>
