@@ -2,8 +2,12 @@ package com.rehapp.rehappmovil.rehapp;
 
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +25,7 @@ import com.rehapp.rehappmovil.rehapp.Models.GenderViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.NeighborhoodViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
@@ -45,7 +50,6 @@ public class CreatePatient extends AppCompatActivity {
     private Spinner  spnGender;
     private Spinner  spnDocumentType;
     private Spinner  spnNeighborhood;
-    private Button btnSavePatient;
     List<String> dataInputString;
     List<Integer> dataInputInteger;
     private int documentTypeSelectedId=-1,indexDocumentTypeSelected=-1;
@@ -80,7 +84,6 @@ public class CreatePatient extends AppCompatActivity {
         spnNeighborhood = findViewById(R.id.spnNeighborhood);
         spnDocumentType = findViewById(R.id.spnDocumentType);
         spnGender = findViewById(R.id.spnGender);
-        btnSavePatient=findViewById(R.id.btnSavePatient);
 
         loadDocumentTypes();
         loadGenders();
@@ -137,7 +140,7 @@ public class CreatePatient extends AppCompatActivity {
 
 
 
-    public void savePatient(View view) {
+    public void savePatient() {
 
         setInputData();
 
@@ -173,6 +176,14 @@ public class CreatePatient extends AppCompatActivity {
                         {
                             patientResponse= response.body();
                             Toast.makeText(getApplicationContext(), PreferencesData.storePatientSuccess, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(CreatePatient.this, SearchPatient.class);
+                            Bundle extras = new Bundle();
+                            extras.putString(PreferencesData.PatientDocument, patientResponse.getPatient_document());
+                            extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(patientResponse.getDocument_type_id()));
+
+                            intent.putExtras(extras);
+                            startActivity(intent);
+
                         }
                     }
 
@@ -290,6 +301,43 @@ public class CreatePatient extends AppCompatActivity {
         dataInputInteger.add(documentTypeSelectedId);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu,  menu);
+
+        showHideItems(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.logout:
+                UserMethods.Do().Logout(this);
+                break;
+            case  R.id.search_patient:
+                savePatient();
+        }
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void showHideItems(Menu menu)
+    {
+        MenuItem item;
+        item= menu.findItem(R.id.create_therapy);
+        item.setVisible(false);
+        item= menu.findItem(R.id.save_therapy);
+        item.setVisible(false);
+    }
 
 
 }

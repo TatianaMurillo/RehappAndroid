@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class PatientViewModel extends ViewModel {
 
-        private float patient_id;
+        private int patient_id;
         private String patient_first_name;
         private String patient_second_name;
         private String patient_first_lastname;
@@ -17,9 +17,9 @@ public class PatientViewModel extends ViewModel {
         private String patient_mobile_number;
         private String patient_landline_phone;
         private String patient_additional_data;
-        private float neighborhood_id;
-        private float document_type_id;
-        private float gender_id;
+        private int neighborhood_id;
+        private int document_type_id;
+        private int gender_id;
         private DocumentTypeViewModel Document_typeObject;
         private NeighborhoodViewModel neighborhoodViewModelObject;
 
@@ -80,7 +80,7 @@ public class PatientViewModel extends ViewModel {
             return neighborhood_id;
         }
 
-        public float getDocument_type_id() {
+        public int getDocument_type_id() {
             return document_type_id;
         }
 
@@ -98,7 +98,7 @@ public class PatientViewModel extends ViewModel {
 
         // Setter Methods
 
-        public void setPatient_id(float patient_id) {
+        public void setPatient_id(int patient_id) {
             this.patient_id = patient_id;
         }
 
@@ -142,15 +142,15 @@ public class PatientViewModel extends ViewModel {
             this.patient_additional_data = patient_additional_data;
         }
 
-        public void setNeighborhood_id(float neighborhood_id) {
+        public void setNeighborhood_id(int neighborhood_id) {
             this.neighborhood_id = neighborhood_id;
         }
 
-        public void setDocument_type_id(float document_type_id) {
+        public void setDocument_type_id(int document_type_id) {
             this.document_type_id = document_type_id;
         }
 
-        public void setGender_id(float gender_id) {
+        public void setGender_id(int gender_id) {
             this.gender_id = gender_id;
         }
 

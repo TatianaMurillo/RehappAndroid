@@ -117,7 +117,6 @@ public class SearchPatient extends AppCompatActivity{
                         if(response.raw().code()==404) {
                             Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatientNonExist, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(SearchPatient.this, SearchCreatePatient.class);
-                            intent.putExtra(PreferencesData.userActive,activeUser);
                             startActivity(intent);
                         }
                     }
@@ -145,7 +144,6 @@ public class SearchPatient extends AppCompatActivity{
             Bundle extras = getIntent().getExtras();
             documentPatient = extras.getString(PreferencesData.PatientDocument);
             documentTypePatientId = Integer.parseInt(extras.getString(PreferencesData.PatientTpoDocument));
-            activeUser=extras.getString(PreferencesData.userActive);
             patientViewModel.setPatient_document(documentPatient);
             patientViewModel.setDocument_type_id(documentTypePatientId);
         }

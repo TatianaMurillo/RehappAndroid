@@ -41,6 +41,8 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+
         etUser=findViewById(R.id.etUser);
         etpassword=findViewById(R.id.etpassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -86,13 +88,12 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
 
             if(userViewModel.getCode()==200)
             {
-                userViewModel.setName(userViewModel.getName().toString());
+                userViewModel.setName(userViewModel.getName());
                 Intent intent = new Intent(Login.this,SearchCreatePatient.class);
-                intent.putExtra( PreferencesData.userActive,userViewModel.getName().toString());
 
-                sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString(PreferencesData.loginToken, userViewModel.getToken());
+                editor.putString(PreferencesData.userActive, userViewModel.getName());
                 editor.commit();
 
                 startActivity(intent);

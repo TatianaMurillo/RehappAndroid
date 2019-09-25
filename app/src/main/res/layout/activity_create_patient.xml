@@ -220,16 +220,6 @@
             android:hint="Ingrese telefono fijo" />
 
     </TableRow>
-        <TableRow>
-            <Button
-                android:id="@+id/btnSavePatient"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="savePatient"
-                android:layout_span="5"
-                android:text="@string/SaveButton" />
-        </TableRow>
-
     </TableLayout>
 
 

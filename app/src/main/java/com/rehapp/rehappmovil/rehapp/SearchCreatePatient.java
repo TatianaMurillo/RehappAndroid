@@ -1,7 +1,9 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,11 +45,14 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
         private int documentTypeSelected, indexDocumentTypeSelected=0;
 
         ArrayList<DocumentTypeViewModel> documentTypes;
-        ArrayList<String> documentTypeNames= new ArrayList<String>();
+        ArrayList<String> documentTypeNames= new ArrayList<>();
+
+    SharedPreferences sharedpreferences;
 
         @Override
         protected void onCreate(Bundle savedInstanceState)
         {
+            sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_search_create_patient);
 
@@ -57,7 +62,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             tvWelcome = findViewById(R.id.tvWelcome);
             spnDocumentType= findViewById(R.id.spnDocumentType);
             searchCreatePatientViewModel = ViewModelProviders.of(this).get(SearchCreatePatientViewModel.class);
-            //recoverySendData();
+            recoverySendData();
             //loadCurrentData();
             spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
             {
@@ -78,14 +83,12 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
 
     private void loadCurrentData()
     {
-        tvWelcome.setText( searchCreatePatientViewModel.getActiveUser() );
+        String activeUser=sharedpreferences.getString(PreferencesData.userActive,"");
+
+        tvWelcome.setText( activeUser );
     }
     private void recoverySendData()
     {
-        if(getIntent().getSerializableExtra(PreferencesData.userActive)!=null) {
-            userActive = getIntent().getSerializableExtra(PreferencesData.userActive).toString();
-            searchCreatePatientViewModel.setActiveUser(userActive);
-        }
     }
 
     @Override
@@ -125,7 +128,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
                         Bundle extras = new Bundle();
                         extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
                         extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
-                        extras.putString(PreferencesData.userActive, searchCreatePatientViewModel.getActiveUser());
+
                         intent.putExtras(extras);
                         startActivity(intent);
                     }else{

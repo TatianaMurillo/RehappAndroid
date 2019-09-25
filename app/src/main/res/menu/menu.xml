@@ -21,4 +21,10 @@
         android:title="Guardar terapia"
         android:icon="@drawable/savetherapy"/>
 
+    <item
+        android:id="@+id/search-patient"
+        app:showAsAction="always"
+        android:title="Buscar paciente"
+        android:icon="@drawable/savetherapy"/>
+
 </menu>
