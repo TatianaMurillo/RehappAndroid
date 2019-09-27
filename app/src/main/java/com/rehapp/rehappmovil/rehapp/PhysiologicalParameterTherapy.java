@@ -40,7 +40,7 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
     private String action;
 
     String json;
-    private TherapyViewModel therapySelected;
+    private int therapySelectedId;
     private EditText editText;
     private TextView textView;
     private GridLayout grid;
@@ -195,7 +195,7 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
             Bundle extras = getIntent().getExtras();
             physiologicalParameterAction= extras.getString(PreferencesData.PhysiologicalParameterAction);
             action=extras.getString(PreferencesData.TherapyAction);
-            therapySelected = (TherapyViewModel) getIntent().getSerializableExtra(PreferencesData.TherapySelected);
+            therapySelectedId = (int) getIntent().getSerializableExtra(PreferencesData.TherapySelectedId);
         }
     }
 

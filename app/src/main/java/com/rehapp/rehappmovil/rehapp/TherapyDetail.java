@@ -18,10 +18,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.InstitutionApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
 import java.util.ArrayList;
@@ -31,12 +34,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TherapyDetail extends AppCompatActivity {
-private TherapyMasterDetailViewModel therapySelected;
+private String therapySelectedId;
+private String therapyCreatedId;
 private TextView tvTherapySequence;
 private String action;
 private Spinner spnTherapist;
 private Spinner spnInstitution;
 private TherapyMasterDetailViewModel therapyViewModel;
+private TherapyViewModel therapySelected;
 private SharedPreferences sharedpreferences;
 private String json;
 
@@ -48,19 +53,12 @@ private String json;
         tvTherapySequence = findViewById(R.id.tvTherapySequence);
         spnInstitution = findViewById(R.id.spnInstitution);
         spnTherapist = findViewById(R.id.spnTherapist);
-        //therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
+        therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         //LoadData();
-        //recoverySendData();
+        recoverySendData();
     }
 
     private void LoadData() {
-
-        Gson gson = new  Gson();
-        json = gson.toJson(therapyViewModel);
-        sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(PreferencesData.TherapyMasterDetailViewModel, json);
-        editor.commit();
 
     }
 
@@ -75,9 +73,11 @@ private String json;
                 action= extras.getString(PreferencesData.TherapyAction);
                 if(action.equals("ADD")) {
                     UnBlockData();
+                    createTherapyId();
                 }else
                 {
-                    therapySelected = (TherapyMasterDetailViewModel) getIntent().getSerializableExtra(PreferencesData.TherapySelected);
+                    therapySelectedId = getIntent().getSerializableExtra(PreferencesData.TherapySelectedId).toString();
+                    searchTherapy();
                     tvTherapySequence.setText("Terapia # " + therapySelected.getTherapy_sequence());
                     blockData();
                 }
@@ -180,6 +180,31 @@ private String json;
         });
     }
 
+    private void searchTherapy(){
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                if(response.isSuccessful())
+                {
+                    therapySelected = response.body();
+
+                }else{
+                    if(response.raw().code()==404) {
+                        Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(TherapyDetail.this, HistoryTherapiesPatient.class);
+                        startActivity(intent);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -206,7 +231,7 @@ private String json;
 
     public void showHideItems(Menu menu)
     {
-       /* MenuItem item;
+        MenuItem item;
         if(therapyViewModel.getAction().equals("DETAIL")) {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
@@ -217,7 +242,7 @@ private String json;
        {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
-       }*/
+       }
     }
 
     public void addPhysiologicalParametersIn(View view) {
@@ -250,6 +275,7 @@ private String json;
 
         Bundle args = new Bundle();
         args.putString(PreferencesData.TherapyAction,action);
+        args.putString(PreferencesData.TherapyId,therapySelectedId);
 
         TherapyExercisesDialog therapyExercisesDialog = new  TherapyExercisesDialog();
         therapyExercisesDialog.setArguments(args);
@@ -257,5 +283,32 @@ private String json;
 
     }
 
+    public void createTherapyId()
+    {
+        TherapyViewModel therapy = new TherapyViewModel();
+        therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                if(response.isSuccessful())
+                {
+                    TherapyViewModel therapyViewModel=response.body();
+                    therapyCreatedId=String.valueOf(therapyViewModel.getTherapy_id());
+                    tvTherapySequence.setText("Terapia # " + therapyCreatedId);
+                    Toast.makeText(getApplicationContext(), PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
+                }else
+                    {
+                        Toast.makeText(getApplicationContext(), PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
+                    }
+
+            }
+
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 }

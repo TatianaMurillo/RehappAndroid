@@ -77,47 +77,6 @@ public class UserMethods extends Activity {
        }
 
 
-       public static void saveTherapy(TherapyViewModel therapy, final Context context)
-       {
-
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapy(therapy);
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-
-                Toast.makeText(context, PreferencesData.therapyCreationFailedMsg, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-                Toast.makeText(context, PreferencesData.therapyCreationSuccessMsg, Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-       }
-
-
-    public static void getTherapy(TherapyViewModel therapy, final Context context)
-    {
-
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy();
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-
-                Toast.makeText(context, PreferencesData.therapyCreationFailedMsg, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-                Toast.makeText(context, PreferencesData.therapyCreationSuccessMsg, Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-    }
-
     public static UserMethods getInstance()
     {
         return  new UserMethods();

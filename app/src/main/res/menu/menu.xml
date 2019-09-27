@@ -8,6 +8,10 @@
         android:id="@+id/logout"
         app:showAsAction="never"
         android:title="Salir" />
+    <item
+        android:id="@+id/back-search-patient-page"
+        app:showAsAction="never"
+        android:title="Buscar paciente" />
 
     <item
         android:id="@+id/create-therapy"

@@ -1,19 +1,14 @@
 package com.rehapp.rehappmovil.rehapp;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyExercise;
+import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 
 import java.util.ArrayList;
@@ -21,7 +16,7 @@ import java.util.ArrayList;
 public class TherapyExercises extends AppCompatActivity {
 
     private ListView lvExercises;
-    private ArrayList<TherapyExercise> exercises = new ArrayList<>();
+    private ArrayList<ExerciseRoutinesViewModel> exercises = new ArrayList<>();
     private boolean isSelected;
     private String action;
     TherapyMasterDetailViewModel therapyViewModel;

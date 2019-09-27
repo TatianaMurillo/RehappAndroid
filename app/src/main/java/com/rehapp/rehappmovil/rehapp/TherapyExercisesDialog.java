@@ -1,52 +1,48 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.ExerciseRoutineApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyExercise;
+import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
-import com.rehapp.rehappmovil.rehapp.Utils.DBHelper2;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class TherapyExercisesDialog extends AppCompatDialogFragment {
 
 
     private ListView lvExercises;
-    private ArrayList<TherapyExercise> exercises = new ArrayList<>();
-    private boolean isSelected;
+    private ArrayList<ExerciseRoutinesViewModel> exercises = new ArrayList<>();
+    private ArrayList<TherapyExcerciseRoutineViewModel> therapyExerciseRoutines = new ArrayList<>();
+    private int  exerciseRoutineSelectedIndex=-1;
     private String action;
+    private String therapyId;
     TherapyMasterDetailViewModel therapyViewModel;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         action=getArguments().getString(PreferencesData.TherapyAction);
+        therapyId=getArguments().getString(PreferencesData.TherapyId);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -57,24 +53,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
         loadData();
 
         lvExercises= view.findViewById(R.id.lvExercises);
-        final TherapyExercisesAdapter adapter = new TherapyExercisesAdapter(getActivity(),exercises);
-        lvExercises.setAdapter(adapter);
 
-            lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String selectedRoutine = exercises.get(position).getExerciseName();
-                    Toast.makeText(getContext(), selectedRoutine, Toast.LENGTH_LONG).show();
-                    TherapyExercise model = exercises.get(position);
-                    if (model.isSelected()) {
-                        model.setSelected(false);
-                    } else {
-                        model.setSelected(true);
-                    }
-                    exercises.set(position, model);
-                    adapter.updateRecords(exercises);
-                }
-            });
 
 
         builder
@@ -102,10 +81,81 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
     }
     private void loadData()
     {
-        exercises.add(new TherapyExercise(isSelected,"Ejercicio 1"));
-        exercises.add(new TherapyExercise(isSelected,"Ejercicio 2"));
-        exercises.add(new TherapyExercise(isSelected,"Ejercicio 3"));
-        exercises.add(new TherapyExercise(isSelected,"Ejercicio 4"));
+        listExercisesRoutines();
+    }
+
+
+    private void listExercisesRoutines()
+    {
+        Call<ArrayList<ExerciseRoutinesViewModel>> call = ExerciseRoutineApiAdapter.getApiService().getExerciseRoutines();
+        call.enqueue(new Callback<ArrayList<ExerciseRoutinesViewModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<ExerciseRoutinesViewModel>> call, Response<ArrayList<ExerciseRoutinesViewModel>> response) {
+                if (response.isSuccessful()) {
+                    exercises = response.body();
+
+                    try {
+                        Call<ArrayList<TherapyExcerciseRoutineViewModel>> callTherapyExcerciseRoutines = TherapyExerciseRoutineApiAdapter.getApiService().getTherapyExerciseRoutines(therapyId);
+                        callTherapyExcerciseRoutines.enqueue(new Callback<ArrayList<TherapyExcerciseRoutineViewModel>>() {
+                            @Override
+                            public void onResponse(Call<ArrayList<TherapyExcerciseRoutineViewModel>> call, Response<ArrayList<TherapyExcerciseRoutineViewModel>> response) {
+                                if (response.isSuccessful()) {
+
+                                    therapyExerciseRoutines = response.body();
+                                    for (TherapyExcerciseRoutineViewModel therapyExerciseRoutines:therapyExerciseRoutines ) {
+                                        for (ExerciseRoutinesViewModel exercise:exercises )
+                                        {
+                                            if(exercise.getExercise_routine_id()==therapyExerciseRoutines.getExerciseRoutineId())
+                                            {
+                                                selectExerciseRoutinesItem(exercises.indexOf(exercise));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ArrayList<TherapyExcerciseRoutineViewModel>> call, Throwable t) {
+                                Toast.makeText(getContext(), PreferencesData.therapyDetailTherapyExerciseRoutinesListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }catch (Exception ex){}
+
+                    lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            selectExerciseRoutinesItem(position);
+                        }
+                    });
+
+                } else {
+                        Toast.makeText(getContext(), PreferencesData.therapyDetailExerciseRoutineListMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<ExerciseRoutinesViewModel>> call, Throwable t) {
+                Toast.makeText(getContext(), PreferencesData.therapyDetailExerciseRoutineListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void selectExerciseRoutinesItem(int position)
+    {
+        final TherapyExercisesAdapter adapter = new TherapyExercisesAdapter(getActivity(),exercises);
+        lvExercises.setAdapter(adapter);
+
+        String selectedRoutine = exercises.get(position).getExerciseName();
+        Toast.makeText(getContext(), selectedRoutine, Toast.LENGTH_LONG).show();
+        ExerciseRoutinesViewModel model = exercises.get(position);
+        exerciseRoutineSelectedIndex=position;
+        if (model.isSelected()) {
+            model.setSelected(false);
+        } else {
+            model.setSelected(true);
+        }
+        exercises.set(position, model);
+        adapter.updateRecords(exercises);
     }
 
     public void blockRowsInExercisesList()

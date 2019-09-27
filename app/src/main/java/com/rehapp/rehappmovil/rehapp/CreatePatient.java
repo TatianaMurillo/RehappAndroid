@@ -322,6 +322,11 @@ public class CreatePatient extends AppCompatActivity {
                 break;
             case  R.id.search_patient:
                 savePatient();
+                break;
+            case R.id.back_search_patient_page:
+                Intent intent = new Intent(CreatePatient.this,SearchCreatePatient.class);
+                startActivity(intent);
+                break;
         }
 
 

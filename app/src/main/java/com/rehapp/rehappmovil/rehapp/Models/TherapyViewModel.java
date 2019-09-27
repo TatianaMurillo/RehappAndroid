@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel;
 
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TherapyViewModel extends ViewModel implements Serializable {
@@ -21,7 +20,7 @@ public class TherapyViewModel extends ViewModel implements Serializable {
     private double therapy_total_duration;
     List<PhysiologicalParameterTherapyViewModel> physiologicalParametersIn;
     List<PhysiologicalParameterTherapyViewModel>  physiologicalParametersOut;
-    List<ExerciseViewModel> exerciseViewModelList;
+    List<ExerciseRoutinesViewModel> exerciseRoutinesViewModelList;
 
 
     private String therapy_description;
@@ -204,11 +203,11 @@ public class TherapyViewModel extends ViewModel implements Serializable {
         this.physiologicalParametersOut = physiologicalParametersOut;
     }
 
-    public List<ExerciseViewModel> getExerciseViewModelList() {
-        return exerciseViewModelList;
+    public List<ExerciseRoutinesViewModel> getExerciseRoutinesViewModelList() {
+        return exerciseRoutinesViewModelList;
     }
 
-    public void setExerciseViewModelList(List<ExerciseViewModel> exerciseViewModelList) {
-        this.exerciseViewModelList = exerciseViewModelList;
+    public void setExerciseRoutinesViewModelList(List<ExerciseRoutinesViewModel> exerciseRoutinesViewModelList) {
+        this.exerciseRoutinesViewModelList = exerciseRoutinesViewModelList;
     }
 }

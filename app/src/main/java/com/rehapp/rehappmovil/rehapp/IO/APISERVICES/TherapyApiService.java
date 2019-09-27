@@ -9,11 +9,14 @@ import retrofit2.http.*;
 
 public interface TherapyApiService {
 
-    @GET("documentTypes")
-    Call<TherapyViewModel> getTherapy();
+    @GET("therapies")
+    Call<ArrayList<TherapyViewModel>> getTherapies();
 
-    @POST("users/new")
-    Call<TherapyViewModel> createTherapy(@Body TherapyViewModel therapy);
+    @GET("therapies/showById/{therapy_id}")
+    Call<TherapyViewModel> getTherapy(@Path("therapy_id") String therapyId);
+
+    @POST("therapies")
+    Call<TherapyViewModel> createTherapyId(@Body TherapyViewModel therapy);
 
 
 }

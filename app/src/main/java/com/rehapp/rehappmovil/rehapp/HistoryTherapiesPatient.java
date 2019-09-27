@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
@@ -48,24 +49,24 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         lvTherapies = findViewById(R.id.lvTherapies);
 
 
-for (int i=1;i<5;i++) {
+        for (int i=1;i<5;i++) {
 
-    /*therapy = new TherapyMasterDetailViewModel();
-    therapy.setTherapy_id(1);
-    therapy.setTherapist_id(1);
-    therapy.setPatient_id(1);
-    therapy.setInstitution_id(2);
-    therapy.setTherapy_description("Terapia cardiovascular sesión "+ i);
-    therapy.setCreated_at("");
-    therapy.setUpdated_at("");
-    therapy.setTherapy_total_duration(2.2);
-    therapy.setTherapy_observation("");
-    therapy.setTherapy_sequence(i);
-    therapy.setTherapy_achieved_the_goal(true);
-*/
-    therapies.add(therapy);
+            therapy = new TherapyMasterDetailViewModel();
+            therapy.setTherapy_id(1);
+            therapy.setTherapist_id(1);
+            therapy.setPatient_id(1);
+            therapy.setInstitution_id(2);
+            therapy.setTherapy_description("Terapia cardiovascular sesión "+ i);
+            therapy.setCreated_at("");
+            therapy.setUpdated_at("");
+            therapy.setTherapy_total_duration(2.2);
+            therapy.setTherapy_observation("");
+            therapy.setTherapy_sequence(i);
+            therapy.setTherapy_achieved_the_goal(true);
 
-}
+            therapies.add(therapy);
+
+        }
         loadTherapies();
 
         lvTherapies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,7 +75,7 @@ for (int i=1;i<5;i++) {
                 TherapyViewModel selectedTherapy = therapies.get(position);
                 Toast.makeText(getApplicationContext(), "therapy selected : " + selectedTherapy.getTherapy_description(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyDetail.class);
-                //intent.putExtra(PreferencesData.TherapySelected, selectedTherapy);
+                intent.putExtra(PreferencesData.TherapySelectedId, selectedTherapy.getTherapy_id());
                 intent.putExtra(PreferencesData.TherapyAction, "DETAIL");
                 startActivity(intent);
             }
@@ -133,7 +134,6 @@ for (int i=1;i<5;i++) {
         switch (item.getItemId())
         {
             case R.id.create_therapy:
-                createTherapyJson();
                 Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyDetail.class);
                 Bundle extras = new Bundle();
                 extras.putString(PreferencesData.TherapyAction, "ADD");
@@ -153,17 +153,5 @@ for (int i=1;i<5;i++) {
         item.setVisible(false);
     }
 
-    public void createTherapyJson()
-    {
-        TherapyMasterDetailViewModel  therapyMasterDetailViewModel;
 
-       /* therapyMasterDetailViewModel = new TherapyMasterDetailViewModel();
-
-        Gson gson = new  Gson();
-        String json = gson.toJson(therapyMasterDetailViewModel);
-        sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(PreferencesData.TherapyMasterDetailViewModel, json);
-        editor.commit();*/
-    }
 }

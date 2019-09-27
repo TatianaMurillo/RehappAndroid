@@ -21,6 +21,7 @@ public class TherapyMasterDetailViewModel extends TherapyViewModel {
         this.institution = institution;
         this.physiologicalParameterViewModel = physiologicalParameterViewModel;
     }
+    public TherapyMasterDetailViewModel(){}
 
     public static TherapyMasterDetailViewModel getInstance()
     {

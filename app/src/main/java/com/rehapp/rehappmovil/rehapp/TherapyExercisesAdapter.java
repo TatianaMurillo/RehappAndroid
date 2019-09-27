@@ -10,14 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyExercise;
+import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 
 import java.util.List;
 
 public class TherapyExercisesAdapter  extends BaseAdapter{
 
     Activity activity;
-    List<TherapyExercise> exercises;
+    List<ExerciseRoutinesViewModel> exercises;
     LayoutInflater inflater;
 
 
@@ -25,7 +25,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
         this.activity = activity;
     }
 
-    public TherapyExercisesAdapter(Activity activity, List<TherapyExercise> exercises) {
+    public TherapyExercisesAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises) {
         this.activity = activity;
         this.exercises = exercises;
         inflater = activity.getLayoutInflater();
@@ -62,7 +62,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
         }else {
             holder = (ViewHolder) view.getTag();
         }
-            TherapyExercise model = exercises.get(position);
+            ExerciseRoutinesViewModel model = exercises.get(position);
 
             holder.tvExerciseName.setText(model.getExerciseName());
             holder.tvVideoUrl.setText(PreferencesData.therapyDetailWatchVideo);
@@ -70,7 +70,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
             holder.tvVideoUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(activity, TherapyExerciseDetail.class);
+                    Intent intent = new Intent(activity, TherapyExcerciseRoutine.class);
                     activity.startActivity(intent);
                 }
             });
@@ -85,7 +85,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
             return view;
         }
 
-        public void updateRecords(List<TherapyExercise> exercises)
+        public void updateRecords(List<ExerciseRoutinesViewModel> exercises)
         {
             this.exercises=exercises;
             notifyDataSetChanged();
