@@ -15,6 +15,8 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterTherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
@@ -31,6 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment {
 
@@ -39,14 +45,16 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
     private TextView textView;
     private GridLayout grid;
     private String physiologicalParameterAction;
+    private int therapyId;
 
 
-    ArrayList<PhysiologicalParameterViewModel> options= new ArrayList<PhysiologicalParameterViewModel>();
+    ArrayList<PhysiologicalParameterViewModel> options= new ArrayList<>();
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         physiologicalParameterAction = getArguments().getString(PreferencesData.PhysiologicalParameterAction);
+        therapyId =Integer.parseInt(getArguments().getString(PreferencesData.TherapyId));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -83,17 +91,27 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
     public void LoadData()
     {
-        options.add(new PhysiologicalParameterViewModel("FC"));
+        loadPhysiologicalParameters();
+    }
 
-        options.add(new PhysiologicalParameterViewModel("Heart rate"));
+    private void loadPhysiologicalParameters()
+    {
+        Call<ArrayList<PhysiologicalParameterViewModel>> call = PhysiologicalParameterApiAdapter.getApiService().getPhysiologicalParams();
+        call.enqueue(new Callback<ArrayList<PhysiologicalParameterViewModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PhysiologicalParameterViewModel>> call, Response<ArrayList<PhysiologicalParameterViewModel>> response) {
+                if(response.isSuccessful())
+                {
+                    options=response.body();
+                    addPhysiologicalParametersView(options);
+                }
+            }
 
-        options.add(new PhysiologicalParameterViewModel("BorgD"));
-
-        options.add(new PhysiologicalParameterViewModel("BorgE"));
-
-        addPhysiologicalParametersView(options);
-
-        setPhysiolocalParametersToViewFromTmpFile();
+            @Override
+            public void onFailure(Call<ArrayList<PhysiologicalParameterViewModel>> call, Throwable t) {
+                Toast.makeText(getContext(), PreferencesData.PhysiologicalParameterTherapyDataMgsError, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -169,21 +187,36 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
             editText = (EditText)childEditText;
 
             valueEditText = editText.getText().toString().trim();
-            data.add(new PhysiologicalParameterTherapyViewModel(0,getIdPhysiologicalParameter(valueTextView),0,valueEditText,physiologicalParameterAction));
+            data.add(new PhysiologicalParameterTherapyViewModel(0,getIdPhysiologicalParameter(valueTextView),therapyId,valueEditText,physiologicalParameterAction));
 
         }
 
-        TherapyViewModel therapy = new TherapyViewModel();
-        therapy.setPhysiologicalParametersIn(data);
 
-        //UserMethods.saveTherapy(therapy,getContext());
+
 
         Toast.makeText(getContext(), PreferencesData.PhysiologicalParameterTherapySuccessMgs, Toast.LENGTH_LONG).show();
 
-        //DBHelper2.connect(this.getContext()).addPhysiologicalParametersInRegister(data);
+    }
 
-        //ReadCSVFile.writeTempTherapyInformation(this.getContext(), PhysiologicalParameterTherapy.DATA_PHYSIOLOGICAL_PARAMETER_THERAPY_IN.getRowId(),data);
+    private void savePhysiologicalParameterTherapy(List<PhysiologicalParameterTherapyViewModel> data){
 
+        Call<List<PhysiologicalParameterTherapyViewModel>>  call = PhysiologicalParameterTherapyApiAdapter.getApiService().savePhysiologicalParamsTherapy(data,therapyId);
+        call.enqueue(new Callback<List<PhysiologicalParameterTherapyViewModel>>() {
+            @Override
+            public void onResponse(Call<List<PhysiologicalParameterTherapyViewModel>> call, Response<List<PhysiologicalParameterTherapyViewModel>> response) {
+                if(response.isSuccessful())
+                {
+                    String mgs = response.body().size()+" "+PreferencesData.PhysiologicalParameterTherapySuccessMgs;
+                    Toast.makeText(getContext(), mgs, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PhysiologicalParameterTherapyViewModel>> call, Throwable t) {
+                Toast.makeText(getContext(), PreferencesData.PhysiologicalParameterTherapyDataMgsError, Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
     private int getIdPhysiologicalParameter(String name)

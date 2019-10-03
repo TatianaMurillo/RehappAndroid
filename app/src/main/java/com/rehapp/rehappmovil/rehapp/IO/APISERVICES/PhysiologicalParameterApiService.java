@@ -11,7 +11,7 @@ import retrofit2.http.GET;
 public interface PhysiologicalParameterApiService {
 
 
-    @GET("documentTypes")
+    @GET("physiologicalParameters")
     Call<ArrayList<PhysiologicalParameterViewModel>> getPhysiologicalParams();
 
 }

@@ -43,6 +43,8 @@ public class PreferencesData {
 
 
     public static final String therapyAddAdditionalInformationSuccessMsg ="Datos guardados correctamente.";
+    public static final String therapyUpdateSuccessMsg ="Se actualizó la terapia con éxito.";
+    public static final String therapyUpdateFailedMsg ="Hubo un error al crear terapia.";
     public static final String therapyCreationIdSuccessMsg ="Se creó la terapia con éxito.";
     public static final String therapyCreationIdFailedMsg ="Hubo un error al generar terapia.";
     public static final String therapyCreationSuccessMsg ="Se creó la terapia con éxito.";

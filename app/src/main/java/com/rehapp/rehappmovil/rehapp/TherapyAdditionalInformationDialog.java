@@ -70,33 +70,12 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
 
     public void addAdditionalInformation()
     {
-        /*TherapyViewModel therapy = new TherapyViewModel(
-                1,
-                1,
-                1,
-                false,
-                "",
-                1,
-                1,
-                5,
-                "",
-                "",
-                "",
-                "",
-                new InstitutionViewModel(1,"ad","f") ,
-                new PatientViewModel(),
-                new TherapistViewModel(1,"dfgvb","asdf","asdf","vbn",1,new GenderViewModel(1,"123","1234"),new DocumentTypeViewModel(2,"2wsd","sdf"),new NeighborhoodViewModel(2,"qwe","123e",1))
-        );*/
         TherapyViewModel therapy = new TherapyViewModel();
         therapy.setTherapy_additional_information(etAdditionalInformacion.getText().toString());
         Gson gson = new Gson();
         String json = gson.toJson(therapy);
 
-        //UserMethods.saveTherapy(therapy,getContext());
-
         Toast.makeText(getContext(), PreferencesData.therapyAddAdditionalInformationSuccessMsg, Toast.LENGTH_LONG).show();
-
-
     }
 
 

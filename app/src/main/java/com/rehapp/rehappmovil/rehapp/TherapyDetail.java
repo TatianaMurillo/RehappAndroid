@@ -78,8 +78,7 @@ private String json;
                 {
                     therapySelectedId = getIntent().getSerializableExtra(PreferencesData.TherapySelectedId).toString();
                     searchTherapy();
-                    tvTherapySequence.setText("Terapia # " + therapySelected.getTherapy_sequence());
-                    blockData();
+
                 }
             therapyViewModel.setAction(action);
             listTherapists();
@@ -188,6 +187,8 @@ private String json;
                 if(response.isSuccessful())
                 {
                     therapySelected = response.body();
+                    tvTherapySequence.setText("Terapia # " + therapySelected.getTherapy_sequence());
+                    blockData();
 
                 }else{
                     if(response.raw().code()==404) {
@@ -309,6 +310,55 @@ private String json;
                 Toast.makeText(getApplicationContext(), PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void saveTherapy()
+    {
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                if(response.isSuccessful())
+                {
+                    therapySelected = response.body();
+
+                    updateTherapy(therapySelected);
+
+                }else{
+                    if(response.raw().code()==404) {
+                        Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(TherapyDetail.this, HistoryTherapiesPatient.class);
+                        startActivity(intent);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void updateTherapy(final TherapyViewModel therapy)
+    {
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().updateTherapy(therapy,therapySelectedId);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                if(response.isSuccessful())
+                {
+                 String msg =PreferencesData.therapyUpdateSuccessMsg + " Id " +response.body().getTherapy_id();
+                 Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), PreferencesData.therapyUpdateFailedMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
 }
