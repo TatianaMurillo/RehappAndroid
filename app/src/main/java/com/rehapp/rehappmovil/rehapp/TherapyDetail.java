@@ -27,6 +27,7 @@ import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -276,7 +277,10 @@ private String json;
 
         Bundle args = new Bundle();
         args.putString(PreferencesData.TherapyAction,action);
-        args.putString(PreferencesData.TherapyId,therapySelectedId);
+        if(action.equals("ADD"))
+            args.putString(PreferencesData.TherapyId,therapyCreatedId);
+        else
+            args.putString(PreferencesData.TherapyId,therapySelectedId);
 
         TherapyExercisesDialog therapyExercisesDialog = new  TherapyExercisesDialog();
         therapyExercisesDialog.setArguments(args);
@@ -289,20 +293,17 @@ private String json;
         TherapyViewModel therapy = new TherapyViewModel();
         therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
-        call.enqueue(new Callback<TherapyViewModel>() {
+       call.enqueue(new Callback<TherapyViewModel>() {
             @Override
             public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     TherapyViewModel therapyViewModel=response.body();
-                    therapyCreatedId=String.valueOf(therapyViewModel.getTherapy_id());
+                    therapyCreatedId = String.valueOf(therapyViewModel.getTherapy_id());
                     tvTherapySequence.setText("Terapia # " + therapyCreatedId);
                     Toast.makeText(getApplicationContext(), PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
-                }else
-                    {
-                        Toast.makeText(getApplicationContext(), PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
-                    }
-
+                } else {
+                    Toast.makeText(getApplicationContext(), PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -310,7 +311,12 @@ private String json;
                 Toast.makeText(getApplicationContext(), PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
             }
         });
+
+
     }
+
+
+
 
     public void saveTherapy()
     {

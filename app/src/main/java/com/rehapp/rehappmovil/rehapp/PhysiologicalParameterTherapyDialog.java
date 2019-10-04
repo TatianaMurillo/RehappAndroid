@@ -200,7 +200,7 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
     private void savePhysiologicalParameterTherapy(List<PhysiologicalParameterTherapyViewModel> data){
 
-        Call<List<PhysiologicalParameterTherapyViewModel>>  call = PhysiologicalParameterTherapyApiAdapter.getApiService().savePhysiologicalParamsTherapy(data,therapyId);
+        Call<List<PhysiologicalParameterTherapyViewModel>>  call = PhysiologicalParameterTherapyApiAdapter.getApiService().savePhysiologicalParamsTherapyIn(data,therapyId);
         call.enqueue(new Callback<List<PhysiologicalParameterTherapyViewModel>>() {
             @Override
             public void onResponse(Call<List<PhysiologicalParameterTherapyViewModel>> call, Response<List<PhysiologicalParameterTherapyViewModel>> response) {

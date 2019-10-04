@@ -51,6 +51,12 @@ public class PreferencesData {
     public static final String therapyCreationFailedMsg ="Falló al crear terapia.";
     public static final String therapyDetailTherapistListMsg ="Hubo un error al listar terapeutas.";
     public static final String therapyDetailExerciseRoutineListMsg ="Hubo un error al ejercicios de rutina.";
+
+    public static final String therapyDetailSaveExerciseRoutineDataFailedMsg ="Debe seleccionar al menos (1) ejercicio de rutina.";
+    public static final String therapyDetailSaveExerciseRoutineFailedMsg ="Hubo un error al guardar ejercicios de terapia.";
+    public static final String therapyDetailSaveExerciseRoutineSuccessMsg ="Ejercicios de terapia guardados correctamente.";
+
+
     public static final String therapyDetailTherapyExerciseRoutinesListMsg ="Hubo un error al listar los ejercicios previamente seleccionados.";
     public static final String therapyDetailInstitutionListMsg ="Hubo un error al listar instituciones.";
     public static final String therapyDetailInstitutionNonExist="No se encontró la institución seleccionada.";

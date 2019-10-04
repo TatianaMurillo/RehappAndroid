@@ -19,7 +19,7 @@ public interface TherapyExerciseRoutineApiService {
     Call<ArrayList<TherapyExcerciseRoutineViewModel>> getTherapyExerciseRoutines(@Path("therapyId") String therapyId);
 
     @POST("therapyExerciseRoutines/saveRoutines/{therapyId}")
-    Call<ArrayList<TherapyExcerciseRoutineViewModel>> saveTherapyExerciseRoutines(@Body List<TherapyExcerciseRoutineViewModel> therapyExcerciseRoutines, @Path("therapyId") String therapyId);
+    Call<List<TherapyExcerciseRoutineViewModel>> saveTherapyExerciseRoutines(@Body List<TherapyExcerciseRoutineViewModel> therapyExcerciseRoutines, @Path("therapyId") String therapyId);
 
 
 }
