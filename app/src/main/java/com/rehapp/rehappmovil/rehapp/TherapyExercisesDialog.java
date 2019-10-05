@@ -1,6 +1,7 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -35,15 +36,15 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
     private ArrayList<ExerciseRoutinesViewModel> exercises = new ArrayList<>();
     private ArrayList<TherapyExcerciseRoutineViewModel> therapyExerciseRoutines = new ArrayList<>();
     private int  exerciseRoutineSelectedIndex=-1;
-    private String action;
     private String therapyId;
     TherapyMasterDetailViewModel therapyViewModel;
     TherapyExercisesAdapter adapter;
 
+    private Context mContext;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        action=getArguments().getString(PreferencesData.TherapyAction);
         therapyId=getArguments().getString(PreferencesData.TherapyId);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -98,6 +99,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                     exercises = response.body();
                     adapter = new TherapyExercisesAdapter(getActivity(),exercises);
                     lvExercises.setAdapter(adapter);
+                    listTherapyExercisesRoutines();
 
                     lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener()
                     {
@@ -108,12 +110,12 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                     });
 
                 } else {
-                        Toast.makeText(getContext(), PreferencesData.therapyDetailExerciseRoutineListMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, PreferencesData.therapyDetailExerciseRoutineListMsg, Toast.LENGTH_LONG).show();
                 }
             }
             @Override
             public void onFailure(Call<ArrayList<ExerciseRoutinesViewModel>> call, Throwable t) {
-                Toast.makeText(getContext(), PreferencesData.therapyDetailExerciseRoutineListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, PreferencesData.therapyDetailExerciseRoutineListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -137,12 +139,13 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                                 }
                             }
                         }
+                    }else if(response.raw().code()==404){
+                        System.out.println(PreferencesData.therapyDetailTherapyExerciseRoutinesEmptyListMsg);
                     }
                 }
-
                 @Override
                 public void onFailure(Call<ArrayList<TherapyExcerciseRoutineViewModel>> call, Throwable t) {
-                    Toast.makeText(getContext(), PreferencesData.therapyDetailTherapyExerciseRoutinesListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, PreferencesData.therapyDetailTherapyExerciseRoutinesListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
                 }
             });
         }catch (Exception ex){}
@@ -186,22 +189,6 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
         }
     }
 
-    public void hideShowItems(Menu menu)
-    {
-        MenuItem item;
-        if(action.equals("DETAIL")) {
-            item = menu.findItem(R.id.create_therapy);
-            item.setVisible(false);
-
-            item = menu.findItem(R.id.save_therapy);
-            item.setVisible(false);
-        }else
-        {
-            item = menu.findItem(R.id.create_therapy);
-            item.setVisible(false);
-        }
-    }
-
     public  void saveExercises()
     {
         List<TherapyExcerciseRoutineViewModel> therapyExcerciseRoutines=new ArrayList<>();
@@ -228,21 +215,26 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                 public void onResponse(Call<List<TherapyExcerciseRoutineViewModel>> call, Response<List<TherapyExcerciseRoutineViewModel>> response) {
                     if(response.isSuccessful())
                     {
-                        Toast.makeText(getContext(), PreferencesData.therapyDetailSaveExerciseRoutineSuccessMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineSuccessMsg, Toast.LENGTH_LONG).show();
                     }
                 }
                 @Override
                 public void onFailure(Call<List<TherapyExcerciseRoutineViewModel>> call, Throwable t) {
-                    Toast.makeText(getContext(), PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
 
                 }
             });
         }else
         {
-            Toast.makeText(getContext(), PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
 
         }
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
+    }
 }

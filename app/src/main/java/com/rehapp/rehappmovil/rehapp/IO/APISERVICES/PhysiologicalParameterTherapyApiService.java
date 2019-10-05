@@ -13,14 +13,14 @@ import retrofit2.http.Path;
 public interface PhysiologicalParameterTherapyApiService {
 
 
-    @POST("physiologicalParametersTherapy/savePhysiologicalParametersTherapyIn/{id}")
-    Call<List<PhysiologicalParameterTherapyViewModel>> savePhysiologicalParamsTherapyIn(@Body List<PhysiologicalParameterTherapyViewModel>  physiologicalParameterTherapy, @Path("id") int id);
+    @POST("physiologicalParametersTherapy/savePhysiologicalParametersTherapy/{id}/{action}")
+    Call<List<PhysiologicalParameterTherapyViewModel>> savePhysiologicalParamsTherapy(@Body List<PhysiologicalParameterTherapyViewModel>  physiologicalParameterTherapy, @Path("id") int id,@Path("action") String action );
 
     @POST("physiologicalParametersTherapy/savePhysiologicalParametersTherapyOut/{id}")
     Call<List<PhysiologicalParameterTherapyViewModel>> savePhysiologicalParamsTherapyOut(@Body List<PhysiologicalParameterTherapyViewModel>  physiologicalParameterTherapy, @Path("id") int id);
 
-    @GET("physiologicalParametersTherapy/getPhysiologicalParametersTherapyIn/{id}")
-    Call<List<PhysiologicalParameterTherapyViewModel>> getPhysiologicalParamsTherapyIn(@Body List<PhysiologicalParameterTherapyViewModel>  physiologicalParameterTherapy, @Path("id") int id);
+    @GET("physiologicalParametersTherapy/getPhysiologicalParametersTherapy/{id}/{action}")
+    Call<List<PhysiologicalParameterTherapyViewModel>> getPhysiologicalParamsTherapy(@Path("id") int id,@Path("action") String action);
 
     @GET("physiologicalParametersTherapy/getPhysiologicalParametersTherapyOut/{id}")
     Call<List<PhysiologicalParameterTherapyViewModel>> getPhysiologicalParamsTherapyOut(@Body List<PhysiologicalParameterTherapyViewModel>  physiologicalParameterTherapy, @Path("id") int id);

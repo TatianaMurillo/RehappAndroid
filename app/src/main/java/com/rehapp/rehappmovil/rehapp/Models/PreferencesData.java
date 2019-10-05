@@ -57,6 +57,8 @@ public class PreferencesData {
     public static final String therapyDetailSaveExerciseRoutineSuccessMsg ="Ejercicios de terapia guardados correctamente.";
 
 
+    public static final String therapyDetailPhysiologicalParameterTherapyEmptyListMsg ="No se encontraron parametros fisiologicos para la terapia.";
+    public static final String therapyDetailTherapyExerciseRoutinesEmptyListMsg ="No se encontraron rutinas para la terapia.";
     public static final String therapyDetailTherapyExerciseRoutinesListMsg ="Hubo un error al listar los ejercicios previamente seleccionados.";
     public static final String therapyDetailInstitutionListMsg ="Hubo un error al listar instituciones.";
     public static final String therapyDetailInstitutionNonExist="No se encontró la institución seleccionada.";
