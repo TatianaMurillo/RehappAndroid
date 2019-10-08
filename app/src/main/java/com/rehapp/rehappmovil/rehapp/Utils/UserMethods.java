@@ -87,8 +87,31 @@ public class UserMethods extends Activity {
         documentTypes.loadDocumentTypes();
         return documentTypes.getDocumentTypes();
     }
+public static void storeStringSharepreferences(String key, String value,SharedPreferences sharedpreferences){
 
-    class DocumentTypes
+    SharedPreferences.Editor editor = sharedpreferences.edit();
+    editor.putString(key, value);
+    editor.commit();
+
+}
+    public static void storeIntSharepreferences(String key, int value,SharedPreferences sharedpreferences){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+
+    }
+    public static int getIntFromSharepreferences(String key, int value,SharedPreferences sharedpreferences) {
+     return sharedpreferences.getInt(key,value);
+   }
+
+
+    public static String getStringFromSharepreferences(String key, String value,SharedPreferences sharedpreferences) {
+        return sharedpreferences.getString(key,value);
+    }
+
+
+        class DocumentTypes
     {
 
         ArrayList<DocumentTypeViewModel> documentTypes;

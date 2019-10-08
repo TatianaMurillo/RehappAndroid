@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
     private GridLayout grid;
     private String physiologicalParameterAction;
     private int therapyId;
+    Dialog d;
 
     private Context mContext;
 
@@ -80,7 +82,9 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
                 });
         grid = view.findViewById(R.id.grid);
         LoadData();
-        return builder.create();
+
+        d = builder.create();
+        return d;
     }
 
     private int getTitle() {
@@ -157,6 +161,14 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
 
             textView = new TextView(mContext);
             editText = new EditText(mContext);
+            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        d.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    }
+                }
+            });
 
             textView.setText(physiologicalParameterViewModel.getPhysiological_parameter_name());
             editText.setEms(PreferencesData.PhysiologicalParameterTherapyValueSize);

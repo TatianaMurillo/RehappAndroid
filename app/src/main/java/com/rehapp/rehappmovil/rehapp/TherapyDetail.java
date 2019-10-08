@@ -50,6 +50,9 @@ private String json;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+
         setContentView(R.layout.activity_therapy_detail);
         tvTherapySequence = findViewById(R.id.tvTherapySequence);
         spnInstitution = findViewById(R.id.spnInstitution);
@@ -63,16 +66,26 @@ private String json;
     {
         if( getIntent().getExtras()!=null)
             {
+
+
+
                 Bundle extras = getIntent().getExtras();
                 action= extras.getString(PreferencesData.TherapyAction);
+
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(PreferencesData.TherapyAction, action);
+                editor.commit();
+
                 if(action.equals("ADD")) {
                     UnBlockData();
                 }else
                 {
                     therapySelectedId = getIntent().getSerializableExtra(PreferencesData.TherapySelectedId).toString();
+                    editor = sharedpreferences.edit();
+                    editor.putString(PreferencesData.TherapyId, therapySelectedId);
+                    editor.commit();
                     searchTherapy();
                 }
-            therapyViewModel.setAction(action);
             listTherapists();
             listInstitutions();
         }
@@ -99,10 +112,11 @@ private String json;
             public void onResponse(Call<ArrayList<TherapistViewModel>> call, Response<ArrayList<TherapistViewModel>> response) {
                 if(response.isSuccessful())
                 {
+                    String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
                     therapists = response.body();
                     for(TherapistViewModel therapistViewModel : therapists)
                     {
-                        if(therapyViewModel.getAction().equals("DETAIL")) {
+                        if(action.equals("DETAIL")) {
                             if (therapistViewModel.getTherapist_id() == therapySelected.getTherapist_id()) {
                                 indexOfTherapist = therapists.indexOf(therapistViewModel);
                             }
@@ -112,7 +126,7 @@ private String json;
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TherapyDetail.this,android.R.layout.simple_list_item_1,therapistNames);
                     spnTherapist.setAdapter(arrayAdapter);
 
-                    if(therapyViewModel.getAction().equals("DETAIL")) {
+                    if(action.equals("DETAIL")) {
                         if (indexOfTherapist != -1) {
                             spnTherapist.setSelection(indexOfTherapist);
                         } else {
@@ -140,10 +154,12 @@ private String json;
             public void onResponse(Call<ArrayList<InstitutionViewModel>> call, Response<ArrayList<InstitutionViewModel>> response) {
                 if(response.isSuccessful())
                 {
+                    String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
+
                     institutions = response.body();
                     for(InstitutionViewModel institutionViewModel : institutions)
                     {
-                        if(therapyViewModel.getAction().equals("DETAIL")) {
+                        if(action.equals("DETAIL")) {
                             if (institutionViewModel.getInstitution_id() == therapySelected.getInstitution_id()) {
                                 indexOfInstitution = institutions.indexOf(institutionViewModel);
                             }
@@ -153,7 +169,7 @@ private String json;
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TherapyDetail.this,android.R.layout.simple_list_item_1,institutionNames);
                     spnInstitution.setAdapter(arrayAdapter);
 
-                    if(therapyViewModel.getAction().equals("DETAIL")) {
+                    if(action.equals("DETAIL")) {
                         if (indexOfInstitution != -1) {
                             spnInstitution.setSelection(indexOfInstitution);
                         } else {
@@ -172,6 +188,7 @@ private String json;
     }
 
     private void searchTherapy(){
+        String therapySelectedId= sharedpreferences.getString(PreferencesData.TherapyId,"");
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
         call.enqueue(new Callback<TherapyViewModel>() {
             @Override
@@ -223,7 +240,10 @@ private String json;
 
     public void showHideItems(Menu menu) {
         MenuItem item;
-        if(therapyViewModel.getAction().equals("DETAIL")) {
+
+        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
+
+        if(action.equals("DETAIL")) {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
 
@@ -237,20 +257,26 @@ private String json;
     }
 
     public void addPhysiologicalParametersIn(View view) {
+        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
+        int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
+
 
         if(action.equals("ADD")) {
-            if(therapyCreatedId.equals("")) {
+            if(therapyId==0) {
                 createTherapyIdForPhysiologicalParameters(PreferencesData.PhysiologicalParameterTherapySesionIN);
             }else {
-                showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionIN,therapyCreatedId);
+                showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionIN,String.valueOf(therapyId));
             }
         } else {
-            showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionIN,therapySelectedId);
+            showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionIN,String.valueOf(therapyId));
         }
 
 }
 
     public void addPhysiologicalParametersOut(View view) {
+
+        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
+
         if(action.equals("ADD")) {
             if(therapyCreatedId.equals("")) {
                 createTherapyIdForPhysiologicalParameters(PreferencesData.PhysiologicalParameterTherapySesionOUT);
@@ -317,13 +343,11 @@ private String json;
 
         tvTherapySequence.setText(R.string.TherapySequence + therapyId);
 
-        Bundle args = new Bundle();
-        args.putString(PreferencesData.PhysiologicalParameterAction,physiologicalParameterAction);
-        args.putString(PreferencesData.TherapyId,therapyId);
+        storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
+        storeStringSharepreferences(PreferencesData.PhysiologicalParameterAction,physiologicalParameterAction);
 
-        PhysiologicalParameterTherapyDialog physiologicalParameterTherapyDialog = new  PhysiologicalParameterTherapyDialog();
-        physiologicalParameterTherapyDialog.setArguments(args);
-        physiologicalParameterTherapyDialog.show(getSupportFragmentManager(),"");
+        Intent intent = new Intent(TherapyDetail.this,PhysiologicalParameterTherapy.class);
+        startActivity(intent);
 
     }
 
@@ -332,6 +356,7 @@ private String json;
 
         Bundle args = new Bundle();
         args.putString(PreferencesData.TherapyId,therapyId);
+
         TherapyExercisesDialog therapyExercisesDialog = new  TherapyExercisesDialog();
         therapyExercisesDialog.setArguments(args);
         therapyExercisesDialog.show(getSupportFragmentManager(),"");
@@ -364,6 +389,7 @@ private String json;
     }
 
     public void saveTherapy() {
+
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
         call.enqueue(new Callback<TherapyViewModel>() {
             @Override
@@ -410,4 +436,21 @@ private String json;
 
     }
 
+
+
+    private  void storeStringSharepreferences(String key, String value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+
+    }
+
+    private  void storeIntSharepreferences(String key, int value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+
+    }
 }
