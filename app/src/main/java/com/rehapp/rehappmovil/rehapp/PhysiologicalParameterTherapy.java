@@ -89,7 +89,8 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ArrayList<PhysiologicalParameterViewModel>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), PreferencesData.PhysiologicalParameterTherapyDataMgsError, Toast.LENGTH_LONG).show();
+                String msg=PreferencesData.PhysiologicalParameterTherapyDataListFailed + " " +t.getMessage();
+                Toast.makeText(getApplicationContext(), msg , Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -244,7 +245,7 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.logout:
-                UserMethods.Do().Logout(this);
+                UserMethods.getInstance().Logout(this);
                 break;
             case R.id.save_therapy:
                 savePhysiologicalParameterTherapy();

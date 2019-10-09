@@ -27,12 +27,8 @@ import retrofit2.Response;
 
 public class UserMethods extends Activity {
 
-   private  SharedPreferences sharedpreferences;
+   private  SharedPreferences sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
-   public static UserMethods Do()
-    {
-        return new UserMethods();
-    }
 
     public  void Logout(Context context){
 
@@ -76,40 +72,40 @@ public class UserMethods extends Activity {
        }
        }
 
+       public UserMethods(){}
 
     public static UserMethods getInstance()
     {
         return  new UserMethods();
     }
-    public  ArrayList<DocumentTypeViewModel> getDocumentTypes()
-    {
+
+    public  ArrayList<DocumentTypeViewModel> getDocumentTypes() {
         DocumentTypes documentTypes= new DocumentTypes();
         documentTypes.loadDocumentTypes();
         return documentTypes.getDocumentTypes();
     }
-public static void storeStringSharepreferences(String key, String value,SharedPreferences sharedpreferences){
+
+    public  void storeStringSharepreferences(String key, String value){
 
     SharedPreferences.Editor editor = sharedpreferences.edit();
     editor.putString(key, value);
     editor.commit();
 
 }
-    public static void storeIntSharepreferences(String key, int value,SharedPreferences sharedpreferences){
+    public  void storeIntSharepreferences(String key, int value){
+
 
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putInt(key, value);
         editor.commit();
 
     }
-    public static int getIntFromSharepreferences(String key, int value,SharedPreferences sharedpreferences) {
+    public  int getIntFromSharepreferences(String key, int value) {
      return sharedpreferences.getInt(key,value);
    }
-
-
-    public static String getStringFromSharepreferences(String key, String value,SharedPreferences sharedpreferences) {
+    public  String getStringFromSharepreferences(String key, String value) {
         return sharedpreferences.getString(key,value);
     }
-
 
         class DocumentTypes
     {

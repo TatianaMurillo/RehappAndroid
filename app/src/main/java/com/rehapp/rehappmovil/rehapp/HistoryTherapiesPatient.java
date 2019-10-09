@@ -22,6 +22,7 @@ import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
+import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,9 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_therapies_patient);
+
+
+        sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
 
         lvTherapies = findViewById(R.id.lvTherapies);
@@ -134,6 +138,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         switch (item.getItemId())
         {
             case R.id.create_therapy:
+                cleanPreferenceData();
                 Intent intent = new Intent(HistoryTherapiesPatient.this, TherapyDetail.class);
                 Bundle extras = new Bundle();
                 extras.putString(PreferencesData.TherapyAction, "ADD");
@@ -153,5 +158,9 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
         item.setVisible(false);
     }
 
+    private void cleanPreferenceData()
+    {
+        UserMethods.getInstance().storeIntSharepreferences(PreferencesData.TherapyId,0);
+    }
 
 }

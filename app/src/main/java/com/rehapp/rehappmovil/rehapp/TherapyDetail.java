@@ -35,7 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TherapyDetail extends AppCompatActivity {
-private String therapySelectedId;
+private int therapySelectedId;
 private String therapyCreatedId;
 private TextView tvTherapySequence;
 private String action;
@@ -60,8 +60,14 @@ private String json;
         therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         therapyCreatedId="";
         recoverySendData();
+        loadData();
     }
 
+    private void loadData(){
+
+        listTherapists();
+        listInstitutions();
+    }
     private void recoverySendData()
     {
         if( getIntent().getExtras()!=null)
@@ -72,22 +78,16 @@ private String json;
                 Bundle extras = getIntent().getExtras();
                 action= extras.getString(PreferencesData.TherapyAction);
 
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString(PreferencesData.TherapyAction, action);
-                editor.commit();
+                storeStringSharepreferences(PreferencesData.TherapyAction, action);
 
                 if(action.equals("ADD")) {
                     UnBlockData();
                 }else
                 {
-                    therapySelectedId = getIntent().getSerializableExtra(PreferencesData.TherapySelectedId).toString();
-                    editor = sharedpreferences.edit();
-                    editor.putString(PreferencesData.TherapyId, therapySelectedId);
-                    editor.commit();
+                    therapySelectedId = Integer.parseInt(getIntent().getSerializableExtra(PreferencesData.TherapySelectedId).toString());
+                    storeIntSharepreferences(PreferencesData.TherapyId, therapySelectedId);
                     searchTherapy();
                 }
-            listTherapists();
-            listInstitutions();
         }
     }
 
@@ -188,7 +188,7 @@ private String json;
     }
 
     private void searchTherapy(){
-        String therapySelectedId= sharedpreferences.getString(PreferencesData.TherapyId,"");
+        String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
         call.enqueue(new Callback<TherapyViewModel>() {
             @Override
@@ -229,7 +229,7 @@ private String json;
         switch (item.getItemId())
         {
             case R.id.logout:
-                UserMethods.Do().Logout(this);
+                UserMethods.getInstance().Logout(this);
                 break;
         }
 
@@ -276,15 +276,16 @@ private String json;
     public void addPhysiologicalParametersOut(View view) {
 
         String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
+        int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
 
         if(action.equals("ADD")) {
-            if(therapyCreatedId.equals("")) {
+            if(therapyId==0) {
                 createTherapyIdForPhysiologicalParameters(PreferencesData.PhysiologicalParameterTherapySesionOUT);
             }else {
-                showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionOUT,therapyCreatedId);
+                showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionOUT,String.valueOf(therapyId));
             }
         } else {
-            showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionOUT,therapySelectedId);
+            showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionOUT,String.valueOf(therapyId));
         }
     }
 
@@ -297,17 +298,19 @@ private String json;
 
     public void watchExercises(View view) {
 
+        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
+        int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
+
         if(action.equals("ADD")) {
 
-            if (therapyCreatedId.equals(""))
+            if (therapyId==0)
                 createTherapyIdForTherapyRoutineExercises();
              else
-                showRoutineExercisesTherapy(therapyCreatedId);
+                showRoutineExercisesTherapy(String.valueOf(therapyId));
 
         }else{
-            showRoutineExercisesTherapy(therapySelectedId);
+            showRoutineExercisesTherapy(String.valueOf(therapyId));
         }
-
 
     }
 
@@ -341,7 +344,7 @@ private String json;
 
     public void showPhysiologicalParameterTherapy(String physiologicalParameterAction, String therapyId){
 
-        tvTherapySequence.setText(R.string.TherapySequence + therapyId);
+        tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
 
         storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
         storeStringSharepreferences(PreferencesData.PhysiologicalParameterAction,physiologicalParameterAction);
@@ -352,7 +355,9 @@ private String json;
     }
 
     public void showRoutineExercisesTherapy(String therapyId) {
-        tvTherapySequence.setText(R.string.TherapySequence + therapyId);
+        tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
+
+        storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
 
         Bundle args = new Bundle();
         args.putString(PreferencesData.TherapyId,therapyId);
@@ -390,7 +395,9 @@ private String json;
 
     public void saveTherapy() {
 
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
+        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
+
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapyId);
         call.enqueue(new Callback<TherapyViewModel>() {
             @Override
             public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
@@ -417,7 +424,11 @@ private String json;
     }
 
     public void updateTherapy(final TherapyViewModel therapy) {
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().updateTherapy(therapy,therapySelectedId);
+
+
+        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
+
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().updateTherapy(therapy,therapyId);
         call.enqueue(new Callback<TherapyViewModel>() {
             @Override
             public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
@@ -435,8 +446,6 @@ private String json;
         });
 
     }
-
-
 
     private  void storeStringSharepreferences(String key, String value){
 

@@ -318,7 +318,7 @@ public class CreatePatient extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.logout:
-                UserMethods.Do().Logout(this);
+                UserMethods.getInstance().Logout(this);
                 break;
             case  R.id.search_patient:
                 savePatient();

@@ -22,6 +22,7 @@ public class PreferencesData {
     public static final String PhysiologicalParameterIn="PhysiologicalParameterIn";
     public static final String PhysiologicalParameterOut="PhysiologicalParameterOut";
     public static final String PhysiologicalParameterTherapyDataMgs ="Diligenciar todos los datos por favor.";
+    public static final String PhysiologicalParameterTherapyDataListFailed ="Hubo un error al consultar los parametros fisiológicos.";
     public static final String PhysiologicalParameterTherapyDataMgsError ="Error al diligenciar  los parametros fisiológicos. Contacte al administrador.";
     public static final String PhysiologicalParameterTherapySuccessMgs ="Parametros fisiológicos guardados correctamente.";
     public static final String PhysiologicalParameterTherapySesionIN ="IN";
