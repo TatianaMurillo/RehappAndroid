@@ -247,7 +247,7 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
             case R.id.logout:
                 UserMethods.getInstance().Logout(this);
                 break;
-            case R.id.save_therapy:
+            case R.id.save:
                 savePhysiologicalParameterTherapy();
 
                 break;
@@ -260,11 +260,9 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
 
     public void showHideItems(Menu menu) {
         MenuItem item;
-        item = menu.findItem(R.id.save_therapy);
+        item = menu.findItem(R.id.save);
         item.setVisible(true);
-        item = menu.findItem(R.id.create_therapy);
-        item.setVisible(false);
-        item = menu.findItem(R.id.search_patient);
+        item = menu.findItem(R.id.save);
         item.setVisible(false);
 
     }

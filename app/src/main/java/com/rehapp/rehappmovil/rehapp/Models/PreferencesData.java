@@ -43,6 +43,9 @@ public class PreferencesData {
     public static final String searchCreatePatientDataMsg="Diligenciar todos los datos por favor.";
 
 
+
+    public static final String vitalSignsLoadFailed ="Fallo al cargar signos vitales.";
+
     public static final String therapyAddAdditionalInformationSuccessMsg ="Datos guardados correctamente.";
     public static final String therapyUpdateSuccessMsg ="Se actualizó la terapia con éxito.";
     public static final String therapyUpdateFailedMsg ="Hubo un error al crear terapia.";
@@ -74,7 +77,11 @@ public class PreferencesData {
     public static final String storePatientSuccess="Paciente creado exitosamente";
     public static final String storePatientFailed="Error al crear paciente.";
 
+    public static final String storePatientEmptyDataMsg="Diligenciar todos los datos por favor.";
+
     public static final int PhysiologicalParameterTherapyValueSize=5;
+    public static final int VitalSignsTherapyValueSize=5;
+
     public static final int PhysiologicalParameterTherapyINPositionArray=0;
     public static final int PhysiologicalParameterTherapyOUTPositionArray=1;
 

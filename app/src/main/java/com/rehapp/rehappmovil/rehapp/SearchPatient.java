@@ -189,7 +189,7 @@ public class SearchPatient extends AppCompatActivity{
         MenuItem item;
         item= menu.findItem(R.id.create_therapy);
         item.setVisible(false);
-        item= menu.findItem(R.id.save_therapy);
+        item= menu.findItem(R.id.save);
         item.setVisible(false);
     }
 

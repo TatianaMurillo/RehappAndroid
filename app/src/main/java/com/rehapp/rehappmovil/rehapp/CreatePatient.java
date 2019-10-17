@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
@@ -57,6 +57,7 @@ public class CreatePatient extends AppCompatActivity {
     private int neighborhoodSelectedId=-1,indexNeighborhoodSelected=-1;
     PatientViewModel patientResponse;
 
+    TextView tvSiguientePagina;
     ArrayList<DocumentTypeViewModel> documentTypes =new ArrayList<>();
     ArrayList<String> documentTypeNames= new ArrayList<>();
 
@@ -84,10 +85,18 @@ public class CreatePatient extends AppCompatActivity {
         spnNeighborhood = findViewById(R.id.spnNeighborhood);
         spnDocumentType = findViewById(R.id.spnDocumentType);
         spnGender = findViewById(R.id.spnGender);
+        tvSiguientePagina=findViewById(R.id.tvSiguientePagina);
 
         loadDocumentTypes();
         loadGenders();
         loadNeigborhoods();
+
+        tvSiguientePagina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                redirectToVitalSigns();
+            }
+        });
 
         spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -144,45 +153,35 @@ public class CreatePatient extends AppCompatActivity {
 
         setInputData();
 
-
-
         if(ValidateInputs.validate().ValidateString(dataInputString))
 
         {
                 if(ValidateInputs.validate().ValidateIntegers(dataInputInteger)) {
 
+                    PatientViewModel patient = new PatientViewModel();
+                    patient.setPatient_first_name(etfirstName.getText().toString());
+                    patient.setPatient_second_name(etSecondName.getText().toString());
+                    patient.setPatient_first_lastname(etFirstLastName.getText().toString());
+                    patient.setPatient_second_lastname(etSecondLastName.getText().toString());
+                    patient.setPatient_document(etDocument.getText().toString());
+                    patient.setPatient_age(Integer.parseInt(etAge.getText().toString()));
+                    patient.setPatient_address(etAddress.getText().toString());
+                    patient.setPatient_mobile_number(etCellPhone.getText().toString());
+                    patient.setPatient_landline_phone(etLandLinePhone.getText().toString());
+                    patient.setDocument_type_id(documentTypeSelectedId);
+                    patient.setGender_id(genderSelectedId);
+                    patient.setNeighborhood_id(neighborhoodSelectedId);
 
 
-
-                Call<PatientViewModel> call = PatientApiAdapter.getApiService().savePatient(
-                        etfirstName.getText().toString(),
-                        etSecondName.getText().toString(),
-                        etFirstLastName.getText().toString(),
-                        etSecondLastName.getText().toString(),
-                        etDocument.getText().toString(),
-                        Integer.parseInt(etAge.getText().toString()),
-                        etAddress.getText().toString(),
-                        etCellPhone.getText().toString(),
-                        etLandLinePhone.getText().toString(),
-                        "Aditional data test",
-                        documentTypeSelectedId,
-                        genderSelectedId,
-                        neighborhoodSelectedId
-                );
-                call.enqueue(new Callback<PatientViewModel>() {
+                    Call<PatientViewModel> call = PatientApiAdapter.getApiService().createPatient(patient);
+                    call.enqueue(new Callback<PatientViewModel>() {
                     @Override
                     public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
                         if(response.isSuccessful())
                         {
                             patientResponse= response.body();
                             Toast.makeText(getApplicationContext(), PreferencesData.storePatientSuccess, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(CreatePatient.this, SearchPatient.class);
-                            Bundle extras = new Bundle();
-                            extras.putString(PreferencesData.PatientDocument, patientResponse.getPatient_document());
-                            extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(patientResponse.getDocument_type_id()));
-
-                            intent.putExtras(extras);
-                            startActivity(intent);
+                            redirectToVitalSigns();
 
                         }
                     }
@@ -192,7 +191,13 @@ public class CreatePatient extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), PreferencesData.storePatientFailed, Toast.LENGTH_LONG).show();
                     }
                 });
-            }
+            }else{
+                    Toast.makeText(getApplicationContext(), PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
+
+                }
+
+        }else{
+            Toast.makeText(getApplicationContext(), PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
 
         }
 
@@ -302,6 +307,13 @@ public class CreatePatient extends AppCompatActivity {
     }
 
 
+    private void redirectToVitalSigns()
+    {
+        Intent intent = new Intent(CreatePatient.this, VitalSigns.class);
+        startActivity(intent);
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -320,7 +332,7 @@ public class CreatePatient extends AppCompatActivity {
             case R.id.logout:
                 UserMethods.getInstance().Logout(this);
                 break;
-            case  R.id.search_patient:
+            case  R.id.save:
                 savePatient();
                 break;
             case R.id.back_search_patient_page:
@@ -339,8 +351,6 @@ public class CreatePatient extends AppCompatActivity {
     {
         MenuItem item;
         item= menu.findItem(R.id.create_therapy);
-        item.setVisible(false);
-        item= menu.findItem(R.id.save_therapy);
         item.setVisible(false);
     }
 

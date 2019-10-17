@@ -65,7 +65,7 @@ public class TherapyExercises extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.save_therapy:
+            case R.id.save:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -79,7 +79,7 @@ public class TherapyExercises extends AppCompatActivity {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
 
-            item = menu.findItem(R.id.save_therapy);
+            item = menu.findItem(R.id.save);
             item.setVisible(false);
         }else
         {

@@ -154,7 +154,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
     {
         MenuItem item;
 
-        item= menu.findItem(R.id.save_therapy);
+        item= menu.findItem(R.id.save);
         item.setVisible(false);
     }
 
