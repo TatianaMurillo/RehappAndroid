@@ -33,8 +33,8 @@ import retrofit2.Response;
 public class HistoryTherapiesPatient extends AppCompatActivity implements Callback<TherapyViewModel> {
 
     private ListView lvTherapies;
-    private ArrayList<TherapyViewModel> therapies = new ArrayList<TherapyViewModel>();
-    private ArrayList<String> therapiesNames= new ArrayList<String>();
+    private ArrayList<TherapyViewModel> therapies = new ArrayList<>();
+    private ArrayList<String> therapiesNames= new ArrayList<>();
     private String documentPatient;
     private PatientViewModel patientViewModel;
     private int documentTypePatientId;

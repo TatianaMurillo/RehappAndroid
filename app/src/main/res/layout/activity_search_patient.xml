@@ -1,81 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".SearchPatient">
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etPatientName"
+                android:layout_width="340dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:ems="10"
+                android:enabled="false"
+                android:hint="@string/patient"
+                android:inputType="textPersonName" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+            <TableRow
+                android:layout_marginTop="50dp">
+
+                <TextView
+                    android:id="@+id/tvDocumentType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="1"
+                    android:text="@string/documentTypeViewModel" />
+                <Spinner
+                    android:id="@+id/spnDocumentType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="4" />
+            </TableRow>
+                <TableRow
+                    android:layout_marginTop="50dp">
+
+                    <TextView
+                        android:id="@+id/tvDocument"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_span="1"
+                        android:text="@string/document" />
+                    <EditText
+                        android:id="@+id/etDocument"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_span="4"
+                        android:hint="@string/document"
+                        android:inputType="number" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
 
 
+                <TableRow
+                    android:layout_marginTop="50dp">
 
-    <TextView
-        android:id="@+id/tvDocumentType"
-        android:layout_width="152dp"
-        android:layout_height="32dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/spnDocumentType"
-        android:layout_alignLeft="@id/spnDocumentType"
-        android:layout_marginTop="32dp"
-        android:text="@string/documentTypeViewModel" />
 
-    <Spinner
-        android:id="@+id/spnDocumentType"
-        android:layout_width="321dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/etDocument"
-        android:layout_alignLeft="@id/etDocument"
-        android:layout_marginTop="76dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_span="5"
+                        android:layout_gravity="right"
+                        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/etDocument"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="11dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="142dp"
-        android:ems="10"
-        android:hint="@string/document"
-        android:inputType="" />
+                        <ImageButton
+                            android:id="@+id/ibtnSearchPatient"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:background="#00000000"
+                            android:onClick="searchPatient"
+                            app:srcCompat="@drawable/search" />
 
-    <ImageButton
-        android:id="@+id/ibtnSearchPatient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/etDocument"
-        android:layout_marginEnd="71dp"
-        android:layout_marginRight="71dp"
-        android:onClick="searchPatient"
-        android:background="#00000000"
-        app:srcCompat="@drawable/search" />
+                        <ImageButton
+                            android:id="@+id/ibtnEditPatient"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:background="#00000000"
+                            android:onClick="editPatient"
+                            app:srcCompat="@drawable/edit" />
 
-    <EditText
-        android:id="@+id/etPatientName"
-        android:layout_width="340dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:ems="10"
-        android:enabled="false"
-        android:hint="@string/patient"
-        android:inputType="textPersonName" />
+                    </LinearLayout>
+                </TableRow>
+
+            </TableLayout>
 
     <TextView
         android:id="@+id/tvTherapiesHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="160dp"
-        android:layout_toEndOf="@+id/etDocument"
-        android:layout_toRightOf="@id/etDocument"
         android:onClick="watchTherapies"
+        android:layout_margin="15dp"
+        android:layout_gravity="right"
         android:text="@string/watchTherapies" />
 
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/tvMedicalHistories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="15dp"
+        android:onClick="watchTherapies"
+        android:text="@string/watchMedicalHistories" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

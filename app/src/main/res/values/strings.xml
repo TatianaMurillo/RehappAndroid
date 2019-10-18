@@ -13,6 +13,7 @@
     <string name="password"> Contraseña </string>
     <string name="login"> Iniciar Sesión </string>
     <string name="watchTherapies"> Ver Terapias </string>
+    <string name="watchMedicalHistories"> Ver Historias médicas </string>
     <string name="additionalInfo"> Información adicional </string>
     <string name="institute">Institución </string>
     <string name="therapistViewModel">Terapeuta </string>

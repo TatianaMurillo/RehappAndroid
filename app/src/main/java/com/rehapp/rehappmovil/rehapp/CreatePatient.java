@@ -2,7 +2,9 @@ package com.rehapp.rehappmovil.rehapp;
 
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -67,11 +69,19 @@ public class CreatePatient extends AppCompatActivity {
     ArrayList<GenderViewModel> genders =new ArrayList<>();
     ArrayList<String> genderNames= new ArrayList<>();
 
+    String documentPatient;
+    String patientTypeDocument;
+    String action;
+    PatientViewModel patient;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_patient);
+
+
+        sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
         etfirstName=findViewById(R.id.etFirstName);
         etSecondName=findViewById(R.id.etSecondName);
@@ -85,18 +95,6 @@ public class CreatePatient extends AppCompatActivity {
         spnNeighborhood = findViewById(R.id.spnNeighborhood);
         spnDocumentType = findViewById(R.id.spnDocumentType);
         spnGender = findViewById(R.id.spnGender);
-        tvSiguientePagina=findViewById(R.id.tvSiguientePagina);
-
-        loadDocumentTypes();
-        loadGenders();
-        loadNeigborhoods();
-
-        tvSiguientePagina.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                redirectToVitalSigns();
-            }
-        });
 
         spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -148,6 +146,55 @@ public class CreatePatient extends AppCompatActivity {
     }
 
 
+    private void recoverySendData()
+    {
+        if( getIntent().getExtras()!=null)
+        {
+            Bundle extras = getIntent().getExtras();
+            action= extras.getString(PreferencesData.PatientAction);
+
+            storeStringSharepreferences(PreferencesData.PatientAction, action);
+
+            if(action.equals("ADD")) {
+                loadNeigborhoods();
+                loadDocumentTypes();
+                loadGenders();
+            }else
+            {
+                searchPatient();
+            }
+        }
+
+        documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
+        patientTypeDocument=sharedpreferences.getString(PreferencesData.PatientTpoDocument,"");
+    }
+
+
+    public  void searchPatient()
+    {
+        Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(documentPatient);
+        call.enqueue(new Callback<PatientViewModel>() {
+            @Override
+            public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
+                if(response.isSuccessful())
+                {
+                    patient = response.body();
+                    setPatientViewModelToView(patient);
+
+                }else{
+                    if(response.raw().code()==404) {
+                        Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatient,Toast.LENGTH_LONG).show();
+                        redirectToSearchPatient();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<PatientViewModel> call, Throwable t)
+            {
+                Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatient +" "+ t.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     public void savePatient() {
 
@@ -158,20 +205,7 @@ public class CreatePatient extends AppCompatActivity {
         {
                 if(ValidateInputs.validate().ValidateIntegers(dataInputInteger)) {
 
-                    PatientViewModel patient = new PatientViewModel();
-                    patient.setPatient_first_name(etfirstName.getText().toString());
-                    patient.setPatient_second_name(etSecondName.getText().toString());
-                    patient.setPatient_first_lastname(etFirstLastName.getText().toString());
-                    patient.setPatient_second_lastname(etSecondLastName.getText().toString());
-                    patient.setPatient_document(etDocument.getText().toString());
-                    patient.setPatient_age(Integer.parseInt(etAge.getText().toString()));
-                    patient.setPatient_address(etAddress.getText().toString());
-                    patient.setPatient_mobile_number(etCellPhone.getText().toString());
-                    patient.setPatient_landline_phone(etLandLinePhone.getText().toString());
-                    patient.setDocument_type_id(documentTypeSelectedId);
-                    patient.setGender_id(genderSelectedId);
-                    patient.setNeighborhood_id(neighborhoodSelectedId);
-
+                    PatientViewModel patient = getPatientViewModelFromView();
 
                     Call<PatientViewModel> call = PatientApiAdapter.getApiService().createPatient(patient);
                     call.enqueue(new Callback<PatientViewModel>() {
@@ -181,8 +215,6 @@ public class CreatePatient extends AppCompatActivity {
                         {
                             patientResponse= response.body();
                             Toast.makeText(getApplicationContext(), PreferencesData.storePatientSuccess, Toast.LENGTH_LONG).show();
-                            redirectToVitalSigns();
-
                         }
                     }
 
@@ -214,12 +246,22 @@ public class CreatePatient extends AppCompatActivity {
                              {
                                  documentTypes= response.body();
                                      for (DocumentTypeViewModel documentTypeViewModel : documentTypes) {
+                                         if(action.equals("DETAIL")) {
+                                             if (documentTypeViewModel.getDocument_type_id() == patient.getDocument_type_id()) {
+                                                 indexDocumentTypeSelected = documentTypes.indexOf(documentTypeViewModel);
+                                             }
+                                         }
+
                                          documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
                                      }
-                                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, documentTypeNames);
+                                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, documentTypeNames);
                                  spnDocumentType.setAdapter(arrayAdapter);
-                                 spnDocumentType.setSelection(0);
-
+                                 if(action.equals("DETAIL")) {
+                                     spnDocumentType.setSelection(indexDocumentTypeSelected);
+                                 }else
+                                 {
+                                     spnDocumentType.setSelection(0);
+                                 }
                              }
                          }
                          @Override
@@ -242,11 +284,22 @@ public class CreatePatient extends AppCompatActivity {
                              {
                                  neighborhoods= response.body();
                                  for (NeighborhoodViewModel neighborhoodViewModel : neighborhoods) {
+
+                                     if(action.equals("DETAIL")) {
+                                         if (neighborhoodViewModel.getNeighborhood_id() == patient.getNeighborhood_id()) {
+                                             indexNeighborhoodSelected = neighborhoods.indexOf(neighborhoodViewModel);
+                                         }
+                                     }
+
                                      neighborhoodNames.add(neighborhoodViewModel.getNeighborhood_name());
                                  }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, neighborhoodNames);
                                  spnNeighborhood.setAdapter(arrayAdapter);
-                                 spnNeighborhood.setSelection(0);
+                                 if("DETAIL".equals(action)){
+                                     spnNeighborhood.setSelection(indexNeighborhoodSelected);
+                                 }else{
+                                     spnNeighborhood.setSelection(0);
+                                 }
 
                              }
                          }
@@ -270,12 +323,22 @@ public class CreatePatient extends AppCompatActivity {
                              {
                                  genders= response.body();
                                  for (GenderViewModel genderViewModel : genders) {
+                                     if(action.equals("DETAIL")) {
+                                         if (genderViewModel.getGender_id() == patient.getGender_id()) {
+                                             indexGenderSelected = genders.indexOf(genderViewModel);
+                                         }
+                                     }
+
                                      genderNames.add(genderViewModel.getGender_name());
                                  }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, genderNames);
                                  spnGender.setAdapter(arrayAdapter);
-                                 spnGender.setSelection(0);
+                                 if("DETAIL".equals(action)){
+                                     spnGender.setSelection(indexGenderSelected);
+                                 }else{
+                                     spnGender.setSelection(0);
 
+                                 }
                              }
                          }
                          @Override
@@ -286,6 +349,41 @@ public class CreatePatient extends AppCompatActivity {
                      }
         );
     }
+
+    private void setPatientViewModelToView(PatientViewModel patient)
+    {
+        etfirstName.setText(patient.getPatient_first_name());
+        etSecondName.setText(patient.getPatient_second_name());
+        etFirstLastName.setText(patient.getPatient_first_lastname());
+        etSecondLastName.setText(patient.getPatient_second_lastname());
+        etDocument.setText(patient.getPatient_document());
+        etAge.setText(patient.getPatient_age());
+        etAddress.setText(patient.getPatient_address());
+        etCellPhone.setText(patient.getPatient_mobile_number());
+        etLandLinePhone.setText(patient.getPatient_landline_phone());
+
+    }
+
+    private PatientViewModel getPatientViewModelFromView()
+    {
+        PatientViewModel patient = new PatientViewModel();
+
+        patient.setPatient_first_name(etfirstName.getText().toString());
+        patient.setPatient_second_name(etSecondName.getText().toString());
+        patient.setPatient_first_lastname(etFirstLastName.getText().toString());
+        patient.setPatient_second_lastname(etSecondLastName.getText().toString());
+        patient.setPatient_document(etDocument.getText().toString());
+        patient.setPatient_age(Integer.parseInt(etAge.getText().toString()));
+        patient.setPatient_address(etAddress.getText().toString());
+        patient.setPatient_mobile_number(etCellPhone.getText().toString());
+        patient.setPatient_landline_phone(etLandLinePhone.getText().toString());
+        patient.setDocument_type_id(documentTypeSelectedId);
+        patient.setGender_id(genderSelectedId);
+        patient.setNeighborhood_id(neighborhoodSelectedId);
+
+        return  patient;
+    }
+
 
     private void setInputData()
     {
@@ -307,9 +405,9 @@ public class CreatePatient extends AppCompatActivity {
     }
 
 
-    private void redirectToVitalSigns()
+    private void redirectToSearchPatient()
     {
-        Intent intent = new Intent(CreatePatient.this, VitalSigns.class);
+        Intent intent = new Intent(CreatePatient.this, SearchPatient.class);
         startActivity(intent);
     }
 
@@ -353,6 +451,16 @@ public class CreatePatient extends AppCompatActivity {
         item= menu.findItem(R.id.create_therapy);
         item.setVisible(false);
     }
+
+
+    private  void storeStringSharepreferences(String key, String value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+
+    }
+
 
 
 }

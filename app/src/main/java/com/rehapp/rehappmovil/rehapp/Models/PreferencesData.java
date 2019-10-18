@@ -17,6 +17,7 @@ public class PreferencesData {
     public static final String TherapyMasterDetailViewModel="therapyMasterDetailViewModel";
 
     public static final String TherapyId="TherapyId";
+    public static final String PatientAction="PatientAction";
     public static final String TherapyAction="TherapyAction";
     public static final String PhysiologicalParameterAction="PhysiologicalParameterAction";
     public static final String PhysiologicalParameterIn="PhysiologicalParameterIn";

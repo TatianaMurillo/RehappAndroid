@@ -125,11 +125,9 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
                     if(response.isSuccessful())
                     {
                         Intent intent = new Intent(SearchCreatePatient.this, SearchPatient.class);
-                        Bundle extras = new Bundle();
-                        extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
-                        extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
 
-                        intent.putExtras(extras);
+                        storeStringSharepreferences(PreferencesData.PatientDocument,etDocument.getText().toString());
+                        storeStringSharepreferences(PreferencesData.PatientTpoDocument,String.valueOf(documentTypeSelected));
                         startActivity(intent);
                     }else{
                         if(response.raw().code()==404) {
@@ -187,6 +185,22 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
         item.setVisible(false);
         item= menu.findItem(R.id.save);
         item.setVisible(false);
+    }
+
+    private  void storeStringSharepreferences(String key, String value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+
+    }
+
+    private  void storeIntSharepreferences(String key, int value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+
     }
 
 }

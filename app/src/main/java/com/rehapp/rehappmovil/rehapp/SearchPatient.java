@@ -1,7 +1,9 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
+import java.security.cert.CRLReason;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -29,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchPatient extends AppCompatActivity{
-    String documentPatient, activeUser;
+    String documentPatient, activeUser, patiendDocument;
     PatientViewModel patientViewModel;
     private int documentTypePatientId, indexOfPatientDocument=-1;
     private int documentTypeSelected, indexDocumentTypeSelected=0;
@@ -38,12 +41,16 @@ public class SearchPatient extends AppCompatActivity{
     Spinner spnDocumentType;
     EditText etPatientName;
     ArrayList<DocumentTypeViewModel> documentTypes;
-    ArrayList<String> documentTypeNames= new ArrayList<String>();
+    ArrayList<String> documentTypeNames= new ArrayList<>();
+    SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_patient);
+
+        sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+
         etDocument = findViewById(R.id.etDocument);
         spnDocumentType = findViewById(R.id.spnDocumentType);
         etPatientName= findViewById(R.id.etPatientName);
@@ -139,14 +146,8 @@ public class SearchPatient extends AppCompatActivity{
     }
     private void recoverySendData()
     {
-        if(getIntent().getExtras()!=null)
-        {
-            Bundle extras = getIntent().getExtras();
-            documentPatient = extras.getString(PreferencesData.PatientDocument);
-            documentTypePatientId = Integer.parseInt(extras.getString(PreferencesData.PatientTpoDocument));
-            patientViewModel.setPatient_document(documentPatient);
-            patientViewModel.setDocument_type_id(documentTypePatientId);
-        }
+        patiendDocument=sharedpreferences.getString(PreferencesData.PatientDocument,"");
+        documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,""));
     }
     public void searchPatient(View view)
     {
@@ -194,6 +195,11 @@ public class SearchPatient extends AppCompatActivity{
     }
 
 
+    public void editPatient(View view) {
 
+        Intent intent = new Intent(SearchPatient.this, CreatePatient.class);
+        intent.putExtra(PreferencesData.PatientAction, "DETAIL");
+        startActivity(intent);
 
+    }
 }

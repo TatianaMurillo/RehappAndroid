@@ -48,7 +48,7 @@ public class VitalSigns extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<VitalSignViewModel> vitalSigns = response.body();
 
-                    addPhysiologicalParametersView(vitalSigns);
+                    addVitalSignsToView(vitalSigns);
                 }
             }
 
@@ -60,7 +60,7 @@ public class VitalSigns extends AppCompatActivity {
     }
 
 
-    private void addPhysiologicalParametersView( List<VitalSignViewModel> vitalSigns) {
+    private void addVitalSignsToView( List<VitalSignViewModel> vitalSigns) {
         EditText editText;
         TextView textView;
 
@@ -75,17 +75,11 @@ public class VitalSigns extends AppCompatActivity {
             editText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(PreferencesData.VitalSignsTherapyValueSize) });
             editText.setSingleLine(true);
             editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            editText.setGravity(Gravity.CENTER);
+            //editText.setGravity(Gravity.CENTER);
             grid.addView(textView);
             grid.addView(editText);
         }
     }
-
-
-
-
-
-
 
     private  void setVitalSignsToView(String vitalSignName,String VitalSignValue) {
 
