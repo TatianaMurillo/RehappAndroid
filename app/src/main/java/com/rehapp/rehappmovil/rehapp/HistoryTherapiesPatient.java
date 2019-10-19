@@ -15,7 +15,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
@@ -52,25 +54,6 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
         lvTherapies = findViewById(R.id.lvTherapies);
 
-
-        for (int i=1;i<5;i++) {
-
-            therapy = new TherapyMasterDetailViewModel();
-            therapy.setTherapy_id(1);
-            therapy.setTherapist_id(1);
-            therapy.setPatient_id(1);
-            therapy.setInstitution_id(2);
-            therapy.setTherapy_description("Terapia cardiovascular sesión "+ i);
-            therapy.setCreated_at("");
-            therapy.setUpdated_at("");
-            therapy.setTherapy_total_duration(2.2);
-            therapy.setTherapy_observation("");
-            therapy.setTherapy_sequence(i);
-            therapy.setTherapy_achieved_the_goal(true);
-
-            therapies.add(therapy);
-
-        }
         loadTherapies();
 
         lvTherapies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,14 +73,29 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
     public void loadTherapies()
     {
+        Call<ArrayList<TherapyViewModel>> call = TherapyApiAdapter.getApiService().getTherapies();
+        call.enqueue(new Callback<ArrayList<TherapyViewModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<TherapyViewModel>> call, Response<ArrayList<TherapyViewModel>> response) {
+                if(response.isSuccessful())
+                {
+                    therapies=response.body();
+                    for(TherapyViewModel therapy: therapies)
+                    {
+                        therapiesNames.add(therapy.getTherapy_description() + " "+ therapy.getTherapy_sequence());
+                    }
 
-        for(TherapyViewModel therapy: therapies)
-        {
-            therapiesNames.add(therapy.getTherapy_description() + " "+ therapy.getTherapy_sequence());
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, therapiesNames);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(HistoryTherapiesPatient.this,android.R.layout.simple_list_item_1,therapiesNames);
+                    lvTherapies.setAdapter(arrayAdapter);
+                }
+            }
 
-        lvTherapies.setAdapter(arrayAdapter);
+            @Override
+            public void onFailure(Call<ArrayList<TherapyViewModel>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), PreferencesData.therapyListError +" "+ t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
 

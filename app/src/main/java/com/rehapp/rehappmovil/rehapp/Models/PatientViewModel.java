@@ -32,7 +32,7 @@ public class PatientViewModel extends ViewModel {
 
         // Getter Methods
 
-        public float getPatient_id() {
+        public int getPatient_id() {
             return patient_id;
         }
 

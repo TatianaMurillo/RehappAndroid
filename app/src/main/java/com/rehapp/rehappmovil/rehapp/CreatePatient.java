@@ -124,7 +124,6 @@ public class CreatePatient extends AppCompatActivity {
             }
         });
 
-
         spnNeighborhood.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -139,15 +138,15 @@ public class CreatePatient extends AppCompatActivity {
             }
         });
 
-
-
-
+        recoverySendData();
 
     }
 
 
     private void recoverySendData()
     {
+        documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
+        patientTypeDocument=sharedpreferences.getString(PreferencesData.PatientTpoDocument,"");
         if( getIntent().getExtras()!=null)
         {
             Bundle extras = getIntent().getExtras();
@@ -155,18 +154,14 @@ public class CreatePatient extends AppCompatActivity {
 
             storeStringSharepreferences(PreferencesData.PatientAction, action);
 
-            if(action.equals("ADD")) {
+            if(action.equals("DETAIL")) {
+                searchPatient();
+            }else{
                 loadNeigborhoods();
                 loadDocumentTypes();
                 loadGenders();
-            }else
-            {
-                searchPatient();
             }
         }
-
-        documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
-        patientTypeDocument=sharedpreferences.getString(PreferencesData.PatientTpoDocument,"");
     }
 
 
@@ -180,6 +175,9 @@ public class CreatePatient extends AppCompatActivity {
                 {
                     patient = response.body();
                     setPatientViewModelToView(patient);
+                    loadNeigborhoods();
+                    loadDocumentTypes();
+                    loadGenders();
 
                 }else{
                     if(response.raw().code()==404) {
@@ -234,6 +232,51 @@ public class CreatePatient extends AppCompatActivity {
         }
 
     }
+
+
+    public void updatePatient() {
+
+        setInputData();
+
+        if(ValidateInputs.validate().ValidateString(dataInputString))
+
+        {
+            if(ValidateInputs.validate().ValidateIntegers(dataInputInteger)) {
+                String patientId=String.valueOf(patient.getPatient_id());
+                final PatientViewModel patient = getPatientViewModelFromView();
+                Call<PatientViewModel> call = PatientApiAdapter.getApiService().updatePatient(patient,patientId);
+                call.enqueue(new Callback<PatientViewModel>() {
+                    @Override
+                    public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
+                        if(response.isSuccessful())
+                        {
+                            patientResponse= response.body();
+                            Toast.makeText(getApplicationContext(), PreferencesData.udpatePatientFailed, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(CreatePatient.this, SearchPatient.class);
+
+                            storeStringSharepreferences(PreferencesData.PatientDocument, patientResponse.getPatient_document());
+                            storeStringSharepreferences(PreferencesData.PatientTpoDocument, String.valueOf(patientResponse.getDocument_type_id()));
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PatientViewModel> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), PreferencesData.udpatePatientFailed, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }else{
+                Toast.makeText(getApplicationContext(), PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
+
+            }
+
+        }else{
+            Toast.makeText(getApplicationContext(), PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
+
+        }
+
+    }
+
 
     private void loadDocumentTypes()
     {
@@ -357,7 +400,7 @@ public class CreatePatient extends AppCompatActivity {
         etFirstLastName.setText(patient.getPatient_first_lastname());
         etSecondLastName.setText(patient.getPatient_second_lastname());
         etDocument.setText(patient.getPatient_document());
-        etAge.setText(patient.getPatient_age());
+        etAge.setText(String.valueOf(patient.getPatient_age()));
         etAddress.setText(patient.getPatient_address());
         etCellPhone.setText(patient.getPatient_mobile_number());
         etLandLinePhone.setText(patient.getPatient_landline_phone());
@@ -431,7 +474,13 @@ public class CreatePatient extends AppCompatActivity {
                 UserMethods.getInstance().Logout(this);
                 break;
             case  R.id.save:
-                savePatient();
+                if("DETAIL".equals(action))
+                {
+                    updatePatient();
+                }else{
+                    savePatient();
+                }
+
                 break;
             case R.id.back_search_patient_page:
                 Intent intent = new Intent(CreatePatient.this,SearchCreatePatient.class);

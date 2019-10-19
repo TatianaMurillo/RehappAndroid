@@ -13,7 +13,7 @@ public class TherapyViewModel extends ViewModel implements Serializable {
     private int institution_id;
     private int patient_id;
     private int therapist_id;
-    private boolean therapy_achieved_the_goal;
+    private int therapy_achieved_the_goal;
     private String therapy_additional_information;
     private int therapy_id;
     private int therapy_sequence;
@@ -35,7 +35,7 @@ public class TherapyViewModel extends ViewModel implements Serializable {
 
     public TherapyViewModel(){}
 
-    public TherapyViewModel(int institution_id, int patient_id, int therapist_id, boolean therapy_achieved_the_goal, String therapy_additional_information, int therapy_id, int therapy_sequence, double therapy_total_duration, String therapy_description, String therapy_observation, String therapy_date, String therapy_time, InstitutionViewModel institucion, PatientViewModel patient, TherapistViewModel therapistViewModel) {
+    public TherapyViewModel(int institution_id, int patient_id, int therapist_id, int therapy_achieved_the_goal, String therapy_additional_information, int therapy_id, int therapy_sequence, double therapy_total_duration, String therapy_description, String therapy_observation, String therapy_date, String therapy_time, InstitutionViewModel institucion, PatientViewModel patient, TherapistViewModel therapistViewModel) {
         this.institution_id = institution_id;
         this.patient_id = patient_id;
         this.therapist_id = therapist_id;
@@ -93,11 +93,11 @@ public class TherapyViewModel extends ViewModel implements Serializable {
         this.therapy_sequence = therapy_sequence;
     }
 
-    public boolean isTherapy_achieved_the_goal() {
+    public int isTherapy_achieved_the_goal() {
         return therapy_achieved_the_goal;
     }
 
-    public void setTherapy_achieved_the_goal(boolean therapy_achieved_the_goal) {
+    public void setTherapy_achieved_the_goal(int therapy_achieved_the_goal) {
         this.therapy_achieved_the_goal = therapy_achieved_the_goal;
     }
 

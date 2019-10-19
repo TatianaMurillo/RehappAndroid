@@ -52,9 +52,10 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
         @Override
         protected void onCreate(Bundle savedInstanceState)
         {
-            sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_search_create_patient);
+
+            sharedpreferences = getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
             ibtnSearchPatient= findViewById(R.id.ibtnSearchPatient);
             ibtnAddPatient= findViewById(R.id.ibtnAddPatient);
@@ -114,36 +115,41 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
 
     public void searchPatient(View view)
     {
-        if(!documentTypes.get(indexDocumentTypeSelected).getDocument_type_name().isEmpty() & !etDocument.getText().toString().isEmpty() ) {
+        if(documentTypes!=null) {
+            if (!documentTypes.get(indexDocumentTypeSelected).getDocument_type_name().isEmpty() & !etDocument.getText().toString().isEmpty()) {
 
-            Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(etDocument.getText().toString());
+                Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(etDocument.getText().toString());
 
-            call.enqueue(new Callback<PatientViewModel>() {
-                @Override
-                public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
+                call.enqueue(new Callback<PatientViewModel>() {
+                    @Override
+                    public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
 
-                    if(response.isSuccessful())
-                    {
-                        Intent intent = new Intent(SearchCreatePatient.this, SearchPatient.class);
+                        if (response.isSuccessful()) {
+                            PatientViewModel patient = response.body();
 
-                        storeStringSharepreferences(PreferencesData.PatientDocument,etDocument.getText().toString());
-                        storeStringSharepreferences(PreferencesData.PatientTpoDocument,String.valueOf(documentTypeSelected));
-                        startActivity(intent);
-                    }else{
-                        if(response.raw().code()==404) {
-                            Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatientNonExist, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(SearchCreatePatient.this, SearchPatient.class);
+
+                            storeStringSharepreferences(PreferencesData.PatientDocument, etDocument.getText().toString());
+                            storeStringSharepreferences(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
+                            startActivity(intent);
+                        } else {
+                            if (response.raw().code() == 404) {
+                                Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatientNonExist, Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
-                }
-                @Override
-                public void onFailure(Call<PatientViewModel> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatient +" "+ t.getMessage(),Toast.LENGTH_LONG).show();
-                }
-            });
-        }else
-        {
-            Toast.makeText(getApplicationContext(), PreferencesData.searchCreatePatientDataMsg,Toast.LENGTH_LONG).show();
+
+                    @Override
+                    public void onFailure(Call<PatientViewModel> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatient + " " + t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), PreferencesData.searchCreatePatientDataMsg, Toast.LENGTH_LONG).show();
+            }
         }
+
+
     }
 
     public void createPatient(View view)

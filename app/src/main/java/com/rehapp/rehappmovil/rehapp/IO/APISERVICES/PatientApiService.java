@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface PatientApiService {
@@ -17,5 +18,7 @@ public interface PatientApiService {
     @POST("patients")
     Call<PatientViewModel> createPatient(@Body PatientViewModel patient);
 
+    @PUT("patients/{patientId}")
+    Call<PatientViewModel> updatePatient(@Body PatientViewModel patient,@Path("patientId") String document);
 
 }

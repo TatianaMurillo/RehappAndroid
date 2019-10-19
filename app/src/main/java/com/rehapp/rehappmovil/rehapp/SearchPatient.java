@@ -32,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchPatient extends AppCompatActivity{
-    String documentPatient, activeUser, patiendDocument;
+    String documentPatient;
     PatientViewModel patientViewModel;
     private int documentTypePatientId, indexOfPatientDocument=-1;
     private int documentTypeSelected, indexDocumentTypeSelected=0;
@@ -73,6 +73,8 @@ public class SearchPatient extends AppCompatActivity{
           listDocumentTypes();
           searchPatient();
     }
+
+
     public void listDocumentTypes()
     {
         Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
@@ -90,7 +92,7 @@ public class SearchPatient extends AppCompatActivity{
                         }
                         documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SearchPatient.this,android.R.layout.simple_list_item_1,documentTypeNames);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(SearchPatient.this,android.R.layout.simple_list_item_1,documentTypeNames);
                     spnDocumentType.setAdapter(arrayAdapter);
                     if(indexOfPatientDocument!=-1) {
                         spnDocumentType.setSelection(indexOfPatientDocument);
@@ -146,7 +148,7 @@ public class SearchPatient extends AppCompatActivity{
     }
     private void recoverySendData()
     {
-        patiendDocument=sharedpreferences.getString(PreferencesData.PatientDocument,"");
+        documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
         documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,""));
     }
     public void searchPatient(View view)

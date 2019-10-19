@@ -41,6 +41,7 @@ public class PreferencesData {
     public static final String searchPatientPatientNonExist ="Paciente no existe.";
     public static final String therapyDetailTherapyNonExist ="La terapia seleccionada no existe.";
     public static final String documentTypeList ="Hubo un error al listar tipos de documentos.";
+    public static final String therapyListError ="Hubo un error al listar terapias.";
     public static final String searchCreatePatientDataMsg="Diligenciar todos los datos por favor.";
 
 
@@ -75,8 +76,10 @@ public class PreferencesData {
     public static final String listNeighborhoodFailed="No se pudieron cargar los barrios correctamente.";
     public static final String listGenderFailed="No se pudieron cargar los géneros correctamente.";
 
-    public static final String storePatientSuccess="Paciente creado exitosamente";
+    public static final String storePatientSuccess="Paciente creado exitosamente.";
+    public static final String updatePatientSuccess="Paciente actualizado exitosamente.";
     public static final String storePatientFailed="Error al crear paciente.";
+    public static final String udpatePatientFailed="Error al actualizar paciente.";
 
     public static final String storePatientEmptyDataMsg="Diligenciar todos los datos por favor.";
 
