@@ -11,6 +11,7 @@ public class PreferencesData {
     public static final String TherapistPasswordlLogin = "therapistPasswordlLogin";
 
 
+    public static final String PatientId ="patientId";
     public static final String PatientDocument ="document";
     public static final String PatientTpoDocument ="tpoDocument";
     public static final String TherapySelectedId="TherapySelectedId";
@@ -19,6 +20,7 @@ public class PreferencesData {
     public static final String TherapyId="TherapyId";
     public static final String PatientAction="PatientAction";
     public static final String TherapyAction="TherapyAction";
+    public static final String MedicaHistoryAction="MedicaHistoryAction";
     public static final String PhysiologicalParameterAction="PhysiologicalParameterAction";
     public static final String PhysiologicalParameterIn="PhysiologicalParameterIn";
     public static final String PhysiologicalParameterOut="PhysiologicalParameterOut";
@@ -42,6 +44,7 @@ public class PreferencesData {
     public static final String therapyDetailTherapyNonExist ="La terapia seleccionada no existe.";
     public static final String documentTypeList ="Hubo un error al listar tipos de documentos.";
     public static final String therapyListError ="Hubo un error al listar terapias.";
+    public static final String patientMedicalHistoryListError ="Hubo un error al listar historias médicas.";
     public static final String searchCreatePatientDataMsg="Diligenciar todos los datos por favor.";
 
 

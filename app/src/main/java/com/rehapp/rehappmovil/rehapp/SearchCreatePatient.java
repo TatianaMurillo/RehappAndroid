@@ -131,6 +131,9 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
 
                             storeStringSharepreferences(PreferencesData.PatientDocument, etDocument.getText().toString());
                             storeStringSharepreferences(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
+                            storeStringSharepreferences(PreferencesData.PatientId, String.valueOf(patient.getPatient_id()));
+
+
                             startActivity(intent);
                         } else {
                             if (response.raw().code() == 404) {

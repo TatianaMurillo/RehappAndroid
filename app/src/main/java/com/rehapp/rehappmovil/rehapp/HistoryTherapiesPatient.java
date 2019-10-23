@@ -40,6 +40,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
     private String documentPatient;
     private PatientViewModel patientViewModel;
     private int documentTypePatientId;
+    private String patientId;
     private TherapyMasterDetailViewModel therapy;
     SharedPreferences sharedpreferences;
 
@@ -53,7 +54,7 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
 
         lvTherapies = findViewById(R.id.lvTherapies);
-
+        recoverySendData();
         loadTherapies();
 
         lvTherapies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -71,9 +72,10 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
     }
 
+
     public void loadTherapies()
     {
-        Call<ArrayList<TherapyViewModel>> call = TherapyApiAdapter.getApiService().getTherapies();
+        Call<ArrayList<TherapyViewModel>> call = TherapyApiAdapter.getApiService().getTherapiesByPatient(patientId);
         call.enqueue(new Callback<ArrayList<TherapyViewModel>>() {
             @Override
             public void onResponse(Call<ArrayList<TherapyViewModel>> call, Response<ArrayList<TherapyViewModel>> response) {
@@ -112,14 +114,10 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
     private void recoverySendData()
     {
-        if(getIntent().getExtras()!=null)
-        {
-            Bundle extras = getIntent().getExtras();
-            documentPatient = extras.getString(PreferencesData.PatientDocument);
-            documentTypePatientId = Integer.parseInt(extras.getString(PreferencesData.PatientTpoDocument));
-            patientViewModel.setPatient_document(documentPatient);
-            patientViewModel.setDocument_type_id(documentTypePatientId);
-        }
+        documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
+        documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,""));
+        patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
+
     }
 
 

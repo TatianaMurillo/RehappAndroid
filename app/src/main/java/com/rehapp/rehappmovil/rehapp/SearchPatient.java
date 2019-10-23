@@ -74,7 +74,6 @@ public class SearchPatient extends AppCompatActivity{
           searchPatient();
     }
 
-
     public void listDocumentTypes()
     {
         Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
@@ -117,10 +116,9 @@ public class SearchPatient extends AppCompatActivity{
             public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
                 if(response.isSuccessful())
                 {
-                    PatientViewModel patient;
-                        patient = response.body();
-                        String fullName = patient.getPatient_first_name() + " " + patient.getPatient_first_lastname();
-                        etDocument.setText(patient.getPatient_document());
+                        patientViewModel = response.body();
+                        String fullName = patientViewModel.getPatient_first_name() + " " + patientViewModel.getPatient_first_lastname();
+                        etDocument.setText(patientViewModel.getPatient_document());
                         etPatientName.setText(fullName);
                     }else{
                         if(response.raw().code()==404) {
@@ -146,11 +144,22 @@ public class SearchPatient extends AppCompatActivity{
         intent.putExtras(extras);
         startActivity(intent);
     }
+
+    public void watchMedicalHistories(View view)
+    {
+        Intent intent = new Intent(SearchPatient.this,MedicalHistoriesPatient.class);
+        Bundle extras = new Bundle();
+        extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
+        extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
+        intent.putExtras(extras);
+        startActivity(intent);
+    }
     private void recoverySendData()
     {
         documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
         documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,""));
     }
+
     public void searchPatient(View view)
     {
         if (!documentTypes.get(indexDocumentTypeSelected).getDocument_type_name().isEmpty() & !etDocument.getText().toString().isEmpty()) {
@@ -162,6 +171,7 @@ public class SearchPatient extends AppCompatActivity{
             Toast.makeText(getApplicationContext(), PreferencesData.searchCreatePatientDataMsg,Toast.LENGTH_LONG).show();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {

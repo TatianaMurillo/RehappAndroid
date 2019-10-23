@@ -39,4 +39,5 @@
     <string name="AddditionalInformationHint">Ingrese información adicional que desee para la terapia.</string>
     <string name="AddditionalInformationTitle">Información adicional</string>
     <string name="TherapySequence">Terapia # </string>
+    <string name="MedicalHistorySequence">Historia médica # </string>
 </resources>
