@@ -67,18 +67,21 @@ public class MedicalHistoriesAdapter extends BaseAdapter{
             holder = (ViewHolder) view.getTag();
         }
         PatientMedicalHistoryViewModel model = medicalHistories.get(position);
+        String createdAtText="Created at: ";
+        String updatedAtText="Last time updated: ";
+        String noDataText="No data. ";
 
             holder.tvMedicalHistoryName.setText(model.getPtnt_mdcl_hstry_name());
 
             if(model.getCreated_at()!=null) {
-                holder.tvCreatedAt.setText(model.getCreated_at());
+                holder.tvCreatedAt.setText(createdAtText+model.getCreated_at());
             }else{
-                holder.tvCreatedAt.setText("");
+                holder.tvCreatedAt.setText(noDataText);
             }
             if(model.getUpdated_at()!=null) {
-                holder.tvUpdatedAt.setText(model.getUpdated_at());
+                holder.tvUpdatedAt.setText(updatedAtText+model.getUpdated_at());
             }else{
-                holder.tvUpdatedAt.setText("");
+                holder.tvUpdatedAt.setText(noDataText);
             }
             return view;
         }

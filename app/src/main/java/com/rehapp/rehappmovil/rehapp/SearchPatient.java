@@ -206,7 +206,6 @@ public class SearchPatient extends AppCompatActivity{
         item.setVisible(false);
     }
 
-
     public void editPatient(View view) {
 
         Intent intent = new Intent(SearchPatient.this, CreatePatient.class);

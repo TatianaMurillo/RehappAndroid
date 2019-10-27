@@ -41,7 +41,7 @@ public class MedicalHistoriesPatient extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history_therapies_patient);
+        setContentView(R.layout.activity_medical_histories_patient);
 
 
         sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
@@ -76,7 +76,7 @@ public class MedicalHistoriesPatient extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "medical history selected : " + medicalHistory.getPtnt_mdcl_hstry_name(), Toast.LENGTH_LONG).show();
 
                             Intent intent = new Intent(MedicalHistoriesPatient.this, MedicalHistoryDetail.class);
-                            intent.putExtra(PreferencesData.TherapySelectedId, medicalHistory.getPtnt_mdcl_hstry_id());
+                            intent.putExtra(PreferencesData.MedicalHistorySelectedId, medicalHistory.getPtnt_mdcl_hstry_id());
                             intent.putExtra(PreferencesData.MedicaHistoryAction, "DETAIL");
                             startActivity(intent);
 
@@ -135,7 +135,23 @@ public class MedicalHistoriesPatient extends AppCompatActivity {
 
     private void cleanPreferenceData()
     {
-        UserMethods.getInstance().storeIntSharepreferences(PreferencesData.TherapyId,0);
+        storeIntSharepreferences(PreferencesData.TherapyId,0);
+    }
+
+    private  void storeStringSharepreferences(String key, String value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+
+    }
+
+    private  void storeIntSharepreferences(String key, int value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+
     }
 
 }

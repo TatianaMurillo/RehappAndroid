@@ -1,22 +1,22 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
 import com.rehapp.rehappmovil.rehapp.Models.MedicalHistoryVitalSignPatientViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.QuestionariesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.VitalSignViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface VitalSignApiService {
+public interface QuestionariesApiService {
 
 
     @GET("vitalSigns")
-    Call<ArrayList<VitalSignViewModel>> getVitalSigns();
+    Call<ArrayList<QuestionariesViewModel>> getQuestionaries();
 
     @GET("vitalSignsMedicalHistory/showByMedicalHistory/{medicalhistory}")
-    Call<ArrayList<MedicalHistoryVitalSignPatientViewModel>> getVitalSignsByMedicalHistory(@Path("medicalhistory") String medicalhistory);
+    Call<ArrayList<MedicalHistoryVitalSignPatientViewModel>> getQuestionatiesOptions(@Path("medicalhistory") String medicalhistory);
 
 }

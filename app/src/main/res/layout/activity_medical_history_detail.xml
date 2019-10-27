@@ -38,37 +38,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5sp"
-                    android:text="Hora" />
+                    android:text="Fecha y hora" />
 
-                    <EditText
-                        android:id="@+id/etDate"
+                    <TextView
+                        android:id="@+id/tvDateValue"
                         android:layout_width="257dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="5sp"
+                        android:enabled="false"
                         android:text="" />
 
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lyTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvHour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:text="Fecha" />
-
-                    <EditText
-                        android:id="@+id/etHour"
-                        android:layout_width="243dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5sp"
-                        android:text="" />
 
                 </LinearLayout>
 
@@ -100,6 +79,11 @@
             android:orientation="vertical"
           />
 
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*">
+        <TableRow>
         <TextView
             android:id="@+id/tvPatientName"
             android:layout_width="wrap_content"
@@ -108,6 +92,14 @@
             android:layout_margin="10dp"
             android:text="Patient" />
 
+            <TextView
+                android:id="@+id/tvPatientNameValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp" />
+        </TableRow>
+            <TableRow>
         <TextView
             android:id="@+id/tvAge"
             android:layout_width="wrap_content"
@@ -115,14 +107,30 @@
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
             android:text="Age" />
+                <TextView
+                    android:id="@+id/tvAgeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                   />
 
+            </TableRow>
+        <TableRow>
         <TextView
             android:id="@+id/tvNeighborhood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Barrio"
             android:layout_margin="10dp"/>
+            <TextView
+                android:id="@+id/tvNeighborhoodValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"/>
 
+        </TableRow>
+        </TableLayout>
         <LinearLayout
             android:id="@+id/lyMedicalHistoryInformation"
             android:layout_width="wrap_content"
@@ -153,6 +161,7 @@
                 android:text="Cuestionarios"
                 android:onClick="addQuestionaries"
                 android:layout_margin="10dp"/>
+
         </LinearLayout>
 
     </LinearLayout>

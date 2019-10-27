@@ -2,6 +2,7 @@ package com.rehapp.rehappmovil.rehapp.Models;
 
 public class VitalSignViewModel {
 
+    private String vital_sign_id;
     private String vital_sign_name;
     private String vital_sign_description;
     private String created_at;
@@ -21,5 +22,13 @@ public class VitalSignViewModel {
 
     public void setVital_sign_description(String vital_sign_description) {
         this.vital_sign_description = vital_sign_description;
+    }
+
+    public String getVital_sign_id() {
+        return vital_sign_id;
+    }
+
+    public void setVital_sign_id(String vital_sign_id) {
+        this.vital_sign_id = vital_sign_id;
     }
 }

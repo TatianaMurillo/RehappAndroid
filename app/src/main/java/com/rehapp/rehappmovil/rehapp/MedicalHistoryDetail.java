@@ -1,6 +1,5 @@
 package com.rehapp.rehappmovil.rehapp;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,22 +9,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.InstitutionApiAdapter;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,38 +32,48 @@ public class MedicalHistoryDetail extends AppCompatActivity {
 private String therapyCreatedId;
 private TextView tvTherapySequence;
 private String action;
-private Spinner spnTherapist;
-private Spinner spnInstitution;
+private TextView tvPatientNameValue;
+private TextView tvAgeValue;
+private TextView tvAgeNeighborhoodValue;
+private String documentPatient;
+private String MedicalHistorySelectedId;
+private PatientViewModel patientViewModel;
 private TherapyViewModel therapySelected;
 private SharedPreferences sharedpreferences;
+private TextView tvDateValue;
 
+private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+Calendar cal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_medical_history_detail);
 
         sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
-        setContentView(R.layout.activity_therapy_detail);
-        tvTherapySequence = findViewById(R.id.tvTherapySequence);
-        spnInstitution = findViewById(R.id.spnInstitution);
-        spnTherapist = findViewById(R.id.spnTherapist);
-        therapyCreatedId="";
+
+        tvDateValue=findViewById(R.id.tvDateValue);
+        tvPatientNameValue=findViewById(R.id.tvPatientNameValue);
+        tvAgeValue=findViewById(R.id.tvAgeValue);
+
         recoverySendData();
         loadData();
+        searchPatient();
     }
 
     private void loadData(){
-
-        listTherapists();
-        listInstitutions();
+        tvDateValue.setText(sdf.format(cal.getTime()));
     }
+
     private void recoverySendData()
     {
         if(getIntent().getExtras()!=null)
         {
                 Bundle extras = getIntent().getExtras();
                 action= extras.getString(PreferencesData.MedicaHistoryAction);
+                MedicalHistorySelectedId=extras.getString(PreferencesData.MedicalHistorySelectedId);
+                storeStringSharepreferences(PreferencesData.MedicalHistorySelectedId, MedicalHistorySelectedId);
                 storeStringSharepreferences(PreferencesData.MedicaHistoryAction, action);
         }
     }
@@ -77,90 +83,29 @@ private SharedPreferences sharedpreferences;
 
     }
 
-    public void listTherapists()
+    public  void searchPatient()
     {
-        Call<ArrayList<TherapistViewModel>> call = TherapistApiAdapter.getApiService().getTherapists();
-        call.enqueue(new Callback<ArrayList<TherapistViewModel>>() {
-            int indexOfTherapist=-1;
-
-            ArrayList<TherapistViewModel> therapists= new ArrayList<TherapistViewModel>();
-            ArrayList<String> therapistNames  = new ArrayList<String>();
-
+        Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(documentPatient);
+        call.enqueue(new Callback<PatientViewModel>() {
             @Override
-            public void onResponse(Call<ArrayList<TherapistViewModel>> call, Response<ArrayList<TherapistViewModel>> response) {
+            public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
                 if(response.isSuccessful())
                 {
-                    String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
-                    therapists = response.body();
-                    for(TherapistViewModel therapistViewModel : therapists)
-                    {
-                        if(action.equals("DETAIL")) {
-                            if (therapistViewModel.getTherapist_id() == therapySelected.getTherapist_id()) {
-                                indexOfTherapist = therapists.indexOf(therapistViewModel);
-                            }
-                        }
-                        therapistNames.add(therapistViewModel.getTherapist_first_lastname()+" " + therapistViewModel.getTherapist_first_name());
-                    }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MedicalHistoryDetail.this,android.R.layout.simple_list_item_1,therapistNames);
-                    spnTherapist.setAdapter(arrayAdapter);
-
-                    if(action.equals("DETAIL")) {
-                        if (indexOfTherapist != -1) {
-                            spnTherapist.setSelection(indexOfTherapist);
-                        } else {
-                            Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailTherapistNonExist, Toast.LENGTH_LONG).show();
-                            spnTherapist.setSelection(0);
-                        }
+                    patientViewModel = response.body();
+                    tvPatientNameValue.setText(patientViewModel.getPatient_first_name() + " " + patientViewModel.getPatient_first_lastname());
+                    tvAgeValue.setText(String.valueOf(patientViewModel.getPatient_age()));
+                }else{
+                    if(response.raw().code()==404) {
+                        Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatientNonExist, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(MedicalHistoryDetail.this, MedicalHistoriesPatient.class);
+                        startActivity(intent);
                     }
                 }
             }
             @Override
-            public void onFailure(Call<ArrayList<TherapistViewModel>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailTherapistListMsg,Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-    public void listInstitutions()
-    {
-        Call<ArrayList<InstitutionViewModel>> call = InstitutionApiAdapter.getApiService().getInstitutions();
-        call.enqueue(new Callback<ArrayList<InstitutionViewModel>>() {
-            int indexOfInstitution=-1;
-            ArrayList<InstitutionViewModel> institutions= new ArrayList<InstitutionViewModel>();
-            ArrayList<String> institutionNames  = new ArrayList<String>();
-
-            @Override
-            public void onResponse(Call<ArrayList<InstitutionViewModel>> call, Response<ArrayList<InstitutionViewModel>> response) {
-                if(response.isSuccessful())
-                {
-                    String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
-
-                    institutions = response.body();
-                    for(InstitutionViewModel institutionViewModel : institutions)
-                    {
-                        if(action.equals("DETAIL")) {
-                            if (institutionViewModel.getInstitution_id() == therapySelected.getInstitution_id()) {
-                                indexOfInstitution = institutions.indexOf(institutionViewModel);
-                            }
-                        }
-                        institutionNames.add(institutionViewModel.getInstitution_name());
-                    }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MedicalHistoryDetail.this,android.R.layout.simple_list_item_1,institutionNames);
-                    spnInstitution.setAdapter(arrayAdapter);
-
-                    if(action.equals("DETAIL")) {
-                        if (indexOfInstitution != -1) {
-                            spnInstitution.setSelection(indexOfInstitution);
-                        } else {
-                            Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailInstitutionNonExist, Toast.LENGTH_LONG).show();
-                            spnInstitution.setSelection(0);
-                        }
-                    }
-                }
-
-            }
-            @Override
-            public void onFailure(Call<ArrayList<InstitutionViewModel>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailInstitutionListMsg,Toast.LENGTH_LONG).show();
+            public void onFailure(Call<PatientViewModel> call, Throwable t)
+            {
+                Toast.makeText(getApplicationContext(), PreferencesData.searchPatientPatient +" "+ t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -442,8 +387,22 @@ private SharedPreferences sharedpreferences;
     }
 
     public void addVitalSigns(View view) {
+
+        MedicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+
+        Bundle args = new Bundle();
+        args.putString(PreferencesData.MedicalHistorySelectedId,MedicalHistorySelectedId);
+        Intent intent = new Intent(MedicalHistoryDetail.this, PatientMedicalHistoryVitalSigns.class);
+        startActivity(intent);
+
+
     }
 
     public void addQuestionaries(View view) {
+
+        Bundle args = new Bundle();
+        args.putString(PreferencesData.MedicalHistorySelectedId,MedicalHistorySelectedId);
+        Intent intent = new Intent(MedicalHistoryDetail.this, PatientMedicalHistoryQuestionaries.class);
+        startActivity(intent);
     }
 }

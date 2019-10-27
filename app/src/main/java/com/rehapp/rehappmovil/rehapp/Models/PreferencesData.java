@@ -15,6 +15,7 @@ public class PreferencesData {
     public static final String PatientDocument ="document";
     public static final String PatientTpoDocument ="tpoDocument";
     public static final String TherapySelectedId="TherapySelectedId";
+    public static final String MedicalHistorySelectedId="MedicalHistorySelectedId";
     public static final String TherapyMasterDetailViewModel="therapyMasterDetailViewModel";
 
     public static final String TherapyId="TherapyId";
@@ -66,6 +67,7 @@ public class PreferencesData {
     public static final String therapyDetailSaveExerciseRoutineSuccessMsg ="Ejercicios de terapia guardados correctamente.";
 
 
+    public static final String medicalHistoryVitalSignEmptyListMsg ="No se encontraron toma de vitales para el paciente.";
     public static final String therapyDetailPhysiologicalParameterTherapyEmptyListMsg ="No se encontraron parametros fisiologicos para la terapia.";
     public static final String therapyDetailTherapyExerciseRoutinesEmptyListMsg ="No se encontraron rutinas para la terapia.";
     public static final String therapyDetailTherapyExerciseRoutinesListMsg ="Hubo un error al listar los ejercicios previamente seleccionados.";

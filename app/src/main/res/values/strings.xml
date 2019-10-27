@@ -4,6 +4,7 @@
     <string name="documentTypeViewModel">Tipo de documento</string>
     <string name="patient">Paciente</string>
     <string name="phisiologicalParametersIn">Parámetros Fisiológicos al inicio de la sesión</string>
+    <string name="vitalSignsTittle">Signos vitales</string>
     <string name="phisiologicalParametersOut">Parámetros Fisiológicos al finalizar de la sesión</string>
     <string name="watchExercises"> Ver ejercicios</string>
     <string name="ChooseRoutines">Elija los ejercicios para su terapia.</string>
