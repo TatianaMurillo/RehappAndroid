@@ -4,27 +4,38 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.internal.bind.ObjectTypeAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.QuestionariesApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.VitalSignApiAdapter;
-import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.QuestionariesApiService;
 import com.rehapp.rehappmovil.rehapp.Models.MedicalHistoryVitalSignPatientViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.OptionViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.QuestionariesViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.VitalSignViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,72 +43,114 @@ import retrofit2.Response;
 
 public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
 
-    private GridLayout grid;
+    private ListView lvQuestionaries;
     private String MedicalHistorySelectedId;
-    ArrayList<QuestionariesViewModel> questionaries;
+    ArrayList<QuestionaryOptionViewModel> questionariesOptions;
     private SharedPreferences sharedpreferences;
+    ArrayList<String> optionNames= new ArrayList<>();
+    MedicalHistoryQuestionariesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionaries_patient);
 
+        adapter=null;
         sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+        lvQuestionaries = findViewById(R.id.lvQuestionaries);
 
-        grid = findViewById(R.id.grid);
 
         recoverySendData();
         loadQuestionaries();
 
-
-
     }
 
     private void loadQuestionaries() {
-        Call<ArrayList<QuestionariesViewModel>> call = QuestionariesApiAdapter.getApiService().getQuestionaries();
-        call.enqueue(new Callback<ArrayList<QuestionariesViewModel>>() {
+        Call<ArrayList<QuestionaryOptionViewModel>> call = QuestionariesApiAdapter.getApiService().getQuestionariesOptions();
+        call.enqueue(new Callback<ArrayList<QuestionaryOptionViewModel>>() {
             @Override
-            public void onResponse(Call<ArrayList<QuestionariesViewModel>> call, Response<ArrayList<QuestionariesViewModel>> response) {
+            public void onResponse(Call<ArrayList<QuestionaryOptionViewModel>> call, Response<ArrayList<QuestionaryOptionViewModel>> response) {
                 if (response.isSuccessful()) {
-                    questionaries = response.body();
-                    addQuestionariesToView(questionaries);
-                    //addVitalSignsMedicalHistoryToView(questionaries);
+                    questionariesOptions = response.body();
+                    adapter = new MedicalHistoryQuestionariesAdapter(PatientMedicalHistoryQuestionaries.this,questionariesOptions);
+                    lvQuestionaries.setAdapter(adapter);
                 }
             }
-
             @Override
-            public void onFailure(Call<ArrayList<QuestionariesViewModel>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<QuestionaryOptionViewModel>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), PreferencesData.vitalSignsLoadFailed, Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void recoverySendData()
-    {
+    private void recoverySendData() {
         MedicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
     }
 
-    private void addQuestionariesToView( ArrayList<QuestionariesViewModel> questionaries) {
-        EditText editText;
+    private void addQuestionariesToView( ArrayList<QuestionaryOptionViewModel> questionaryOptions) {
+        Spinner spinner;
         TextView textView;
+        ArrayList<String>  optionNames;
 
-        for(QuestionariesViewModel questionary : questionaries)
+        for(QuestionaryOptionViewModel questionaryOption : questionaryOptions)
         {
 
+            spinner=new Spinner(getApplicationContext());
             textView = new TextView(getApplicationContext());
-            editText = new EditText(getApplicationContext());
+            ArrayList<OptionViewModel> options=questionaryOption.getOptions();
 
-            textView.setText(questionary.getQuestionnaire_name());
-            editText.setEms(PreferencesData.VitalSignsTherapyValueSize);
-            editText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(PreferencesData.VitalSignsTherapyValueSize) });
-            editText.setSingleLine(true);
-            editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            editText.setGravity(Gravity.CENTER);
-            grid.addView(textView);
-            grid.addView(editText);
+            optionNames=new ArrayList<>();
+
+            for (OptionViewModel option:options )
+            {
+                optionNames.add(option.getOption_name());
+            }
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(PatientMedicalHistoryQuestionaries.this,android.R.layout.simple_list_item_1,optionNames);
+            spinner.setAdapter(arrayAdapter);
+            textView.setText(questionaryOption.getQuestionnaire_name());
+            textView.setTag(questionaryOption.getQuestionnaire_id());
+            lvQuestionaries.addView(textView);
+            lvQuestionaries.addView(spinner);
         }
     }
 
+    private List<QuestionaryOptionViewModel> getQuestionaryOptionIdFromView() {
+
+        List<QuestionaryOptionViewModel> data = new ArrayList<>();
+
+        int childCount = lvQuestionaries.getChildCount();
+
+
+        for ( int i=0;i<childCount;i++) {
+
+            LinearLayout children = (LinearLayout)lvQuestionaries.getChildAt(i);
+            TableLayout children2 = (TableLayout) children.getChildAt(0);
+            TableRow children3 = (TableRow) children2.getChildAt(0);
+            Spinner spn = (Spinner) children3.getChildAt(1);
+            TextView tv = (TextView) children3.getChildAt(0);
+
+            String questionaireId=tv.getTag().toString();
+            String selectedOptionId = spn.getTag().toString();
+
+            QuestionaryOptionViewModel model = new QuestionaryOptionViewModel();
+            model.setQuestionnaire_id(questionaireId);
+            model.setOption_id(selectedOptionId);
+            data.add(model);
+        }
+
+        return data;
+    }
 
     private void addVitalSignsMedicalHistoryToView(final ArrayList<QuestionariesViewModel> questionaries) {
 
@@ -132,7 +185,7 @@ public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
 
     private  void setVitalSignsToView(String vitalSignName,String VitalSignValue) {
 
-        int childCount = grid.getChildCount();
+        int childCount = lvQuestionaries.getChildCount();
         String valueTextView;
         Object childEditText;
         Object childTextView;
@@ -140,8 +193,8 @@ public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
         EditText editText;
 
         for (int i = 1; i < childCount; i += 2) {
-            childEditText = grid.getChildAt(i);
-            childTextView = grid.getChildAt(i - 1);
+            childEditText = lvQuestionaries.getChildAt(i);
+            childTextView = lvQuestionaries.getChildAt(i - 1);
 
             textView = (TextView) childTextView;
             valueTextView = textView.getText().toString().trim();
@@ -153,6 +206,9 @@ public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
         }
     }
 
+    private void saveQuestionariesOptionsSelected() {
+        getQuestionaryOptionIdFromView();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -170,6 +226,7 @@ public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
                 UserMethods.getInstance().Logout(this);
                 break;
             case R.id.save:
+                getQuestionaryOptionIdFromView();
                 break;
         }
 

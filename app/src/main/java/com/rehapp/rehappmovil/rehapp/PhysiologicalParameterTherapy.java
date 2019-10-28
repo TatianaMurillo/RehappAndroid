@@ -71,6 +71,7 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
         therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
         physiologicalParameterAction=sharedpreferences.getString(PreferencesData.PhysiologicalParameterAction,"");
     }
+
     public void LoadData() {
         loadPhysiologicalParameters();
     }
@@ -94,7 +95,6 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
             }
         });
     }
-
 
     private void addPhysiologicalParametersTherapyToView(final ArrayList<PhysiologicalParameterViewModel> physiologicalParameters) {
 
