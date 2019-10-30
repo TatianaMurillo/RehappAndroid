@@ -28,7 +28,10 @@ public class PreferencesData {
     public static final String PhysiologicalParameterTherapyDataMgs ="Diligenciar todos los datos por favor.";
     public static final String PhysiologicalParameterTherapyDataListFailed ="Hubo un error al consultar los parametros fisiológicos.";
     public static final String PhysiologicalParameterTherapyDataMgsError ="Error al diligenciar  los parametros fisiológicos. Contacte al administrador.";
+    public static final String MedicalHistoryVitalSignsDataMgsError ="Error al diligenciar los signos vitales. Contacte al administrador.";
+
     public static final String PhysiologicalParameterTherapySuccessMgs ="Parametros fisiológicos guardados correctamente.";
+    public static final String MedicalHistoryVitalSignsSuccessMgs ="Signos vitales guardados correctamente.";
     public static final String PhysiologicalParameterTherapySesionIN ="IN";
     public static final String PhysiologicalParameterTherapySesionOUT ="OUT";
 
@@ -51,6 +54,12 @@ public class PreferencesData {
 
 
     public static final String vitalSignsLoadFailed ="Fallo al cargar signos vitales.";
+    public static final String questionairesLoadFailed ="Fallo al cargar questionarios para diligenciar.";
+    public static final String questionairesOptionSelectedLoadFailed ="Fallo al cargar registros.";
+
+    public static final String questionairesOptionCreateSuccessMsg ="Respuestas guardadas correctamente.";
+    public static final String questionairesOptionCreateFailedMsg ="Hubo un error al guardar respuestas.";
+    public static final String questionairesOptionResponseMsg ="Algunas respuestas no se diligenciaron o cargaron.";
 
     public static final String therapyAddAdditionalInformationSuccessMsg ="Datos guardados correctamente.";
     public static final String therapyUpdateSuccessMsg ="Se actualizó la terapia con éxito.";

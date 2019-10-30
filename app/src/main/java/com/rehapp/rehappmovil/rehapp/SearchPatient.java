@@ -74,8 +74,7 @@ public class SearchPatient extends AppCompatActivity{
           searchPatient();
     }
 
-    public void listDocumentTypes()
-    {
+    public void listDocumentTypes() {
         Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
         call.enqueue(new Callback<ArrayList<DocumentTypeViewModel>>() {
             @Override
@@ -108,8 +107,8 @@ public class SearchPatient extends AppCompatActivity{
             }
         });
     }
-    public  void searchPatient()
-    {
+
+    public  void searchPatient() {
         Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(documentPatient);
         call.enqueue(new Callback<PatientViewModel>() {
             @Override
@@ -135,8 +134,8 @@ public class SearchPatient extends AppCompatActivity{
             }
         });
     }
-    public void watchTherapies(View view)
-    {
+
+    public void watchTherapies(View view) {
         Intent intent = new Intent(SearchPatient.this,HistoryTherapiesPatient.class);
         Bundle extras = new Bundle();
         extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
@@ -145,8 +144,7 @@ public class SearchPatient extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void watchMedicalHistories(View view)
-    {
+    public void watchMedicalHistories(View view) {
         Intent intent = new Intent(SearchPatient.this,MedicalHistoriesPatient.class);
         Bundle extras = new Bundle();
         extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
@@ -154,14 +152,13 @@ public class SearchPatient extends AppCompatActivity{
         intent.putExtras(extras);
         startActivity(intent);
     }
-    private void recoverySendData()
-    {
+
+    private void recoverySendData() {
         documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
         documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,""));
     }
 
-    public void searchPatient(View view)
-    {
+    public void searchPatient(View view) {
         if (!documentTypes.get(indexDocumentTypeSelected).getDocument_type_name().isEmpty() & !etDocument.getText().toString().isEmpty()) {
             documentPatient = etDocument.getText().toString();
             documentTypePatientId=documentTypes.get(indexDocumentTypeSelected).getDocument_type_id();
@@ -173,8 +170,7 @@ public class SearchPatient extends AppCompatActivity{
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu,  menu);
 
@@ -183,8 +179,7 @@ public class SearchPatient extends AppCompatActivity{
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case R.id.logout:
@@ -197,8 +192,7 @@ public class SearchPatient extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    public void showHideItems(Menu menu)
-    {
+    public void showHideItems(Menu menu) {
         MenuItem item;
         item= menu.findItem(R.id.create_therapy);
         item.setVisible(false);

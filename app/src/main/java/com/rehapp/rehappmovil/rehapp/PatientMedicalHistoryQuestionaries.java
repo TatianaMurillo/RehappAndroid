@@ -1,17 +1,13 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -20,19 +16,12 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.internal.bind.ObjectTypeAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.QuestionariesApiAdapter;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.VitalSignApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.MedicalHistoryVitalSignPatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.OptionViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.PatientMedicalHistoryQuestionaireOptionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.QuestionariesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.VitalSignViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +33,9 @@ import retrofit2.Response;
 public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
 
     private ListView lvQuestionaries;
-    private String MedicalHistorySelectedId;
+    private String medicalHistorySelectedId;
     ArrayList<QuestionaryOptionViewModel> questionariesOptions;
+    ArrayList<QuestionaryOptionViewModel> patientQuestionaries;
     private SharedPreferences sharedpreferences;
     ArrayList<String> optionNames= new ArrayList<>();
     MedicalHistoryQuestionariesAdapter adapter;
@@ -74,60 +64,75 @@ public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
                     questionariesOptions = response.body();
                     adapter = new MedicalHistoryQuestionariesAdapter(PatientMedicalHistoryQuestionaries.this,questionariesOptions);
                     lvQuestionaries.setAdapter(adapter);
+                    loadPatientMedicalHistoryQuestionaireOption();
                 }
             }
             @Override
             public void onFailure(Call<ArrayList<QuestionaryOptionViewModel>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), PreferencesData.vitalSignsLoadFailed, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), PreferencesData.questionairesLoadFailed, Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void recoverySendData() {
-        MedicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+    private void loadPatientMedicalHistoryQuestionaireOption() {
+        Call<ArrayList<PatientMedicalHistoryQuestionaireOptionViewModel>> call = QuestionariesApiAdapter.getApiService().getPatienHistoryMedicalQuestionariesOptions(medicalHistorySelectedId);
+        call.enqueue(new Callback<ArrayList<PatientMedicalHistoryQuestionaireOptionViewModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PatientMedicalHistoryQuestionaireOptionViewModel>> call, Response<ArrayList<PatientMedicalHistoryQuestionaireOptionViewModel>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<PatientMedicalHistoryQuestionaireOptionViewModel> options = response.body();
+                    setQuestionaryOptionToView(options);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<PatientMedicalHistoryQuestionaireOptionViewModel>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), PreferencesData.questionairesOptionSelectedLoadFailed, Toast.LENGTH_LONG).show();
+            }
+        });
+
+
     }
 
-    private void addQuestionariesToView( ArrayList<QuestionaryOptionViewModel> questionaryOptions) {
-        Spinner spinner;
-        TextView textView;
-        ArrayList<String>  optionNames;
+    private void recoverySendData() {
+        medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+    }
 
-        for(QuestionaryOptionViewModel questionaryOption : questionaryOptions)
-        {
-
-            spinner=new Spinner(getApplicationContext());
-            textView = new TextView(getApplicationContext());
-            ArrayList<OptionViewModel> options=questionaryOption.getOptions();
-
-            optionNames=new ArrayList<>();
-
-            for (OptionViewModel option:options )
-            {
-                optionNames.add(option.getOption_name());
-            }
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void saveQuestionaireOptions()
+    {
+        List<PatientMedicalHistoryQuestionaireOptionViewModel> data;
+        data=getQuestionaryOptionIdFromView();
+        if(data!=null) {
+            Call<List<PatientMedicalHistoryQuestionaireOptionViewModel>> call = QuestionariesApiAdapter.getApiService().saveQuestionairesOptionsInMedicalHistory(data, medicalHistorySelectedId);
+            call.enqueue(new Callback<List<PatientMedicalHistoryQuestionaireOptionViewModel>>() {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                public void onResponse(Call<List<PatientMedicalHistoryQuestionaireOptionViewModel>> call, Response<List<PatientMedicalHistoryQuestionaireOptionViewModel>> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), PreferencesData.questionairesOptionCreateSuccessMsg, Toast.LENGTH_LONG).show();
+                        goToMedicalHistoryDetail();
+                    }else if(response.raw().code()==500)
+                    {
+                        Toast.makeText(getApplicationContext(), response.raw().message(), Toast.LENGTH_LONG).show();
+                        goToMedicalHistoryDetail();
+                    }
                 }
-
                 @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                public void onFailure(Call<List<PatientMedicalHistoryQuestionaireOptionViewModel>> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), PreferencesData.questionairesOptionCreateFailedMsg, Toast.LENGTH_LONG).show();
 
                 }
             });
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(PatientMedicalHistoryQuestionaries.this,android.R.layout.simple_list_item_1,optionNames);
-            spinner.setAdapter(arrayAdapter);
-            textView.setText(questionaryOption.getQuestionnaire_name());
-            textView.setTag(questionaryOption.getQuestionnaire_id());
-            lvQuestionaries.addView(textView);
-            lvQuestionaries.addView(spinner);
+        }else{
+            Intent intent = new Intent(PatientMedicalHistoryQuestionaries.this, MedicalHistoryDetail.class);
+            startActivity(intent);
         }
+
     }
 
-    private List<QuestionaryOptionViewModel> getQuestionaryOptionIdFromView() {
 
-        List<QuestionaryOptionViewModel> data = new ArrayList<>();
+    private List<PatientMedicalHistoryQuestionaireOptionViewModel> getQuestionaryOptionIdFromView() {
+
+        List<PatientMedicalHistoryQuestionaireOptionViewModel> data = new ArrayList<>();
 
         int childCount = lvQuestionaries.getChildCount();
 
@@ -140,75 +145,84 @@ public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
             Spinner spn = (Spinner) children3.getChildAt(1);
             TextView tv = (TextView) children3.getChildAt(0);
 
+
+            Object tagSelectedOptionId = spn.getTag();
+            Object tagQuestionaireIdId = tv.getTag();
+            if(tagSelectedOptionId==null || tagQuestionaireIdId==null)
+            {
+                Toast.makeText(getApplicationContext(), PreferencesData.questionairesOptionResponseMsg, Toast.LENGTH_LONG).show();
+                return null;
+            }
             String questionaireId=tv.getTag().toString();
             String selectedOptionId = spn.getTag().toString();
 
-            QuestionaryOptionViewModel model = new QuestionaryOptionViewModel();
+            PatientMedicalHistoryQuestionaireOptionViewModel model = new PatientMedicalHistoryQuestionaireOptionViewModel();
             model.setQuestionnaire_id(questionaireId);
             model.setOption_id(selectedOptionId);
+            model.setPtnt_mdcl_hstry_id(medicalHistorySelectedId);
+
             data.add(model);
         }
 
         return data;
     }
 
-    private void addVitalSignsMedicalHistoryToView(final ArrayList<QuestionariesViewModel> questionaries) {
-
-        Call<ArrayList<MedicalHistoryVitalSignPatientViewModel>> call = VitalSignApiAdapter.getApiService().getVitalSignsByMedicalHistory(MedicalHistorySelectedId);
-        call.enqueue(new Callback<ArrayList<MedicalHistoryVitalSignPatientViewModel>>() {
-            @Override
-            public void onResponse(Call<ArrayList<MedicalHistoryVitalSignPatientViewModel>> call, Response<ArrayList<MedicalHistoryVitalSignPatientViewModel>> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<MedicalHistoryVitalSignPatientViewModel> lVitalSignsPatient = response.body();
-                    for (MedicalHistoryVitalSignPatientViewModel vitalSignPatient : lVitalSignsPatient) {
-                       /* for (VitalSignViewModel vitalSign : vitalSigns) {
-                            if (vitalSign.getVital_sign_id() == vitalSignPatient.getPatient_vital_signs_id()) {
-                                setVitalSignsToView(vitalSign.getVital_sign_name(), vitalSignPatient.getPatient_vital_signs_value());
-                            }
-                        }
-                        */
-                    }
-
-                } else if (response.raw().code() == 404) {
-                    System.out.println(PreferencesData.medicalHistoryVitalSignEmptyListMsg);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<MedicalHistoryVitalSignPatientViewModel>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-    }
-
-    private  void setVitalSignsToView(String vitalSignName,String VitalSignValue) {
+    private void setQuestionaryOptionToView( List<PatientMedicalHistoryQuestionaireOptionViewModel> patientQuestionaireOption) {
 
         int childCount = lvQuestionaries.getChildCount();
-        String valueTextView;
-        Object childEditText;
-        Object childTextView;
-        TextView textView;
-        EditText editText;
 
-        for (int i = 1; i < childCount; i += 2) {
-            childEditText = lvQuestionaries.getChildAt(i);
-            childTextView = lvQuestionaries.getChildAt(i - 1);
+        for(PatientMedicalHistoryQuestionaireOptionViewModel patientMedicalHistoryQuestionaireOption:patientQuestionaireOption ){
 
-            textView = (TextView) childTextView;
-            valueTextView = textView.getText().toString().trim();
-            editText = (EditText) childEditText;
+            OptionViewModel option = new OptionViewModel();
+            option.setOption_name(patientMedicalHistoryQuestionaireOption.getOption_name());
+            option.setOption_description(patientMedicalHistoryQuestionaireOption.getOption_description());
+            option.setOption_id(patientMedicalHistoryQuestionaireOption.getOption_id());
 
-            if(vitalSignName.equals(valueTextView)) {
-                editText.setText(VitalSignValue);
+
+            for ( int i=0;i<childCount;i++) {
+
+                LinearLayout children = (LinearLayout)lvQuestionaries.getChildAt(i);
+                TableLayout children2 = (TableLayout) children.getChildAt(0);
+                TableRow children3 = (TableRow) children2.getChildAt(0);
+                Spinner spn = (Spinner) children3.getChildAt(1);
+                TextView tv = (TextView) children3.getChildAt(0);
+
+
+                String questionaireId=tv.getTag().toString();
+                if(questionaireId.equals(patientMedicalHistoryQuestionaireOption.getQuestionnaire_id()))
+                {
+                    spn.setSelection(getIndexOfOption(option,questionaireId));
+                }
             }
         }
+
     }
 
-    private void saveQuestionariesOptionsSelected() {
-        getQuestionaryOptionIdFromView();
+    private int getIndexOfOption(OptionViewModel selectedOption,String questionaireId){
+        int index=-1;
+        List<OptionViewModel> options;
+        for(QuestionaryOptionViewModel questionaireOption:questionariesOptions){
+            if(questionaireId.equals(questionaireOption.getQuestionnaire_id())) {
+                options = questionaireOption.getOptions();
+                for (OptionViewModel item:options)
+                {
+                    if(item.getOption_id().equals(selectedOption.getOption_id())){
+                        index = options.indexOf(item);
+                        return index;
+                    }
+                }
+
+            }
+        }
+        return index;
     }
+
+    private void goToMedicalHistoryDetail(){
+        Intent intent = new Intent(PatientMedicalHistoryQuestionaries.this, MedicalHistoryDetail.class);
+        startActivity(intent);
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -226,7 +240,7 @@ public class PatientMedicalHistoryQuestionaries extends AppCompatActivity {
                 UserMethods.getInstance().Logout(this);
                 break;
             case R.id.save:
-                getQuestionaryOptionIdFromView();
+                saveQuestionaireOptions();
                 break;
         }
 

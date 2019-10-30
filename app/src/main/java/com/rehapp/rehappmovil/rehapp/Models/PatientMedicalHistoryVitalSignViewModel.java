@@ -1,6 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
-public class MedicalHistoryVitalSignPatientViewModel {
+public class PatientMedicalHistoryVitalSignViewModel {
 
     private String patient_medical_history_vital_sign_id;
     private String patient_vital_signs_value;

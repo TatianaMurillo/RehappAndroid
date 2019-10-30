@@ -76,6 +76,8 @@ Calendar cal = Calendar.getInstance();
                 storeStringSharepreferences(PreferencesData.MedicalHistorySelectedId, MedicalHistorySelectedId);
                 storeStringSharepreferences(PreferencesData.MedicaHistoryAction, action);
         }
+
+        documentPatient =sharedpreferences.getString(PreferencesData.PatientDocument,"");
     }
 
     public void blockData()
@@ -83,8 +85,7 @@ Calendar cal = Calendar.getInstance();
 
     }
 
-    public  void searchPatient()
-    {
+    public  void searchPatient() {
         Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(documentPatient);
         call.enqueue(new Callback<PatientViewModel>() {
             @Override
@@ -139,8 +140,7 @@ Calendar cal = Calendar.getInstance();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu,  menu);
         showHideItems(menu);
