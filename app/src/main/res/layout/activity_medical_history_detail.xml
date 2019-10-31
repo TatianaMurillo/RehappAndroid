@@ -151,7 +151,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Enfermedades"
-            android:onClick="addVitalSigns"
+            android:onClick="addDiseases"
             android:layout_margin="10dp"/>
 
             <TextView

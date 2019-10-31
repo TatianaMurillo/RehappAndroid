@@ -32,8 +32,8 @@ import retrofit2.Response;
 
 public class PatientMedicalHistoryVitalSigns extends AppCompatActivity {
 
-    private GridLayout grid;
-    private String medicalHistorySelectedId;
+    GridLayout grid;
+    String medicalHistorySelectedId;
     ArrayList<VitalSignViewModel> vitalSigns;
     private SharedPreferences sharedpreferences;
 

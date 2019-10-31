@@ -69,7 +69,8 @@ public class PreferencesData {
     public static final String therapyCreationSuccessMsg ="Se creó la terapia con éxito.";
     public static final String therapyCreationFailedMsg ="Falló al crear terapia.";
     public static final String therapyDetailTherapistListMsg ="Hubo un error al listar terapeutas.";
-    public static final String therapyDetailExerciseRoutineListMsg ="Hubo un error al ejercicios de rutina.";
+    public static final String therapyDetailExerciseRoutineListMsg ="Hubo un error al listar ejercicios de rutina.";
+    public static final String medicalHistoryDiseasesListMsg ="Hubo un error al listar las enfermedades.";
 
     public static final String therapyDetailSaveExerciseRoutineDataFailedMsg ="Debe seleccionar al menos (1) ejercicio de rutina.";
     public static final String therapyDetailSaveExerciseRoutineFailedMsg ="Hubo un error al guardar ejercicios de terapia.";
@@ -78,6 +79,7 @@ public class PreferencesData {
 
     public static final String medicalHistoryVitalSignEmptyListMsg ="No se encontraron toma de vitales para el paciente.";
     public static final String therapyDetailPhysiologicalParameterTherapyEmptyListMsg ="No se encontraron parametros fisiologicos para la terapia.";
+    public static final String medicalHistoryDiseaseEmptyListMsg ="No se registraron enfermedades en la historia medica.";
     public static final String therapyDetailTherapyExerciseRoutinesEmptyListMsg ="No se encontraron rutinas para la terapia.";
     public static final String therapyDetailTherapyExerciseRoutinesListMsg ="Hubo un error al listar los ejercicios previamente seleccionados.";
     public static final String therapyDetailInstitutionListMsg ="Hubo un error al listar instituciones.";
