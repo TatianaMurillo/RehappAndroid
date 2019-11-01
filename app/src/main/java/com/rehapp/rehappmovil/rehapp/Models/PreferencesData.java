@@ -74,7 +74,9 @@ public class PreferencesData {
 
     public static final String therapyDetailSaveExerciseRoutineDataFailedMsg ="Debe seleccionar al menos (1) ejercicio de rutina.";
     public static final String therapyDetailSaveExerciseRoutineFailedMsg ="Hubo un error al guardar ejercicios de terapia.";
+    public static final String medicalHistoryDiseaseSaveFailedMsg ="Hubo un error al guardar las enfermedades.";
     public static final String therapyDetailSaveExerciseRoutineSuccessMsg ="Ejercicios de terapia guardados correctamente.";
+    public static final String medicalHistoryDiseaseSaveSuccessMsg ="enfermedades guardadas correctamente.";
 
 
     public static final String medicalHistoryVitalSignEmptyListMsg ="No se encontraron toma de vitales para el paciente.";

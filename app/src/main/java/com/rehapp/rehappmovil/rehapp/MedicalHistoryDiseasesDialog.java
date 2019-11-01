@@ -14,11 +14,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DiseaseApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientMedicalHistoryApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DiseaseViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +38,6 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
     String medicalHistorySelectedId;
     MedicalHistoryDiseaseAdapter adapter;
     int  diseaseSelectedIndex=-1;
-
     private Context mContext;
 
 
@@ -44,16 +47,17 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         adapter=null;
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.activity_therapy_exercises,null);
+        View view = inflater.inflate(R.layout.activity_medical_history_diseases,null);
 
-        recoverySendData();
+
+        medicalHistorySelectedId=getArguments().getString(PreferencesData.MedicalHistorySelectedId);
         loadData();
 
-        lvDiseases= view.findViewById(R.id.lvExercises);
+        lvDiseases= view.findViewById(R.id.lvDiseases);
 
         builder
                 .setView(view)
-                .setTitle(R.string.watchExercises)
+                .setTitle(R.string.diseases)
                 .setNegativeButton(R.string.CancelButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -63,6 +67,7 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
                 .setPositiveButton(R.string.SaveButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        saveDisease();
                     }
                 });
 
@@ -118,8 +123,10 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
 
                             for (DiseaseViewModel disease:diseases )
                             {
-                                if(disease.getDisease_id()==selectedDisease.getDisease_id())
+                                if(disease.getDisease_id().equals(selectedDisease.getDisease_id()))
                                 {
+                                    diseases.get(diseases.indexOf(disease)).setPatient_disease_is_base(selectedDisease.getPatient_disease_is_base());
+                                    adapter.updateRecords(diseases);
                                     selectDiseaseItem(diseases.indexOf(disease));
                                 }
                             }
@@ -137,11 +144,48 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
     }
 
 
-    private void recoverySendData()
+    public  void saveDisease()
     {
-        medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
-    }
+        List<DiseaseViewModel> diseasesFromView=new ArrayList<>();
+        DiseaseViewModel diseaseSelected=null;
 
+        for (DiseaseViewModel disease: diseases) {
+            if(disease.isSelected()) {
+                diseaseSelected = new DiseaseViewModel();
+                diseaseSelected.setDisease_id(disease.getDisease_id());
+                diseaseSelected.setPtnt_mdcl_hstry_id(medicalHistorySelectedId);
+                diseaseSelected.setPatient_disease_is_base(disease.getPatient_disease_is_base());
+                diseasesFromView.add(diseaseSelected);
+            }
+        }
+        if(diseasesFromView!=null)
+        {
+            Call<List<DiseaseViewModel>> call = PatientMedicalHistoryApiAdapter.getApiService().saveDiseases(diseasesFromView,medicalHistorySelectedId);
+            call.enqueue(new Callback<List<DiseaseViewModel>>() {
+                @Override
+                public void onResponse(Call<List<DiseaseViewModel>> call, Response<List<DiseaseViewModel>> response) {
+                    if(response.isSuccessful())
+                    {
+                        Toast.makeText(mContext, PreferencesData.medicalHistoryDiseaseSaveSuccessMsg, Toast.LENGTH_LONG).show();
+                    }else if(response.raw().code()==500){
+                        Toast.makeText(mContext, PreferencesData.medicalHistoryDiseaseSaveFailedMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<DiseaseViewModel>> call, Throwable t) {
+                    Toast.makeText(mContext, PreferencesData.medicalHistoryDiseaseSaveFailedMsg, Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+
+        }else{
+            Toast.makeText(mContext, PreferencesData.medicalHistoryDiseaseSaveFailedMsg, Toast.LENGTH_LONG).show();
+        }
+
+
+
+    }
 
 
 
@@ -154,6 +198,7 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
         } else {
             model.setSelected(true);
         }
+
         diseases.set(position, model);
         adapter.updateRecords(diseases);
     }

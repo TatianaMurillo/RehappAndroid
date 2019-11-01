@@ -225,10 +225,10 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                 }
             });
         }else
-        {
-            Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
+    {
+        Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
 
-        }
+    }
 
     }
 

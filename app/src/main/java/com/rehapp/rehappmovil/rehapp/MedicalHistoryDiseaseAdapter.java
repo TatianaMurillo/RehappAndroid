@@ -50,7 +50,7 @@ public class MedicalHistoryDiseaseAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(final int position, View view, ViewGroup parent) {
         ViewHolder holder = null;
         if(view ==null)
         {
@@ -75,17 +75,33 @@ public class MedicalHistoryDiseaseAdapter extends BaseAdapter{
             {
                 holder.ivCheckbox.setBackgroundResource(R.drawable.unchecked);
             }
-            if("0".equals(model.getPatient_disease_is_base())){
-                holder.ivCheckbox.setBackgroundResource(R.drawable.checked);
-            }else{
-                holder.ivCheckbox.setBackgroundResource(R.drawable.unchecked);
+
+            if ("0".equals(model.getPatient_disease_is_base())) {
+                holder.ivIsBase.setBackgroundResource(R.drawable.checked);
+            } else {
+                holder.ivIsBase.setBackgroundResource(R.drawable.unchecked);
             }
+
+            holder.ivIsBase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DiseaseViewModel model = diseases.get(position);
+                if ("0".equals(model.getPatient_disease_is_base())) {
+                    model.setPatient_disease_is_base("1");
+                } else {
+                    model.setPatient_disease_is_base("0");
+                }
+                diseases.set(position, model);
+                updateRecords(diseases);
+            }
+        });
+
             return view;
         }
 
-        public void updateRecords(List<DiseaseViewModel> exercises)
+        public void updateRecords(List<DiseaseViewModel> diseases)
         {
-            this.diseases=exercises;
+            this.diseases=diseases;
             notifyDataSetChanged();
         }
 

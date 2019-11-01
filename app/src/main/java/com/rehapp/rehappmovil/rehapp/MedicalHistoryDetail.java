@@ -36,7 +36,7 @@ private TextView tvPatientNameValue;
 private TextView tvAgeValue;
 private TextView tvAgeNeighborhoodValue;
 private String documentPatient;
-private String MedicalHistorySelectedId;
+private String medicalHistorySelectedId;
 private PatientViewModel patientViewModel;
 private TherapyViewModel therapySelected;
 private SharedPreferences sharedpreferences;
@@ -72,8 +72,8 @@ Calendar cal = Calendar.getInstance();
         {
                 Bundle extras = getIntent().getExtras();
                 action= extras.getString(PreferencesData.MedicaHistoryAction);
-                MedicalHistorySelectedId=extras.getString(PreferencesData.MedicalHistorySelectedId);
-                storeStringSharepreferences(PreferencesData.MedicalHistorySelectedId, MedicalHistorySelectedId);
+                medicalHistorySelectedId=extras.getString(PreferencesData.MedicalHistorySelectedId);
+                storeStringSharepreferences(PreferencesData.MedicalHistorySelectedId, medicalHistorySelectedId);
                 storeStringSharepreferences(PreferencesData.MedicaHistoryAction, action);
         }
 
@@ -197,10 +197,10 @@ Calendar cal = Calendar.getInstance();
 
     public void addVitalSigns(View view) {
 
-        MedicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+       medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
 
         Bundle args = new Bundle();
-        args.putString(PreferencesData.MedicalHistorySelectedId,MedicalHistorySelectedId);
+        args.putString(PreferencesData.MedicalHistorySelectedId,medicalHistorySelectedId);
         Intent intent = new Intent(MedicalHistoryDetail.this, PatientMedicalHistoryVitalSigns.class);
         startActivity(intent);
 
@@ -210,15 +210,22 @@ Calendar cal = Calendar.getInstance();
     public void addQuestionaries(View view) {
 
         Bundle args = new Bundle();
-        args.putString(PreferencesData.MedicalHistorySelectedId,MedicalHistorySelectedId);
+        args.putString(PreferencesData.MedicalHistorySelectedId,medicalHistorySelectedId);
         Intent intent = new Intent(MedicalHistoryDetail.this, PatientMedicalHistoryQuestionaries.class);
         startActivity(intent);
     }
 
     public void addDiseases(View view) {
 
+        medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+
+        Bundle args = new Bundle();
+        args.putString(PreferencesData.MedicalHistorySelectedId,medicalHistorySelectedId);
+
         MedicalHistoryDiseasesDialog medicalHistoryDiseasesDialog = new  MedicalHistoryDiseasesDialog();
+        medicalHistoryDiseasesDialog.setArguments(args);
         medicalHistoryDiseasesDialog.show(getSupportFragmentManager(),"");
+
 
     }
 

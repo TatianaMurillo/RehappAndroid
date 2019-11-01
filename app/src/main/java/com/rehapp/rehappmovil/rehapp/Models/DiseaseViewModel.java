@@ -6,11 +6,13 @@ public class DiseaseViewModel {
     private String disease_name;
     private String disease_description;
     private String patient_medical_history_id;
+    private String ptnt_mdcl_hstry_id;
     private String patient_disease_is_base;
     boolean isSelected;
     private String created_at;
     private String  updated_at;
 
+    public DiseaseViewModel(){}
     public DiseaseViewModel(boolean isSelected, String disease_name) {
         this.isSelected = isSelected;
         this.disease_name = disease_name;
@@ -78,5 +80,13 @@ public class DiseaseViewModel {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public String getPtnt_mdcl_hstry_id() {
+        return ptnt_mdcl_hstry_id;
+    }
+
+    public void setPtnt_mdcl_hstry_id(String ptnt_mdcl_hstry_id) {
+        this.ptnt_mdcl_hstry_id = ptnt_mdcl_hstry_id;
     }
 }
