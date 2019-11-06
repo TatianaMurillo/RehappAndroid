@@ -262,7 +262,7 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
         MenuItem item;
         item = menu.findItem(R.id.save);
         item.setVisible(true);
-        item = menu.findItem(R.id.save);
+        item = menu.findItem(R.id.create_therapy);
         item.setVisible(false);
 
     }

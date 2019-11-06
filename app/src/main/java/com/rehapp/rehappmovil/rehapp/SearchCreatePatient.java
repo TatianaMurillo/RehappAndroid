@@ -64,7 +64,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
             spnDocumentType= findViewById(R.id.spnDocumentType);
             searchCreatePatientViewModel = ViewModelProviders.of(this).get(SearchCreatePatientViewModel.class);
             recoverySendData();
-            //loadCurrentData();
+            loadCurrentData();
             spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
             {
                 @Override
@@ -86,7 +86,7 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
     {
         String activeUser=sharedpreferences.getString(PreferencesData.userActive,"");
 
-        tvWelcome.setText( activeUser );
+        tvWelcome.setText( "¡Bienvenido " +activeUser+"!" );
     }
     private void recoverySendData()
     {

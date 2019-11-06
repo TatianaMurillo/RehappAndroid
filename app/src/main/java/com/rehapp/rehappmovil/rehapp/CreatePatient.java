@@ -251,7 +251,7 @@ public class CreatePatient extends AppCompatActivity {
                         if(response.isSuccessful())
                         {
                             patientResponse= response.body();
-                            Toast.makeText(getApplicationContext(), PreferencesData.udpatePatientFailed, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), PreferencesData.updatePatientSuccess, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(CreatePatient.this, SearchPatient.class);
 
                             storeStringSharepreferences(PreferencesData.PatientDocument, patientResponse.getPatient_document());

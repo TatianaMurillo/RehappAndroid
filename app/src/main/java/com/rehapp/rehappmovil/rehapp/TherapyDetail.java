@@ -82,6 +82,7 @@ private String json;
 
                 if(action.equals("ADD")) {
                     UnBlockData();
+
                 }else
                 {
                     therapySelectedId = Integer.parseInt(getIntent().getSerializableExtra(PreferencesData.TherapySelectedId).toString());
@@ -99,8 +100,7 @@ private String json;
     {
 
     }
-    public void listTherapists()
-    {
+    public void listTherapists() {
         Call<ArrayList<TherapistViewModel>> call = TherapistApiAdapter.getApiService().getTherapists();
         call.enqueue(new Callback<ArrayList<TherapistViewModel>>() {
             int indexOfTherapist=-1;
@@ -142,8 +142,8 @@ private String json;
             }
         });
     }
-    public void listInstitutions()
-    {
+
+    public void listInstitutions() {
         Call<ArrayList<InstitutionViewModel>> call = InstitutionApiAdapter.getApiService().getInstitutions();
         call.enqueue(new Callback<ArrayList<InstitutionViewModel>>() {
             int indexOfInstitution=-1;
@@ -197,6 +197,7 @@ private String json;
                 {
                     therapySelected = response.body();
                     tvTherapySequence.setText(R.string.TherapySequence + therapySelected.getTherapy_sequence());
+
                     blockData();
 
                 }else{
@@ -213,6 +214,14 @@ private String json;
 
             }
         });
+    }
+
+    private void selectTherapist(){
+
+    }
+
+    private void selectInstitution(){
+
     }
 
     @Override

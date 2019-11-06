@@ -156,7 +156,15 @@ public class HistoryTherapiesPatient extends AppCompatActivity implements Callba
 
     private void cleanPreferenceData()
     {
-        UserMethods.getInstance().storeIntSharepreferences(PreferencesData.TherapyId,0);
+        storeIntSharepreferences(PreferencesData.TherapyId,0);
+    }
+
+    private  void storeIntSharepreferences(String key, int value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+
     }
 
 }
