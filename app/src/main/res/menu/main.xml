@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/logout"
+        app:showAsAction="never"
+        android:title="Salir" />
+
+    <item
+        android:id="@+id/create-therapy"
+        app:showAsAction="ifRoom"
+        android:title="Crear terapia"
+        android:icon="@drawable/createtherapy"/>
+
+    <item
+        android:id="@+id/save-therapy"
+        app:showAsAction="ifRoom"
+        android:title="Guardar terapia"
+        android:icon="@drawable/savetherapy"/>
+</menu>
