@@ -470,9 +470,6 @@ public class CreatePatient extends AppCompatActivity {
     {
         switch (item.getItemId())
         {
-            case R.id.logout:
-                UserMethods.getInstance().Logout(this);
-                break;
             case  R.id.save:
                 if("DETAIL".equals(action))
                 {

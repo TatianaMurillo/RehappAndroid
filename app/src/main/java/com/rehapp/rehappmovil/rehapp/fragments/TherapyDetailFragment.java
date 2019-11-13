@@ -1,32 +1,39 @@
-package com.rehapp.rehappmovil.rehapp;
+package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.rehapp.rehappmovil.rehapp.HistoryTherapiesPatient;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.InstitutionApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
-import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
-
+import com.rehapp.rehappmovil.rehapp.PhysiologicalParameterTherapy;
+import com.rehapp.rehappmovil.rehapp.R;
+import com.rehapp.rehappmovil.rehapp.TherapyAdditionalInformationDialog;
+import com.rehapp.rehappmovil.rehapp.TherapyExercisesDialog;
 
 import java.util.ArrayList;
 
@@ -34,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TherapyDetail extends AppCompatActivity {
+public class TherapyDetailFragment extends Fragment {
 private int therapySelectedId;
 private String therapyCreatedId;
 private TextView tvTherapySequence;
@@ -46,17 +53,23 @@ private TherapyViewModel therapySelected;
 private SharedPreferences sharedpreferences;
 private String json;
 
+    private Context mContext;
+    View view;
+    FragmentManager manager;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
-        setContentView(R.layout.activity_therapy_detail);
-        tvTherapySequence = findViewById(R.id.tvTherapySequence);
-        spnInstitution = findViewById(R.id.spnInstitution);
-        spnTherapist = findViewById(R.id.spnTherapist);
+        manager = this.getFragmentManager();
+        view =inflater.inflate(R.layout.activity_therapy_detail,container,false);
+        sharedpreferences =mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
+
+        tvTherapySequence = view.findViewById(R.id.tvTherapySequence);
+        spnInstitution = view.findViewById(R.id.spnInstitution);
+        spnTherapist = view.findViewById(R.id.spnTherapist);
         therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         therapyCreatedId="";
         recoverySendData();
@@ -123,7 +136,7 @@ private String json;
                         }
                         therapistNames.add(therapistViewModel.getTherapist_first_lastname()+" " + therapistViewModel.getTherapist_first_name());
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TherapyDetail.this,android.R.layout.simple_list_item_1,therapistNames);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TherapyDetailFragment.this,android.R.layout.simple_list_item_1,therapistNames);
                     spnTherapist.setAdapter(arrayAdapter);
 
                     if(action.equals("DETAIL")) {
@@ -166,7 +179,7 @@ private String json;
                         }
                         institutionNames.add(institutionViewModel.getInstitution_name());
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TherapyDetail.this,android.R.layout.simple_list_item_1,institutionNames);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TherapyDetailFragment.this,android.R.layout.simple_list_item_1,institutionNames);
                     spnInstitution.setAdapter(arrayAdapter);
 
                     if(action.equals("DETAIL")) {
@@ -203,7 +216,7 @@ private String json;
                 }else{
                     if(response.raw().code()==404) {
                         Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(TherapyDetail.this, HistoryTherapiesPatient.class);
+                        Intent intent = new Intent(TherapyDetailFragment.this, HistoryTherapiesPatient.class);
                         startActivity(intent);
                     }
                 }
@@ -355,7 +368,7 @@ private String json;
         storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
         storeStringSharepreferences(PreferencesData.PhysiologicalParameterAction,physiologicalParameterAction);
 
-        Intent intent = new Intent(TherapyDetail.this,PhysiologicalParameterTherapy.class);
+        Intent intent = new Intent(TherapyDetailFragment.this,PhysiologicalParameterTherapy.class);
         startActivity(intent);
 
     }
@@ -416,7 +429,7 @@ private String json;
                 }else{
                     if(response.raw().code()==404) {
                         Toast.makeText(getApplicationContext(), PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(TherapyDetail.this, HistoryTherapiesPatient.class);
+                        Intent intent = new Intent(TherapyDetailFragment.this, HistoryTherapiesPatient.class);
                         startActivity(intent);
                     }
                 }
@@ -451,6 +464,13 @@ private String json;
             }
         });
 
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
     }
 
     private  void storeStringSharepreferences(String key, String value){

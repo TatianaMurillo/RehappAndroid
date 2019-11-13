@@ -177,9 +177,6 @@ public class SearchCreatePatient extends AppCompatActivity implements Callback<A
     {
             switch (item.getItemId())
             {
-                case R.id.logout:
-                    UserMethods.getInstance().Logout(this);
-                    break;
             }
 
 

@@ -189,16 +189,48 @@ public class SearchCreatePatientFragment  extends Fragment {
 
     public void createPatient()
     {
-        loadFragment(new CreatePatientFragment());
+        CreatePatientFragment fragment = new CreatePatientFragment();
+        Bundle extras = new Bundle();
+        extras.putString(PreferencesData.PatientAction, PreferencesData.ADD);
+        fragment.setArguments(extras);
+        loadFragment(fragment );
     }
 
-    public void ocultarItems(Menu menu)
-    {
-        MenuItem item;
-        item= menu.findItem(R.id.create_therapy);
-        item.setVisible(false);
-        item= menu.findItem(R.id.save);
-        item.setVisible(false);
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        showHideItems(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case R.id.save:
+                break;
+                default:
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void showHideItems(Menu menu) {
+            MenuItem item;
+            item = menu.findItem(R.id.create_therapy);
+            item.setVisible(false);
+            item = menu.findItem(R.id.save);
+            item.setVisible(false);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
+    }
+
+    public void loadFragment(Fragment fragment){
+        manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
 
     private  void storeStringSharepreferences(String key, String value){
@@ -215,15 +247,5 @@ public class SearchCreatePatientFragment  extends Fragment {
         editor.putInt(key, value);
         editor.commit();
 
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext=context;
-    }
-
-    public void loadFragment(Fragment fragment){
-        manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
 }

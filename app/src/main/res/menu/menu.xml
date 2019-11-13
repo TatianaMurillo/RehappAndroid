@@ -5,22 +5,22 @@
 
 
     <item
-        android:id="@+id/logout"
+        android:id="@+id/logout1"
         app:showAsAction="never"
         android:title="Salir" />
     <item
-        android:id="@+id/back-search-patient-page"
+        android:id="@+id/back-search-patient-page1"
         app:showAsAction="never"
         android:title="Buscar paciente" />
 
     <item
-        android:id="@+id/create-therapy"
+        android:id="@+id/create-therapy1"
         app:showAsAction="ifRoom"
         android:title="Crear terapia"
         android:icon="@drawable/createtherapy"/>
 
     <item
-        android:id="@+id/save"
+        android:id="@+id/save1"
         android:title=""
         app:showAsAction="always"
         android:icon="@drawable/savetherapy"/>

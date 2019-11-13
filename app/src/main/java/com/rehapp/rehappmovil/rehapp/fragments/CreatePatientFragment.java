@@ -87,6 +87,11 @@ public class CreatePatientFragment extends Fragment {
     View view;
     FragmentManager manager;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -230,6 +235,7 @@ public class CreatePatientFragment extends Fragment {
                         {
                             patientResponse= response.body();
                             Toast.makeText(mContext, PreferencesData.storePatientSuccess, Toast.LENGTH_LONG).show();
+                            redirectToSearchCreatePatient();
                         }
                     }
 
@@ -269,11 +275,10 @@ public class CreatePatientFragment extends Fragment {
                         {
                             patientResponse= response.body();
                             Toast.makeText(mContext, PreferencesData.updatePatientSuccess, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(mContext, SearchPatient.class);
 
                             storeStringSharepreferences(PreferencesData.PatientDocument, patientResponse.getPatient_document());
                             storeStringSharepreferences(PreferencesData.PatientTpoDocument, String.valueOf(patientResponse.getDocument_type_id()));
-                            startActivity(intent);
+                            redirectToSearchPatient();
                         }
                     }
 
@@ -444,7 +449,6 @@ public class CreatePatientFragment extends Fragment {
         return  patient;
     }
 
-
     private void setInputData()
     {
         dataInputString =new ArrayList();
@@ -467,19 +471,25 @@ public class CreatePatientFragment extends Fragment {
 
     private void redirectToSearchPatient()
     {
-        Intent intent = new Intent(mContext, SearchPatient.class);
-        startActivity(intent);
+        loadFragment(new SearchPatientFragment());
     }
 
+    private void redirectToSearchCreatePatient()
+    {
+        loadFragment(new SearchCreatePatientFragment());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        showHideItems(menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {
-            case R.id.logout:
-
-                break;
             case  R.id.save:
                 if("DETAIL".equals(action))
                 {
@@ -489,10 +499,6 @@ public class CreatePatientFragment extends Fragment {
                 }
 
                 break;
-            case R.id.back_search_patient_page:
-                Intent intent = new Intent(mContext,SearchCreatePatient.class);
-                startActivity(intent);
-                break;
         }
 
 
@@ -501,11 +507,24 @@ public class CreatePatientFragment extends Fragment {
     }
 
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
+    }
+
     public void showHideItems(Menu menu)
     {
         MenuItem item;
         item= menu.findItem(R.id.create_therapy);
         item.setVisible(false);
+        item= menu.findItem(R.id.save);
+        item.setVisible(true);
+    }
+
+
+    public void loadFragment(Fragment fragment){
+        manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
 
 
@@ -515,16 +534,6 @@ public class CreatePatientFragment extends Fragment {
         editor.putString(key, value);
         editor.commit();
 
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext=context;
-    }
-
-    public void loadFragment(Fragment fragment){
-        manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
 
 

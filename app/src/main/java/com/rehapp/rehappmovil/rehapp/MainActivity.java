@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.rehapp.rehappmovil.rehapp.fragments.SearchCreatePatientFragment;
-import com.rehapp.rehappmovil.rehapp.fragments.SearchPatientFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -49,8 +48,19 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        showHideItems(menu);
         return true;
     }
+
+    public void showHideItems(Menu menu)
+    {
+        MenuItem item;
+        item= menu.findItem(R.id.create_therapy);
+        item.setVisible(false);
+        item= menu.findItem(R.id.save);
+        item.setVisible(false);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

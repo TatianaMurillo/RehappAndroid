@@ -226,9 +226,6 @@ public class SearchPatientFragment extends  Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.logout:
-                UserMethods.getInstance().Logout(mContext);
-                break;
         }
 
 
@@ -248,7 +245,7 @@ public class SearchPatientFragment extends  Fragment {
     public void editPatient() {
         CreatePatientFragment fragment = new CreatePatientFragment();
         Bundle extras = new Bundle();
-        extras.putString(PreferencesData.PatientAction, "DETAIL");
+        extras.putString(PreferencesData.PatientAction, PreferencesData.DETAIL);
         fragment.setArguments(extras);
         loadFragment(fragment );
     }

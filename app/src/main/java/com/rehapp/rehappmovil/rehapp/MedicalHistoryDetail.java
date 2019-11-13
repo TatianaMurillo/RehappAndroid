@@ -151,9 +151,6 @@ Calendar cal = Calendar.getInstance();
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.logout:
-                UserMethods.getInstance().Logout(this);
-                break;
         }
 
 

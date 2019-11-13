@@ -244,9 +244,6 @@ public class PhysiologicalParameterTherapy extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.logout:
-                UserMethods.getInstance().Logout(this);
-                break;
             case R.id.save:
                 savePhysiologicalParameterTherapy();
 
