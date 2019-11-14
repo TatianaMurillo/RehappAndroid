@@ -52,6 +52,12 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
 
     public HistoryTherapiesPatientFragment() { }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,16 +77,18 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TherapyViewModel selectedTherapy = therapies.get(position);
                 Toast.makeText(mContext, "therapy selected : " + selectedTherapy.getTherapy_description(), Toast.LENGTH_LONG).show();
+                TherapyDetailFragment fragment = new TherapyDetailFragment();
+                Bundle extras = new Bundle();
+                extras.putString(PreferencesData.TherapyAction, "DETAIL");
+                extras.putInt(PreferencesData.TherapySelectedId, selectedTherapy.getTherapy_id());
 
-                Intent intent = new Intent(HistoryTherapiesPatientFragment.this, TherapyDetail.class);
-                intent.putExtra(PreferencesData.TherapySelectedId, selectedTherapy.getTherapy_id());
-                intent.putExtra(PreferencesData.TherapyAction, "DETAIL");
-                startActivity(intent);
+                fragment.setArguments(extras);
+                loadFragment(fragment);
 
             }
         });
 
-
+        return  view;
     }
 
 
@@ -97,15 +105,14 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
                     {
                         therapiesNames.add(therapy.getTherapy_description() + " "+ therapy.getTherapy_sequence());
                     }
-
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(HistoryTherapiesPatientFragment.this,android.R.layout.simple_list_item_1,therapiesNames);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,therapiesNames);
                     lvTherapies.setAdapter(arrayAdapter);
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<TherapyViewModel>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), PreferencesData.therapyListError +" "+ t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, PreferencesData.therapyListError +" "+ t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -133,12 +140,11 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         showHideItems(menu);
-        return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -147,19 +153,11 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
             case R.id.create_therapy:
 
                 cleanPreferenceData();
-                Intent intent = new Intent(HistoryTherapiesPatientFragment.this, TherapyDetail.class);
+                TherapyDetailFragment fragment = new TherapyDetailFragment();
                 Bundle extras = new Bundle();
                 extras.putString(PreferencesData.TherapyAction, "ADD");
-                intent.putExtras(extras);
-                startActivity(intent);
-
-                CreatePatientFragment fragment = new CreatePatientFragment();
-                Bundle extras = new Bundle();
-                extras.putString(PreferencesData.PatientAction, PreferencesData.ADD);
                 fragment.setArguments(extras);
                 loadFragment(fragment );
-
-
                 return true;
                 default:
                     return super.onOptionsItemSelected(item);
@@ -176,7 +174,6 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
     public void showHideItems(Menu menu)
     {
         MenuItem item;
-
         item= menu.findItem(R.id.save);
         item.setVisible(false);
     }

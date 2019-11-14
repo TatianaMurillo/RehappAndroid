@@ -65,7 +65,6 @@ public class SearchPatientFragment extends  Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        super.onCreate(savedInstanceState);
 
         manager = this.getFragmentManager();
         view =inflater.inflate(R.layout.activity_search_patient,container,false);
@@ -189,12 +188,12 @@ public class SearchPatientFragment extends  Fragment {
     }
 
     public void watchTherapies() {
-        Intent intent = new Intent(mContext,HistoryTherapiesPatient.class);
+        HistoryTherapiesPatientFragment fragment = new HistoryTherapiesPatientFragment();
         Bundle extras = new Bundle();
         extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
         extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
-        intent.putExtras(extras);
-        startActivity(intent);
+        fragment.setArguments(extras);
+        loadFragment(fragment );
     }
 
     public void watchMedicalHistories() {
