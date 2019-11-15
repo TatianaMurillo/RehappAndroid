@@ -1,10 +1,12 @@
 package com.rehapp.rehappmovil.rehapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +14,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.Toast;
 
+import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.fragments.SearchCreatePatientFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -41,8 +45,10 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            Toast.makeText(getApplicationContext(), "¿Cerrar sesion?",   Toast.LENGTH_LONG).show();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

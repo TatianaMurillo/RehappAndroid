@@ -176,6 +176,8 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
         MenuItem item;
         item= menu.findItem(R.id.save);
         item.setVisible(false);
+        item= menu.findItem(R.id.create_therapy);
+        item.setVisible(true);
     }
 
     private void cleanPreferenceData()

@@ -28,7 +28,10 @@ import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,12 +43,19 @@ private String therapyCreatedId;
 private TextView tvTherapySequence;
 private String action;
 private Spinner spnTherapist;
+private TextView tvDateAndTime;
 private Spinner spnInstitution;
 private TherapyMasterDetailViewModel therapyViewModel;
+private TextView tvWatchExercises;
+private TextView tvPhisiologicalParametersIn;
+private TextView tvPhisiologicalParametersOut;
+private TextView tvAdditionalInfo;
 private TherapyViewModel therapySelected;
 private SharedPreferences sharedpreferences;
 private String json;
 
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    Calendar cal = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +64,10 @@ private String json;
         sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
         setContentView(R.layout.activity_therapy_detail);
+        tvWatchExercises=findViewById(R.id.tvWatchExercises);
+        tvAdditionalInfo=findViewById(R.id.tvAdditionalInfo);
+        tvPhisiologicalParametersIn=findViewById(R.id.tvPhisiologicalParametersIn);
+        tvPhisiologicalParametersOut=findViewById(R.id.tvPhisiologicalParametersOut);
         tvTherapySequence = findViewById(R.id.tvTherapySequence);
         spnInstitution = findViewById(R.id.spnInstitution);
         spnTherapist = findViewById(R.id.spnTherapist);
@@ -61,10 +75,39 @@ private String json;
         therapyCreatedId="";
         recoverySendData();
         loadData();
+
+        tvWatchExercises.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                watchExercises();
+            }
+        });
+
+        tvPhisiologicalParametersIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPhysiologicalParametersIn();
+            }
+        });
+
+        tvPhisiologicalParametersOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPhysiologicalParametersOut();
+            }
+        });
+
+        tvAdditionalInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addAdditionalInformation();
+            }
+        });
+
     }
 
     private void loadData(){
-
+        tvDateAndTime.setText(sdf.format(cal.getTime()));
         listTherapists();
         listInstitutions();
     }
@@ -262,7 +305,7 @@ private String json;
        }
     }
 
-    public void addPhysiologicalParametersIn(View view) {
+    public void addPhysiologicalParametersIn() {
         String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
         int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
 
@@ -279,7 +322,7 @@ private String json;
 
 }
 
-    public void addPhysiologicalParametersOut(View view) {
+    public void addPhysiologicalParametersOut() {
 
         String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
         int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
@@ -295,14 +338,14 @@ private String json;
         }
     }
 
-    public void addAdditionalInformation(View view) {
+    public void addAdditionalInformation() {
 
         TherapyAdditionalInformationDialog therapyAdditionalInformationDialog = new  TherapyAdditionalInformationDialog();
         therapyAdditionalInformationDialog.show(getSupportFragmentManager(),"");
 
     }
 
-    public void watchExercises(View view) {
+    public void watchExercises() {
 
         String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
         int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);

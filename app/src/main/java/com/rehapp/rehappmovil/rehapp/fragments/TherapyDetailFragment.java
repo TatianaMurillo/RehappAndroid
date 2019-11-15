@@ -35,7 +35,10 @@ import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.TherapyAdditionalInformationDialog;
 import com.rehapp.rehappmovil.rehapp.TherapyExercisesDialog;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,9 +49,14 @@ private int therapySelectedId;
 private String therapyCreatedId;
 private TextView tvTherapySequence;
 private String action;
+private TextView tvDateAndTime;
 private Spinner spnTherapist;
 private Spinner spnInstitution;
 private TherapyMasterDetailViewModel therapyViewModel;
+private TextView tvWatchExercises;
+private TextView tvPhisiologicalParametersIn;
+private TextView tvPhisiologicalParametersOut;
+private TextView tvAdditionalInfo;
 private TherapyViewModel therapySelected;
 private SharedPreferences sharedpreferences;
 private String json;
@@ -56,6 +64,18 @@ private String json;
     private Context mContext;
     View view;
     FragmentManager manager;
+
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    Calendar cal = Calendar.getInstance();
+
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
 
     @Nullable
     @Override
@@ -68,18 +88,51 @@ private String json;
         sharedpreferences =mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
         tvTherapySequence = view.findViewById(R.id.tvTherapySequence);
+        tvWatchExercises=view.findViewById(R.id.tvWatchExercises);
+        tvAdditionalInfo=view.findViewById(R.id.tvAdditionalInfo);
+        tvPhisiologicalParametersIn=view.findViewById(R.id.tvPhisiologicalParametersIn);
+        tvPhisiologicalParametersOut=view.findViewById(R.id.tvPhisiologicalParametersOut);
         spnInstitution = view.findViewById(R.id.spnInstitution);
+        tvDateAndTime=view.findViewById(R.id.tvDateAndTime);
         spnTherapist = view.findViewById(R.id.spnTherapist);
         therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         therapyCreatedId="";
         recoverySendData();
         loadData();
 
+        tvWatchExercises.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                watchExercises();
+            }
+        });
+
+        tvPhisiologicalParametersIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPhysiologicalParametersIn();
+            }
+        });
+
+        tvPhisiologicalParametersOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPhysiologicalParametersOut();
+            }
+        });
+
+        tvAdditionalInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addAdditionalInformation();
+            }
+        });
+
         return view;
     }
 
     private void loadData(){
-
+        tvDateAndTime.setText(sdf.format(cal.getTime()));
         listTherapists();
         listInstitutions();
     }
@@ -98,7 +151,7 @@ private String json;
 
                 }else
                 {
-                    therapySelectedId = Integer.parseInt(extras.getString(PreferencesData.TherapySelectedId));
+                    therapySelectedId = extras.getInt(PreferencesData.TherapySelectedId);
                     storeIntSharepreferences(PreferencesData.TherapyId, therapySelectedId);
                     searchTherapy();
                 }
@@ -263,17 +316,14 @@ private String json;
         if(action.equals("DETAIL")) {
             item = menu.findItem(R.id.create_therapy);
             item.setVisible(false);
-
-            item = menu.findItem(R.id.save);
-            item.setVisible(false);
         }else
        {
-            item = menu.findItem(R.id.create_therapy);
+            item = menu.findItem(R.id.save);
             item.setVisible(false);
        }
     }
 
-    public void addPhysiologicalParametersIn(View view) {
+    public void addPhysiologicalParametersIn() {
         String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
         int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
 
@@ -290,7 +340,7 @@ private String json;
 
 }
 
-    public void addPhysiologicalParametersOut(View view) {
+    public void addPhysiologicalParametersOut() {
 
         String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
         int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
@@ -306,14 +356,14 @@ private String json;
         }
     }
 
-    public void addAdditionalInformation(View view) {
+    public void addAdditionalInformation() {
 
         TherapyAdditionalInformationDialog therapyAdditionalInformationDialog = new  TherapyAdditionalInformationDialog();
         therapyAdditionalInformationDialog.show(getFragmentManager(),"");
 
     }
 
-    public void watchExercises(View view) {
+    public void watchExercises() {
 
         String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
         int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
@@ -366,8 +416,12 @@ private String json;
         storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
         storeStringSharepreferences(PreferencesData.PhysiologicalParameterAction,physiologicalParameterAction);
 
-        Intent intent = new Intent(mContext,PhysiologicalParameterTherapy.class);
-        startActivity(intent);
+
+        loadFragment(new PhysiologicalParameterTherapyFragment());
+
+
+
+
 
     }
 
@@ -485,5 +539,9 @@ private String json;
         editor.putInt(key, value);
         editor.commit();
 
+    }
+
+    public void loadFragment(Fragment fragment){
+        manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
 }
