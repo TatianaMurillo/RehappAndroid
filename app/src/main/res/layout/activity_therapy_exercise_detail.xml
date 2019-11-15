@@ -118,7 +118,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ver video"
-        android:onClick="watchVideo"
         android:layout_margin="10sp"
         android:layout_span="4"
         android:layout_gravity="end"

@@ -2,6 +2,9 @@ package com.rehapp.rehappmovil.rehapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +14,17 @@ import android.widget.TextView;
 
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
+import com.rehapp.rehappmovil.rehapp.fragments.ExampleFragment;
+import com.rehapp.rehappmovil.rehapp.fragments.TherapyExcerciseRoutineFragment;
 
 import java.util.List;
 
 public class TherapyExercisesAdapter  extends BaseAdapter{
 
     Activity activity;
+    TherapyExercisesDialog dialog;
     List<ExerciseRoutinesViewModel> exercises;
+    FragmentManager fragment;
     LayoutInflater inflater;
 
 
@@ -25,10 +32,12 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
         this.activity = activity;
     }
 
-    public TherapyExercisesAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises) {
+    public TherapyExercisesAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises, FragmentManager fragment,TherapyExercisesDialog dialog) {
         this.activity = activity;
         this.exercises = exercises;
         inflater = activity.getLayoutInflater();
+        this.fragment=fragment;
+        this.dialog=dialog;
     }
 
 
@@ -70,8 +79,9 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
             holder.tvVideoUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(activity, TherapyExcerciseRoutine.class);
-                    activity.startActivity(intent);
+                    dialog.dismiss();
+                    loadFragment(new TherapyExcerciseRoutineFragment());
+
                 }
             });
 
@@ -96,5 +106,13 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
         TextView tvExerciseName;
         ImageView ivCheckbox;
         TextView tvVideoUrl;
+    }
+
+
+    public void loadFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction=this.fragment.beginTransaction();
+        fragmentTransaction.replace(R.id.content,fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

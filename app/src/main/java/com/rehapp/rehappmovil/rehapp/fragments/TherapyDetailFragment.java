@@ -302,9 +302,6 @@ private String json;
         switch (item.getItemId())
         {
         }
-
-
-
         return super.onOptionsItemSelected(item);
     }
 

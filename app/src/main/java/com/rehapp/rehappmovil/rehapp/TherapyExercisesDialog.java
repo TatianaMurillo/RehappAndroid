@@ -97,7 +97,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
             public void onResponse(Call<ArrayList<ExerciseRoutinesViewModel>> call, Response<ArrayList<ExerciseRoutinesViewModel>> response) {
                 if (response.isSuccessful()) {
                     exercises = response.body();
-                    adapter = new TherapyExercisesAdapter(getActivity(),exercises);
+                    adapter = new TherapyExercisesAdapter(getActivity(),exercises,getFragmentManager(),TherapyExercisesDialog.this);
                     lvExercises.setAdapter(adapter);
                     listTherapyExercisesRoutines();
 
