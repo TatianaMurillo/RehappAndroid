@@ -24,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Login extends AppCompatActivity implements Callback<UserViewModel>{
+public class Login extends AppCompatActivity {
 
     private EditText etUser;
     private  EditText etpassword;
@@ -73,69 +73,70 @@ public class Login extends AppCompatActivity implements Callback<UserViewModel>{
 
 
             UserViewModel user = new UserViewModel(username,password);
-            Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);
-            call.enqueue(this);
+            login(user);
         }
     }
 
-    @Override
-    public void onResponse(Call<UserViewModel> call, Response<UserViewModel> response) {
+    private void login(UserViewModel user){
+        Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);
+        call.enqueue(new Callback<UserViewModel>() {
+            @Override
+            public void onResponse(Call<UserViewModel> call, Response<UserViewModel> response) {
 
 
-        if(response.isSuccessful()) {
+                if(response.isSuccessful()) {
 
-            userViewModel = response.body();
+                    userViewModel = response.body();
 
-            if(userViewModel.getCode()==200)
-            {
-                userViewModel.setName(userViewModel.getName());
-                Intent intent = new Intent(Login.this,SearchCreatePatient.class);
+                    if(userViewModel.getCode()==200)
+                    {
+                        userViewModel.setName(userViewModel.getName());
+                        storeStringSharepreferences(PreferencesData.loginToken, userViewModel.getToken());
+                        storeStringSharepreferences(PreferencesData.userActive, userViewModel.getName());
 
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString(PreferencesData.loginToken, userViewModel.getToken());
-                editor.putString(PreferencesData.userActive, userViewModel.getName());
-                editor.commit();
+                        Intent intent = new Intent(Login.this,MainActivity.class);
+                        startActivity(intent);
+                    }else
+                    {
+                        Toast.makeText(getApplicationContext(), userViewModel.getError(),   Toast.LENGTH_LONG).show();
 
-                startActivity(intent);
-
-            }else
-            {
-                Toast.makeText(getApplicationContext(), userViewModel.getError(),   Toast.LENGTH_LONG).show();
-
+                    }
+                }
             }
-
-
-        }
-
-
+            @Override
+            public void onFailure(Call<UserViewModel> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), PreferencesData.loginFailureMsg,   Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    @Override
-    public void onFailure(Call<UserViewModel> call, Throwable t) {
-        Toast.makeText(getApplicationContext(), PreferencesData.loginFailureMsg,   Toast.LENGTH_LONG).show();
 
-    }
+
 
     public void registerUser(View view) {
 
-
         Intent intent = new Intent(Login.this,Register.class);
-
         startActivity(intent);
-
-
-
     }
 
     private void loadPreferences() {
         sharedpreferences=getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
-        String therapistEmail=sharedpreferences.getString(PreferencesData.TherapistEmailLogin,"").toString();
+        String therapistEmail=sharedpreferences.getString(PreferencesData.TherapistEmailLogin,"");
 
-        String therapistPassword=sharedpreferences.getString(PreferencesData.TherapistPasswordlLogin,"").toString();
+        String therapistPassword=sharedpreferences.getString(PreferencesData.TherapistPasswordlLogin,"");
 
         etUser.setText(therapistEmail);
         etpassword.setText(therapistPassword);
+
+    }
+
+
+    private  void storeStringSharepreferences(String key, String value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
 
     }
 

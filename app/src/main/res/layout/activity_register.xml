@@ -49,29 +49,29 @@
         android:hint="@string/ConfirmEmail" />
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etUserPassword"
         android:layout_width="243dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etEmail"
+        android:layout_alignLeft="@+id/etEmail"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-1dp"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginBottom="402dp"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/etConfirmUserPassword"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/etEmail"
         android:layout_alignLeft="@+id/etEmail"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="-2dp"
         android:layout_marginLeft="-2dp"
-        android:layout_marginBottom="218dp"
-        android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textPassword" />
-
-    <EditText
-        android:id="@+id/etConfirmPassword"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etEmail"
-        android:layout_alignLeft="@+id/etEmail"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginBottom="146dp"
+        android:layout_marginBottom="309dp"
         android:ems="10"
         android:hint="@string/ConfirmPassword"
         android:inputType="textPassword" />
@@ -83,9 +83,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="254dp"
-        android:layout_marginLeft="254dp"
-        android:layout_marginBottom="49dp"
+        android:layout_marginStart="269dp"
+        android:layout_marginLeft="269dp"
+        android:layout_marginBottom="205dp"
         android:hint="@string/Save"
-        android:onClick="register"/>
+        android:onClick="register" />
 </RelativeLayout>
