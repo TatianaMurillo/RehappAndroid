@@ -18,6 +18,8 @@ public class PreferencesData {
     public static final String TherapySelectedId="TherapySelectedId";
     public static final String MedicalHistorySelectedId="MedicalHistorySelectedId";
     public static final String TherapyMasterDetailViewModel="therapyMasterDetailViewModel";
+    public static final String ExerciseRoutineUrl="exerciseRoutineUrl";
+    public static final String ExerciseRoutineId="exerciseRoutineId";
 
     public static final String TherapyId="TherapyId";
     public static final String ADD="ADD";

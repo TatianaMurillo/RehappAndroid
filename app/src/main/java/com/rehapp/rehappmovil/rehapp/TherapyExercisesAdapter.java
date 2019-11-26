@@ -2,6 +2,7 @@ package com.rehapp.rehappmovil.rehapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -71,7 +72,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
         }else {
             holder = (ViewHolder) view.getTag();
         }
-            ExerciseRoutinesViewModel model = exercises.get(position);
+            final ExerciseRoutinesViewModel model = exercises.get(position);
 
             holder.tvExerciseName.setText(model.getExerciseName());
             holder.tvVideoUrl.setText(PreferencesData.therapyDetailWatchVideo);
@@ -80,6 +81,11 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
+                    TherapyExcerciseRoutineFragment fragment=new TherapyExcerciseRoutineFragment();
+                    Bundle extras = new Bundle();
+                    extras.putString(PreferencesData.ExerciseRoutineUrl, model.getExercise_routine_url());
+                    extras.putInt(PreferencesData.ExerciseRoutineId, model.getExercise_routine_id());
+                    fragment.setArguments(extras);
                     loadFragment(new TherapyExcerciseRoutineFragment());
 
                 }

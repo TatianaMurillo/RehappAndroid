@@ -6,13 +6,22 @@ public class TherapyExcerciseRoutineViewModel {
     private int therapy_excercise_routine_id;
     private float therapy_excercise_routine_intensity;
     private float therapy_excercise_routine_duration;
+    private float therapy_excercise_routine_frequent;
     private float therapy_excercise_routine_speed;
     private String therapy_excercise_routine_observation;
+    private String therapy_excercise_routine_conditions;
     private int therapy_id;
     private int exercise_routine_id;
 
     public TherapyExcerciseRoutineViewModel() { }
 
+    public float getTherapy_excercise_routine_frequent() {
+        return therapy_excercise_routine_frequent;
+    }
+
+    public void setTherapy_excercise_routine_frequent(float therapy_excercise_routine_frequent) {
+        this.therapy_excercise_routine_frequent = therapy_excercise_routine_frequent;
+    }
 
     public int getTherapyExcerciseRoutineId() {
         return therapy_excercise_routine_id;
