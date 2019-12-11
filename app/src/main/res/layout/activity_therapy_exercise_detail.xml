@@ -70,7 +70,7 @@
         android:layout_span="1"
         android:layout_margin="10sp"/>
     <EditText
-        android:id="@+id/etExerciseObservations"
+        android:id="@+id/etObservations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_span="4"
@@ -88,7 +88,7 @@
         android:layout_margin="10sp"
         />
         <EditText
-            android:id="@+id/etExerciseConditions"
+            android:id="@+id/etConditions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
@@ -104,7 +104,7 @@
         android:layout_margin="10sp"
         />
     <EditText
-        android:id="@+id/etExercisePreconditions"
+        android:id="@+id/etPreConditions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
