@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.ExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
@@ -24,9 +25,11 @@ import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
+import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 import com.rehapp.rehappmovil.rehapp.YoutubeVideo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,6 +47,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     EditText etExerciseSpeed;
     EditText etExerciseFrequent;
     EditText etExerciseIntensity;
+    EditText etDuration;
     EditText etConditions;
     EditText etPreConditions;
     EditText etObservations;
@@ -75,6 +79,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         etConditions=view.findViewById(R.id.etConditions);
         etPreConditions=view.findViewById(R.id.etPreConditions);
         etObservations=view.findViewById(R.id.etObservations);
+        etDuration=view.findViewById(R.id.etDuration);
 
         recoverySendData();
         searchRoutineDetail();
@@ -111,37 +116,48 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     }
 
     private void saveExerciseRoutineTherapy(){
-        TherapyExcerciseRoutineViewModel therapyExcerciseRoutine=getDataFromView();
-        Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().saveTherapyExerciseRoutine(therapyExcerciseRoutine,"");
-        call.enqueue(new Callback<TherapyExcerciseRoutineViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyExcerciseRoutineViewModel> call, Response<TherapyExcerciseRoutineViewModel> response) {
+        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
+        List<Object> dataToSave=getDataFromView();
+        boolean isDataRight=(Boolean)dataToSave.get(1);
+        TherapyExcerciseRoutineViewModel objectData=(TherapyExcerciseRoutineViewModel)dataToSave.get(0);
+        if(isDataRight) {
+            Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().saveTherapyExerciseRoutine(objectData, therapyId);
+            call.enqueue(new Callback<TherapyExcerciseRoutineViewModel>() {
+                @Override
+                public void onResponse(Call<TherapyExcerciseRoutineViewModel> call, Response<TherapyExcerciseRoutineViewModel> response) {
 
-                if(response.isSuccessful())
-                {
-                    TherapyExcerciseRoutineViewModel routine=response.body();
+                    if (response.isSuccessful()) {
+                        TherapyExcerciseRoutineViewModel routine = response.body();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TherapyExcerciseRoutineViewModel> call, Throwable t) {
 
                 }
-            }
-
-            @Override
-            public void onFailure(Call<TherapyExcerciseRoutineViewModel> call, Throwable t) {
-
-            }
-        });
+            });
+        }else{
+            Toast.makeText(mContext, PreferencesData.therapyRoutineDetailDataMessage, Toast.LENGTH_LONG).show();
+        }
     }
 
-    private TherapyExcerciseRoutineViewModel getDataFromView(){
+    private List<Object> getDataFromView(){
         TherapyExcerciseRoutineViewModel therapyExcerciseRoutine= new TherapyExcerciseRoutineViewModel();
+        float speed;float frequent;float intensity;float duration;
+        String conditions;String preconditions; String observation;
 
-        float speed = Float.parseFloat(etExerciseSpeed.getText().toString());
-        float frequent = Float.parseFloat(etExerciseFrequent.getText().toString());
-        float intensity = Float.parseFloat(etExerciseIntensity.getText().toString());
-        String conditions = etConditions.getText().toString();
-        String preconditions = etPreConditions.getText().toString();
-        String observation = etObservations.getText().toString();
+        if(validateDataFromView()) {
+             speed = Float.parseFloat(etExerciseSpeed.getText().toString());
+             frequent = Float.parseFloat(etExerciseFrequent.getText().toString());
+             intensity = Float.parseFloat(etExerciseIntensity.getText().toString());
+             duration = Float.parseFloat(etDuration.getText().toString());
+             conditions = etConditions.getText().toString();
+             preconditions = etPreConditions.getText().toString();
+             observation = etObservations.getText().toString();
+
         int routineId=sharedpreferences.getInt(PreferencesData.ExerciseRoutineId,0);
 
+        therapyExcerciseRoutine.setTherapyExcerciseRoutineDuration(duration);
         therapyExcerciseRoutine.setExerciseRoutineId(routineId);
         therapyExcerciseRoutine.setTherapy_excercise_routine_speed(speed);
         therapyExcerciseRoutine.setTherapy_excercise_routine_frequent(frequent);
@@ -149,8 +165,25 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         therapyExcerciseRoutine.setConditions(conditions);
         therapyExcerciseRoutine.setPreconditions(preconditions);
         therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation(observation);
+        }else{
+            return Arrays.asList(therapyExcerciseRoutine,false);
+        }
+        return Arrays.asList(therapyExcerciseRoutine,true);
 
-        return therapyExcerciseRoutine;
+    }
+
+    private boolean validateDataFromView(){
+
+        List<String> dataInput= Arrays.asList(
+                etExerciseSpeed.getText().toString(),
+                etExerciseFrequent.getText().toString(),
+                etExerciseIntensity.getText().toString(),
+                etDuration.getText().toString(),
+                etConditions.getText().toString(),
+                etPreConditions.getText().toString(),
+                etObservations.getText().toString()
+        );
+        return ValidateInputs.validate().ValidateString(dataInput);
     }
 
     private void setDataToView(TherapyExcerciseRoutineViewModel therapyExcerciseRoutine){
@@ -158,6 +191,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         etExerciseSpeed.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineSpeed()));
         etExerciseFrequent.setText(String.valueOf(therapyExcerciseRoutine.getFrequency()));
         etExerciseIntensity.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineIntensity()));
+        etDuration.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineDuration()));
         etConditions.setText(therapyExcerciseRoutine.getConditions());
         etPreConditions.setText(therapyExcerciseRoutine.getConditions());
         etObservations.setText(therapyExcerciseRoutine.getTherapyExcerciseRoutineObservation());

@@ -14,15 +14,21 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.ExerciseRoutineApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +45,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
     private String therapyId;
     TherapyMasterDetailViewModel therapyViewModel;
     TherapyExercisesAdapter adapter;
+    float totalDuration=0;
 
     private Context mContext;
 
@@ -192,16 +199,19 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
     public  void saveExercises()
     {
         List<TherapyExcerciseRoutineViewModel> therapyExcerciseRoutines=new ArrayList<>();
-        TherapyExcerciseRoutineViewModel therapyExcerciseRoutine=null;
+        TherapyExcerciseRoutineViewModel therapyExcerciseRoutine;
 
         for (ExerciseRoutinesViewModel exerciseRoutine: exercises) {
             if(exerciseRoutine.isSelected()) {
+                totalDuration=totalDuration+exerciseRoutine.getDuration();
                 therapyExcerciseRoutine = new TherapyExcerciseRoutineViewModel();
-
-                therapyExcerciseRoutine.setTherapyExcerciseRoutineIntensity(0);
-                therapyExcerciseRoutine.setTherapyExcerciseRoutineDuration(0);
-                therapyExcerciseRoutine.setTherapy_excercise_routine_speed(0);
-                therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation("");
+                therapyExcerciseRoutine.setTherapyExcerciseRoutineIntensity(exerciseRoutine.getIntensity());
+                therapyExcerciseRoutine.setTherapyExcerciseRoutineDuration(exerciseRoutine.getDuration());
+                therapyExcerciseRoutine.setTherapy_excercise_routine_speed(exerciseRoutine.getSpeed());
+                therapyExcerciseRoutine.setConditions(exerciseRoutine.getConditions());
+                therapyExcerciseRoutine.setPreconditions(exerciseRoutine.getPreconditions());
+                therapyExcerciseRoutine.setFrequency(exerciseRoutine.getFrequency());
+                therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation(exerciseRoutine.getObservations());
                 therapyExcerciseRoutine.setTherapyId(Integer.parseInt(therapyId));
                 therapyExcerciseRoutine.setExerciseRoutineId(exerciseRoutine.getExercise_routine_id());
                 therapyExcerciseRoutines.add(therapyExcerciseRoutine);
@@ -215,6 +225,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                 public void onResponse(Call<List<TherapyExcerciseRoutineViewModel>> call, Response<List<TherapyExcerciseRoutineViewModel>> response) {
                     if(response.isSuccessful())
                     {
+                        saveTherapyTotalDuration(totalDuration);
                         Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineSuccessMsg, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -230,6 +241,27 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
 
     }
 
+    }
+
+    private void saveTherapyTotalDuration(float totalDuration){
+        Object object =createObjectToUpdateTherapy(totalDuration);
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().updateTherapyDuration(object,therapyId);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) { }
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private Object createObjectToUpdateTherapy(float duration){
+
+        Map<String, Object> therapyObject = new HashMap<>();
+        therapyObject.put("therapy_total_duration",duration);
+
+        return therapyObject;
     }
 
     @Override

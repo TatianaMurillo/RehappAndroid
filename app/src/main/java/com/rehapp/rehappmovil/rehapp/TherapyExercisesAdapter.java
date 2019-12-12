@@ -86,7 +86,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
                     extras.putString(PreferencesData.ExerciseRoutineUrl, model.getExercise_routine_url());
                     extras.putInt(PreferencesData.ExerciseRoutineId, model.getExercise_routine_id());
                     fragment.setArguments(extras);
-                    loadFragment(new TherapyExcerciseRoutineFragment());
+                    loadFragment(fragment);
 
                 }
             });

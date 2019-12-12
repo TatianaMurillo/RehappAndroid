@@ -95,6 +95,7 @@ public class PreferencesData {
     public static final String therapyCreationDescriptionFieldValue ="Nueva terapia.";
 
     public static final String therapyDetailTherapistNonExist="No se encontró el terapeuta seleccionado.";
+    public static final String therapyRoutineDetailDataMessage="Ingrese los valores en los parametros indicados.";
 
     public static final String listDocumentTypesFailed="No se pudieron cargar los tipos de documento correctamente.";
     public static final String listNeighborhoodFailed="No se pudieron cargar los barrios correctamente.";

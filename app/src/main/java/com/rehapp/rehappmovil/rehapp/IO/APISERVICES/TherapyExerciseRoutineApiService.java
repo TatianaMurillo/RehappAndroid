@@ -28,5 +28,4 @@ public interface TherapyExerciseRoutineApiService {
     @POST("therapyExerciseRoutines/saveRoutine/{therapyId}")
     Call<TherapyExcerciseRoutineViewModel> saveTherapyExerciseRoutine(@Body TherapyExcerciseRoutineViewModel therapyExcerciseRoutines, @Path("therapyId") String therapyId);
 
-
 }
