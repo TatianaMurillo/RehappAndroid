@@ -19,6 +19,7 @@ public class PreferencesData {
     public static final String MedicalHistorySelectedId="MedicalHistorySelectedId";
     public static final String TherapyMasterDetailViewModel="therapyMasterDetailViewModel";
     public static final String ExerciseRoutineUrl="exerciseRoutineUrl";
+    public static final String TherapyExerciseRoutineId="therapyExerciseRoutineId";
     public static final String ExerciseRoutineId="exerciseRoutineId";
 
     public static final String TherapyId="TherapyId";
@@ -96,6 +97,9 @@ public class PreferencesData {
 
     public static final String therapyDetailTherapistNonExist="No se encontró el terapeuta seleccionado.";
     public static final String therapyRoutineDetailDataMessage="Ingrese los valores en los parametros indicados.";
+
+    public static final String therapyRoutineSuccessCreationMessage="Valores de rutina actualizados correctamente.";
+    public static final String therapyRoutineFailedCreationMessage="Hubo un error al actualizar rutina.";
 
     public static final String listDocumentTypesFailed="No se pudieron cargar los tipos de documento correctamente.";
     public static final String listNeighborhoodFailed="No se pudieron cargar los barrios correctamente.";
