@@ -197,12 +197,12 @@ public class SearchPatientFragment extends  Fragment {
     }
 
     public void watchMedicalHistories() {
-        Intent intent = new Intent(mContext,MedicalHistoriesPatient.class);
+        MedicalHistoriesPatientFragment fragment = new MedicalHistoriesPatientFragment();
         Bundle extras = new Bundle();
         extras.putString(PreferencesData.PatientDocument, etDocument.getText().toString());
         extras.putString(PreferencesData.PatientTpoDocument, String.valueOf(documentTypeSelected));
-        intent.putExtras(extras);
-        startActivity(intent);
+        fragment.setArguments(extras);
+        loadFragment(fragment );
     }
 
     private void recoverySendData() {

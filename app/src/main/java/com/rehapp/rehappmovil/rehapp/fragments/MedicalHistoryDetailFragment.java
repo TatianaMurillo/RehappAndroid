@@ -45,18 +45,20 @@ private TextView tvTherapySequence;
 private String action;
 private TextView tvPatientNameValue;
 private TextView tvAgeValue;
-private TextView tvAgeNeighborhoodValue;
 private String documentPatient;
 private String medicalHistorySelectedId;
 private PatientViewModel patientViewModel;
 private TherapyViewModel therapySelected;
 private SharedPreferences sharedpreferences;
 private TextView tvDateValue;
+private TextView  tvVitalSigns;
+private TextView  tvDiseases;
+private TextView  tvQuestionaries;
+
 
 private Context mContext;
     View view;
     FragmentManager manager;
-
 
 private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 Calendar cal = Calendar.getInstance();
@@ -77,6 +79,33 @@ Calendar cal = Calendar.getInstance();
         tvDateValue=view.findViewById(R.id.tvDateValue);
         tvPatientNameValue=view.findViewById(R.id.tvPatientNameValue);
         tvAgeValue=view.findViewById(R.id.tvAgeValue);
+        tvVitalSigns=view.findViewById(R.id.tvVitalSigns);
+        tvDiseases=view.findViewById(R.id.tvDiseases);
+        tvQuestionaries=view.findViewById(R.id.tvQuestionaries);
+        tvTherapySequence=view.findViewById(R.id.tvTherapySequence);
+
+        tvVitalSigns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addVitalSigns(view);
+            }
+        });
+
+
+        tvDiseases.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addDiseases(view);
+            }
+        });
+
+
+        tvQuestionaries.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addQuestionaries(view);
+            }
+        });
 
         recoverySendData();
         loadData();
@@ -213,22 +242,17 @@ Calendar cal = Calendar.getInstance();
 
     public void addVitalSigns(View view) {
 
-       medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
-
-        Bundle args = new Bundle();
-        args.putString(PreferencesData.MedicalHistorySelectedId,medicalHistorySelectedId);
-        Intent intent = new Intent(mContext, PatientMedicalHistoryVitalSigns.class);
-        startActivity(intent);
-
-
+        medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+        PatientMedicalHistoryVitalSignsFragment fragment = new PatientMedicalHistoryVitalSignsFragment();
+        loadFragment(fragment);
     }
 
     public void addQuestionaries(View view) {
 
-        Bundle args = new Bundle();
-        args.putString(PreferencesData.MedicalHistorySelectedId,medicalHistorySelectedId);
-        Intent intent = new Intent(mContext, PatientMedicalHistoryQuestionaries.class);
-        startActivity(intent);
+        medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+        PatientMedicalHistoryQuestionariesFragment fragment = new PatientMedicalHistoryQuestionariesFragment();
+        loadFragment(fragment);
+
     }
 
     public void addDiseases(View view) {
@@ -243,6 +267,12 @@ Calendar cal = Calendar.getInstance();
         medicalHistoryDiseasesDialog.show(getFragmentManager(),"");
 
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
     }
 
     public void loadFragment(Fragment fragment){

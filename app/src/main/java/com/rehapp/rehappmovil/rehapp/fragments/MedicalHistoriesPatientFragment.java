@@ -91,10 +91,13 @@ public class MedicalHistoriesPatientFragment extends Fragment {
 
                             Toast.makeText(mContext, "medical history selected : " + medicalHistory.getPtnt_mdcl_hstry_name(), Toast.LENGTH_LONG).show();
 
-                            Intent intent = new Intent(getActivity(), MedicalHistoryDetail.class);
-                            intent.putExtra(PreferencesData.MedicalHistorySelectedId, medicalHistory.getPtnt_mdcl_hstry_id());
-                            intent.putExtra(PreferencesData.MedicaHistoryAction, "DETAIL");
-                            startActivity(intent);
+                            MedicalHistoryDetailFragment fragment = new MedicalHistoryDetailFragment();
+                            Bundle extras = new Bundle();
+                            extras.putString(PreferencesData.MedicalHistorySelectedId, medicalHistory.getPtnt_mdcl_hstry_id());
+                            extras.putString(PreferencesData.MedicaHistoryAction, "DETAIL");
+                            fragment.setArguments(extras);
+                            loadFragment(fragment);
+
 
                         }
                     });
