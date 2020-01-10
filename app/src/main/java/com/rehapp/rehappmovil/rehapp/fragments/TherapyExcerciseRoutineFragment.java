@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -103,8 +104,13 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
                 if(response.isSuccessful())
                 {
+
                     TherapyExcerciseRoutineViewModel therapyRoutine=response.body();
+                    int therapyExerciseRoutineId=therapyRoutine.getTherapyExcerciseRoutineId();
+                    storeIntSharepreferences(PreferencesData.TherapyExerciseRoutineId,therapyExerciseRoutineId);
                     setDataToView(therapyRoutine);
+                }else{
+
                 }
             }
 
@@ -121,19 +127,20 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         boolean isDataRight=(Boolean)dataToSave.get(1);
         TherapyExcerciseRoutineViewModel objectData=(TherapyExcerciseRoutineViewModel)dataToSave.get(0);
         if(isDataRight) {
-            Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().saveTherapyExerciseRoutine(objectData, therapyId);
+            Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().updateRoutine(objectData, therapyId);
             call.enqueue(new Callback<TherapyExcerciseRoutineViewModel>() {
                 @Override
                 public void onResponse(Call<TherapyExcerciseRoutineViewModel> call, Response<TherapyExcerciseRoutineViewModel> response) {
 
                     if (response.isSuccessful()) {
-                        TherapyExcerciseRoutineViewModel routine = response.body();
+                        Toast.makeText(mContext, PreferencesData.therapyRoutineSuccessCreationMessage, Toast.LENGTH_LONG).show();
+                        loadFragment(new TherapyDetailFragment());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<TherapyExcerciseRoutineViewModel> call, Throwable t) {
-
+                    Toast.makeText(mContext, PreferencesData.therapyRoutineFailedCreationMessage, Toast.LENGTH_LONG).show();
                 }
             });
         }else{
@@ -218,6 +225,12 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         intent.putExtras(extras);
         startActivity(intent);
 
+    }
+
+    public void loadFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction=manager.beginTransaction();
+        fragmentTransaction.replace(R.id.content,fragment);
+        fragmentTransaction.commit();
     }
 
     @Override
