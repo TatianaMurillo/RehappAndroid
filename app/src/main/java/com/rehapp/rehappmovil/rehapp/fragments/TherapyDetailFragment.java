@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,9 +58,9 @@ private TextView tvWatchExercises;
 private TextView tvPhisiologicalParametersIn;
 private TextView tvPhisiologicalParametersOut;
 private TextView tvAdditionalInfo;
-private TherapyViewModel therapySelected;
-private SharedPreferences sharedpreferences;
-private String json;
+private EditText etTherapyDuration;
+private  TherapyViewModel therapySelected;
+private  SharedPreferences sharedpreferences;
 
     private Context mContext;
     View view;
@@ -95,6 +96,7 @@ private String json;
         spnInstitution = view.findViewById(R.id.spnInstitution);
         tvDateAndTime=view.findViewById(R.id.tvDateAndTime);
         spnTherapist = view.findViewById(R.id.spnTherapist);
+        etTherapyDuration=view.findViewById(R.id.etTherapyDuration);
         therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         therapyCreatedId="";
         recoverySendData();
@@ -136,8 +138,7 @@ private String json;
         listTherapists();
         listInstitutions();
     }
-    private void recoverySendData()
-    {
+    private void recoverySendData() {
         if( getArguments()!=null)
             {
 
@@ -153,9 +154,9 @@ private String json;
                 {
                     therapySelectedId = extras.getInt(PreferencesData.TherapySelectedId);
                     storeIntSharepreferences(PreferencesData.TherapyId, therapySelectedId);
-                    searchTherapy();
                 }
         }
+        searchTherapy();
     }
 
     public void blockData()
@@ -182,7 +183,7 @@ private String json;
                     therapists = response.body();
                     for(TherapistViewModel therapistViewModel : therapists)
                     {
-                        if(action.equals("DETAIL")) {
+                        if(action.equals("DETAIL") && therapySelected!=null) {
                             if (therapistViewModel.getTherapist_id() == therapySelected.getTherapist_id()) {
                                 indexOfTherapist = therapists.indexOf(therapistViewModel);
                             }
@@ -225,7 +226,8 @@ private String json;
                     institutions = response.body();
                     for(InstitutionViewModel institutionViewModel : institutions)
                     {
-                        if(action.equals("DETAIL")) {
+                        if(action.equals("DETAIL") && therapySelected!=null) {
+
                             if (institutionViewModel.getInstitution_id() == therapySelected.getInstitution_id()) {
                                 indexOfInstitution = institutions.indexOf(institutionViewModel);
                             }
@@ -253,7 +255,7 @@ private String json;
         });
     }
 
-    private void searchTherapy(){
+    public  void searchTherapy(){
         String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
         call.enqueue(new Callback<TherapyViewModel>() {
@@ -262,8 +264,8 @@ private String json;
                 if(response.isSuccessful())
                 {
                     therapySelected = response.body();
-                    tvTherapySequence.setText(R.string.TherapySequence + therapySelected.getTherapy_sequence());
-
+                    tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapySelected.getTherapy_sequence());
+                    etTherapyDuration.setText(String.valueOf(therapySelected.getTherapy_total_duration()));
                     blockData();
 
                 }else{
@@ -378,6 +380,12 @@ private String json;
 
     }
 
+    /**
+     *
+     * Metodo creado por si el usuario decide guardar los parametros fisiologicos antes de grabar como
+     * tal la terapia. Ya que los parametros fisiologicos necesitan de una terapia creada
+     */
+
     public void createTherapyIdForPhysiologicalParameters(final String physiologicalParametersTherapyAction) {
         TherapyViewModel therapy = new TherapyViewModel();
         therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
@@ -406,36 +414,11 @@ private String json;
 
     }
 
-    public void showPhysiologicalParameterTherapy(String physiologicalParameterAction, String therapyId){
-
-        tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
-
-        storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
-        storeStringSharepreferences(PreferencesData.PhysiologicalParameterAction,physiologicalParameterAction);
-
-
-        loadFragment(new PhysiologicalParameterTherapyFragment());
-
-
-
-
-
-    }
-
-    public void showRoutineExercisesTherapy(String therapyId) {
-        tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
-
-        storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
-
-        Bundle args = new Bundle();
-        args.putString(PreferencesData.TherapyId,therapyId);
-
-        TherapyExercisesDialog therapyExercisesDialog = new  TherapyExercisesDialog();
-        therapyExercisesDialog.setArguments(args);
-        therapyExercisesDialog.show(getFragmentManager(),"");
-
-    }
-
+    /**
+     *
+     * Metodo creado por si el usuario decide guardar las rutinas de ejercicio antes de grabar como
+     * tal la terapia. Ya que las rutinas de ejercicio necesitan de una terapia creada
+     */
     public void createTherapyIdForTherapyRoutineExercises() {
         TherapyViewModel therapy = new TherapyViewModel();
         therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
@@ -460,6 +443,42 @@ private String json;
         });
 
     }
+
+    /**
+     *
+     * Metodos que redirigen a otros fragments
+     */
+    public void showPhysiologicalParameterTherapy(String physiologicalParameterAction, String therapyId){
+
+        tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
+
+        storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
+        storeStringSharepreferences(PreferencesData.PhysiologicalParameterAction,physiologicalParameterAction);
+
+
+        loadFragment(new PhysiologicalParameterTherapyFragment());
+
+    }
+
+    public void showRoutineExercisesTherapy(String therapyId) {
+        tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
+
+        storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
+
+        Bundle args = new Bundle();
+        args.putString(PreferencesData.TherapyId,therapyId);
+
+        TherapyExercisesDialog therapyExercisesDialog = new  TherapyExercisesDialog();
+        therapyExercisesDialog.setArguments(args);
+        therapyExercisesDialog.show(getFragmentManager(),"");
+
+    }
+
+    /**
+     *
+     * Fin metodos que redirigen a otros fragments
+     */
+
 
     public void saveTherapy() {
 

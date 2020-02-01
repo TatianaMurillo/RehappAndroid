@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
-import com.rehapp.rehappmovil.rehapp.fragments.ExampleFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.TherapyExcerciseRoutineFragment;
 
 import java.util.List;
@@ -27,11 +26,6 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
     List<ExerciseRoutinesViewModel> exercises;
     FragmentManager fragment;
     LayoutInflater inflater;
-
-
-    public TherapyExercisesAdapter(Activity activity) {
-        this.activity = activity;
-    }
 
     public TherapyExercisesAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises, FragmentManager fragment,TherapyExercisesDialog dialog) {
         this.activity = activity;
