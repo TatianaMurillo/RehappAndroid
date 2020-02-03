@@ -28,9 +28,7 @@ import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.fragments.TherapyDetailFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,7 +45,6 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
     private String therapyId;
     TherapyMasterDetailViewModel therapyViewModel;
     TherapyExercisesAdapter adapter;
-    float totalDuration=0;
     FragmentManager manager;
 
     private Context mContext;
@@ -122,15 +119,6 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                     {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                            /**
-                             * Esta validacion se pone para que no acumule de la tabla rutinas de ejercicio
-                             * si ya  se habia seleccionado antes, ya que si se habia seleccionado antes
-                             * deberia tomar el valor que tiene en la tabla de rutinas de ejercicio de terapia
-                             **/
-                            if(!exercises.get(position).isSelected()) {
-                                totalDuration = totalDuration + exercises.get(position).getDuration();
-                            }
                             selectExerciseRoutinesItem(position);
                         }
                     });
@@ -161,7 +149,6 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                             {
                                 if(exercise.getExercise_routine_id()==therapyExerciseRoutines.getExerciseRoutineId())
                                 {
-                                    totalDuration=totalDuration+ therapyExerciseRoutines.getTherapyExcerciseRoutineDuration();
                                     selectExerciseRoutinesItem(exercises.indexOf(exercise));
                                 }
                             }
@@ -241,7 +228,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                 public void onResponse(Call<List<TherapyExcerciseRoutineViewModel>> call, Response<List<TherapyExcerciseRoutineViewModel>> response) {
                     if(response.isSuccessful())
                     {
-                        saveTherapyTotalDuration(totalDuration);
+                        saveTherapyTotalDuration();
                     }
                 }
                 @Override
@@ -253,9 +240,8 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
 
     }
 
-    private void saveTherapyTotalDuration(float totalDuration){
-        Object object =createObjectToUpdateTherapy(totalDuration);
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().updateTherapyDuration(object,therapyId);
+    private void saveTherapyTotalDuration(){
+        Call<TherapyViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().updateTherapyDuration(therapyId);
         call.enqueue(new Callback<TherapyViewModel>() {
             @Override
             public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
@@ -272,15 +258,6 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                 Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-
-    private Object createObjectToUpdateTherapy(float duration){
-
-        Map<String, Object> therapyObject = new HashMap<>();
-        therapyObject.put("therapy_total_duration",duration);
-
-        return therapyObject;
     }
 
     public void loadFragment(Fragment fragment){
