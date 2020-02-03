@@ -68,7 +68,8 @@ private  SharedPreferences sharedpreferences;
 
     private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     Calendar cal = Calendar.getInstance();
-
+    ArrayList<InstitutionViewModel> institutions= new ArrayList<>();
+    ArrayList<TherapistViewModel> therapists= new ArrayList<>();
 
 
     @Override
@@ -137,6 +138,7 @@ private  SharedPreferences sharedpreferences;
         tvDateAndTime.setText(sdf.format(cal.getTime()));
         listTherapists();
         listInstitutions();
+        searchTherapy();
     }
     private void recoverySendData() {
         if( getArguments()!=null)
@@ -148,7 +150,6 @@ private  SharedPreferences sharedpreferences;
                 storeStringSharepreferences(PreferencesData.TherapyAction, action);
 
                 if(action.equals("ADD")) {
-                    UnBlockData();
 
                 }else
                 {
@@ -156,51 +157,24 @@ private  SharedPreferences sharedpreferences;
                     storeIntSharepreferences(PreferencesData.TherapyId, therapySelectedId);
                 }
         }
-        searchTherapy();
     }
 
-    public void blockData()
-    {
-
-    }
-    public void UnBlockData()
-    {
-
-    }
     public void listTherapists() {
         Call<ArrayList<TherapistViewModel>> call = TherapistApiAdapter.getApiService().getTherapists();
         call.enqueue(new Callback<ArrayList<TherapistViewModel>>() {
-            int indexOfTherapist=-1;
-
-            ArrayList<TherapistViewModel> therapists= new ArrayList<TherapistViewModel>();
-            ArrayList<String> therapistNames  = new ArrayList<String>();
+            ArrayList<String> therapistNames  = new ArrayList<>();
 
             @Override
             public void onResponse(Call<ArrayList<TherapistViewModel>> call, Response<ArrayList<TherapistViewModel>> response) {
                 if(response.isSuccessful())
                 {
-                    String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
                     therapists = response.body();
                     for(TherapistViewModel therapistViewModel : therapists)
                     {
-                        if(action.equals("DETAIL") && therapySelected!=null) {
-                            if (therapistViewModel.getTherapist_id() == therapySelected.getTherapist_id()) {
-                                indexOfTherapist = therapists.indexOf(therapistViewModel);
-                            }
-                        }
                         therapistNames.add(therapistViewModel.getTherapist_first_lastname()+" " + therapistViewModel.getTherapist_first_name());
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mContext,android.R.layout.simple_list_item_1,therapistNames);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,therapistNames);
                     spnTherapist.setAdapter(arrayAdapter);
-
-                    if(action.equals("DETAIL")) {
-                        if (indexOfTherapist != -1) {
-                            spnTherapist.setSelection(indexOfTherapist);
-                        } else {
-                            Toast.makeText(mContext, PreferencesData.therapyDetailTherapistNonExist, Toast.LENGTH_LONG).show();
-                            spnTherapist.setSelection(0);
-                        }
-                    }
                 }
             }
             @Override
@@ -213,40 +187,20 @@ private  SharedPreferences sharedpreferences;
     public void listInstitutions() {
         Call<ArrayList<InstitutionViewModel>> call = InstitutionApiAdapter.getApiService().getInstitutions();
         call.enqueue(new Callback<ArrayList<InstitutionViewModel>>() {
-            int indexOfInstitution=-1;
-            ArrayList<InstitutionViewModel> institutions= new ArrayList<InstitutionViewModel>();
-            ArrayList<String> institutionNames  = new ArrayList<String>();
+            ArrayList<String> institutionNames  = new ArrayList<>();
 
             @Override
             public void onResponse(Call<ArrayList<InstitutionViewModel>> call, Response<ArrayList<InstitutionViewModel>> response) {
                 if(response.isSuccessful())
                 {
-                    String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
-
                     institutions = response.body();
                     for(InstitutionViewModel institutionViewModel : institutions)
                     {
-                        if(action.equals("DETAIL") && therapySelected!=null) {
-
-                            if (institutionViewModel.getInstitution_id() == therapySelected.getInstitution_id()) {
-                                indexOfInstitution = institutions.indexOf(institutionViewModel);
-                            }
-                        }
                         institutionNames.add(institutionViewModel.getInstitution_name());
                     }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mContext,android.R.layout.simple_list_item_1,institutionNames);
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,institutionNames);
                     spnInstitution.setAdapter(arrayAdapter);
-
-                    if(action.equals("DETAIL")) {
-                        if (indexOfInstitution != -1) {
-                            spnInstitution.setSelection(indexOfInstitution);
-                        } else {
-                            Toast.makeText(mContext, PreferencesData.therapyDetailInstitutionNonExist, Toast.LENGTH_LONG).show();
-                            spnInstitution.setSelection(0);
-                        }
-                    }
                 }
-
             }
             @Override
             public void onFailure(Call<ArrayList<InstitutionViewModel>> call, Throwable t) {
@@ -266,8 +220,8 @@ private  SharedPreferences sharedpreferences;
                     therapySelected = response.body();
                     tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapySelected.getTherapy_sequence());
                     etTherapyDuration.setText(String.valueOf(therapySelected.getTherapy_total_duration()));
-                    blockData();
-
+                    selectInstitution(therapySelected);
+                    selectTherapist(therapySelected);
                 }else{
                     if(response.raw().code()==404) {
                         Toast.makeText(mContext, PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
@@ -282,14 +236,6 @@ private  SharedPreferences sharedpreferences;
 
             }
         });
-    }
-
-    private void selectTherapist(){
-
-    }
-
-    private void selectInstitution(){
-
     }
 
     @Override
@@ -380,6 +326,42 @@ private  SharedPreferences sharedpreferences;
 
     }
 
+    /**
+     **Se selecciona el terapeuta
+     **/
+    private void selectTherapist(TherapyViewModel therapySelected){
+        int indexOfTherapist=-1;
+        for(TherapistViewModel therapistViewModel : therapists)
+        {
+                if (therapistViewModel.getTherapist_id() == therapySelected.getTherapist_id()) {
+                    indexOfTherapist = therapists.indexOf(therapistViewModel);
+            }
+        }
+            if (indexOfTherapist != -1) {
+                spnTherapist.setSelection(indexOfTherapist);
+            } else {
+                Toast.makeText(mContext, PreferencesData.therapyDetailTherapistNonExist, Toast.LENGTH_LONG).show();
+                spnTherapist.setSelection(0);
+            }
+    }
+    /**
+     **Se selecciona la institucion
+     **/
+    private void selectInstitution(TherapyViewModel therapySelected){
+        int indexOfInstitution=-1;
+        for(InstitutionViewModel institutionViewModel : institutions)
+        {
+                if (institutionViewModel.getInstitution_id() == therapySelected.getInstitution_id()) {
+                    indexOfInstitution = institutions.indexOf(institutionViewModel);
+                }
+        }
+        if (indexOfInstitution != -1) {
+              spnInstitution.setSelection(indexOfInstitution);
+        }else {
+                    Toast.makeText(mContext, PreferencesData.therapyDetailInstitutionNonExist, Toast.LENGTH_LONG).show();
+                    spnInstitution.setSelection(0);
+        }
+    }
     /**
      *
      * Metodo creado por si el usuario decide guardar los parametros fisiologicos antes de grabar como

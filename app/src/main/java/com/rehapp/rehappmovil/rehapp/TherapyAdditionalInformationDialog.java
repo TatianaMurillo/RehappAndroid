@@ -10,25 +10,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.GenderViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.NeighborhoodViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
+
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
-import com.rehapp.rehappmovil.rehapp.Utils.Constants.DocumentType;
-import com.rehapp.rehappmovil.rehapp.Utils.Constants.Therapy;
-import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment {
 
@@ -72,12 +57,11 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
     {
         TherapyViewModel therapy = new TherapyViewModel();
         therapy.setTherapy_additional_information(etAdditionalInformacion.getText().toString());
-        Gson gson = new Gson();
-        String json = gson.toJson(therapy);
+
 
         Toast.makeText(getContext(), PreferencesData.therapyAddAdditionalInformationSuccessMsg, Toast.LENGTH_LONG).show();
     }
 
 
-    }
+}
 
