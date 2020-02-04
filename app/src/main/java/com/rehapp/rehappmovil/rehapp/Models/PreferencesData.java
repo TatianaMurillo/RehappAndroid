@@ -68,6 +68,7 @@ public class PreferencesData {
     public static final String questionairesOptionCreateFailedMsg ="Hubo un error al guardar respuestas.";
     public static final String questionairesOptionResponseMsg ="Algunas respuestas no se diligenciaron o cargaron.";
 
+    public static final String therapyAddAdditionalInformationFailedMsg ="Error al guardar información adicional de la terapia.";
     public static final String therapyAddAdditionalInformationSuccessMsg ="Datos guardados correctamente.";
     public static final String therapyUpdateSuccessMsg ="Se actualizó la terapia con éxito.";
     public static final String therapyUpdateFailedMsg ="Hubo un error al crear terapia.";

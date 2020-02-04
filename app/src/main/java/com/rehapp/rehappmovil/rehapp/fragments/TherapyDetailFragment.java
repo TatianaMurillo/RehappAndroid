@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +30,6 @@ import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
-import com.rehapp.rehappmovil.rehapp.PhysiologicalParameterTherapy;
 import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.TherapyAdditionalInformationDialog;
 import com.rehapp.rehappmovil.rehapp.TherapyExercisesDialog;
@@ -137,8 +135,6 @@ private  SharedPreferences sharedpreferences;
     private void loadData(){
         tvDateAndTime.setText(sdf.format(cal.getTime()));
         listTherapists();
-        listInstitutions();
-        searchTherapy();
     }
     private void recoverySendData() {
         if( getArguments()!=null)
@@ -175,6 +171,7 @@ private  SharedPreferences sharedpreferences;
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,therapistNames);
                     spnTherapist.setAdapter(arrayAdapter);
+                    listInstitutions();
                 }
             }
             @Override
@@ -200,6 +197,7 @@ private  SharedPreferences sharedpreferences;
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,institutionNames);
                     spnInstitution.setAdapter(arrayAdapter);
+                    searchTherapy();
                 }
             }
             @Override
@@ -304,8 +302,13 @@ private  SharedPreferences sharedpreferences;
     public void addAdditionalInformation() {
 
         TherapyAdditionalInformationDialog therapyAdditionalInformationDialog = new  TherapyAdditionalInformationDialog();
-        therapyAdditionalInformationDialog.show(getFragmentManager(),"");
+        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
 
+        Bundle args = new Bundle();
+        args.putString(PreferencesData.TherapyId,therapyId);
+
+        therapyAdditionalInformationDialog.setArguments(args);
+        therapyAdditionalInformationDialog.show(getFragmentManager(),"");
     }
 
     public void watchExercises() {
@@ -427,9 +430,8 @@ private  SharedPreferences sharedpreferences;
     }
 
     /**
-     *
-     * Metodos que redirigen a otros fragments
-     */
+        * Metodos que redirigen a otros fragments
+     **/
     public void showPhysiologicalParameterTherapy(String physiologicalParameterAction, String therapyId){
 
         tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
