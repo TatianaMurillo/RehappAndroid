@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -31,12 +32,13 @@ import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
-import com.rehapp.rehappmovil.rehapp.TherapyAdditionalInformationDialog;
 import com.rehapp.rehappmovil.rehapp.TherapyExercisesDialog;
+import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -56,6 +58,10 @@ private TextView tvWatchExercises;
 private TextView tvPhisiologicalParametersIn;
 private TextView tvPhisiologicalParametersOut;
 private TextView tvAdditionalInfo;
+
+private int institutionSelectedId=-1,indexInstitutionSelected=-1;
+private int therapistSelectedId=-1,indexTherapistSelected=-1;
+
 private EditText etTherapyDuration;
 private  TherapyViewModel therapySelected;
 private  SharedPreferences sharedpreferences;
@@ -101,33 +107,59 @@ private  SharedPreferences sharedpreferences;
         recoverySendData();
         loadData();
 
-        tvWatchExercises.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                watchExercises();
-            }
-        });
-
         tvPhisiologicalParametersIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPhysiologicalParametersIn();
+                goToPage(1,PreferencesData.PhysiologicalParameterTherapySesionIN);
             }
         });
 
         tvPhisiologicalParametersOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addPhysiologicalParametersOut();
+                goToPage(1,PreferencesData.PhysiologicalParameterTherapySesionOUT);
+            }
+        });
+
+        tvWatchExercises.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToPage(2,"");
             }
         });
 
         tvAdditionalInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addAdditionalInformation();
+                goToPage(3,"");
             }
         });
+
+        spnTherapist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                therapistSelectedId=therapists.get(position).getTherapist_id();
+                indexTherapistSelected=position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spnInstitution.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                institutionSelectedId=institutions.get(position).getInstitution_id();
+                indexInstitutionSelected=position;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         return view;
     }
@@ -165,6 +197,7 @@ private  SharedPreferences sharedpreferences;
                 if(response.isSuccessful())
                 {
                     therapists = response.body();
+                    therapistNames.add(getResources().getString(R.string.TherapistNonSelected));
                     for(TherapistViewModel therapistViewModel : therapists)
                     {
                         therapistNames.add(therapistViewModel.getTherapist_first_lastname()+" " + therapistViewModel.getTherapist_first_name());
@@ -191,6 +224,7 @@ private  SharedPreferences sharedpreferences;
                 if(response.isSuccessful())
                 {
                     institutions = response.body();
+                    institutionNames.add(getResources().getString(R.string.InstitutionNonSelected));
                     for(InstitutionViewModel institutionViewModel : institutions)
                     {
                         institutionNames.add(institutionViewModel.getInstitution_name());
@@ -247,84 +281,38 @@ private  SharedPreferences sharedpreferences;
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
+            case R.id.save:
+                updateTherapy();
+            break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void showHideItems(Menu menu) {
+
         MenuItem item;
+        item= menu.findItem(R.id.create_therapy);
 
-        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
+        item.setVisible(false);
 
-        if(action.equals("DETAIL")) {
-            item = menu.findItem(R.id.create_therapy);
-            item.setVisible(false);
-        }else
-       {
-            item = menu.findItem(R.id.save);
-            item.setVisible(false);
-       }
+        item= menu.findItem(R.id.save);
+        item.setVisible(true);
     }
 
-    public void addPhysiologicalParametersIn() {
+
+    public void goToPage(int option,String physiologicalParameterActionKey) {
+
         String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
         int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
 
-
         if(action.equals("ADD")) {
-            if(therapyId==0) {
-                createTherapyIdForPhysiologicalParameters(PreferencesData.PhysiologicalParameterTherapySesionIN);
+            if (therapyId==0) {
+                createTherapyId(physiologicalParameterActionKey, option);
             }else {
-                showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionIN,String.valueOf(therapyId));
+                redirectToPage(option,String.valueOf(therapyId),physiologicalParameterActionKey);
             }
-        } else {
-            showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionIN,String.valueOf(therapyId));
-        }
-
-}
-
-    public void addPhysiologicalParametersOut() {
-
-        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
-        int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
-
-        if(action.equals("ADD")) {
-            if(therapyId==0) {
-                createTherapyIdForPhysiologicalParameters(PreferencesData.PhysiologicalParameterTherapySesionOUT);
-            }else {
-                showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionOUT,String.valueOf(therapyId));
-            }
-        } else {
-            showPhysiologicalParameterTherapy(PreferencesData.PhysiologicalParameterTherapySesionOUT,String.valueOf(therapyId));
-        }
-    }
-
-    public void addAdditionalInformation() {
-
-        TherapyAdditionalInformationDialog therapyAdditionalInformationDialog = new  TherapyAdditionalInformationDialog();
-        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-
-        Bundle args = new Bundle();
-        args.putString(PreferencesData.TherapyId,therapyId);
-
-        therapyAdditionalInformationDialog.setArguments(args);
-        therapyAdditionalInformationDialog.show(getFragmentManager(),"");
-    }
-
-    public void watchExercises() {
-
-        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
-        int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
-
-        if(action.equals("ADD")) {
-
-            if (therapyId==0)
-                createTherapyIdForTherapyRoutineExercises();
-             else
-                showRoutineExercisesTherapy(String.valueOf(therapyId));
-
         }else{
-            showRoutineExercisesTherapy(String.valueOf(therapyId));
+            redirectToPage(option,String.valueOf(therapyId),physiologicalParameterActionKey);
         }
 
     }
@@ -367,11 +355,12 @@ private  SharedPreferences sharedpreferences;
     }
     /**
      *
-     * Metodo creado por si el usuario decide guardar los parametros fisiologicos antes de grabar como
-     * tal la terapia. Ya que los parametros fisiologicos necesitan de una terapia creada
+     * Metodo creado por si el usuario decide ejecutar cualquier otra opcion antes de grabar como
+     * tal la terapia. Ya que opciones como crear rutinas, parametros fisiologicos u observaciones requieren
+     * de una terapia creada.
      */
 
-    public void createTherapyIdForPhysiologicalParameters(final String physiologicalParametersTherapyAction) {
+    public void createTherapyId(final String physiologicalParametersTherapyAction,final int option) {
         TherapyViewModel therapy = new TherapyViewModel();
         therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
@@ -382,9 +371,8 @@ private  SharedPreferences sharedpreferences;
 
                     TherapyViewModel therapyViewModel=response.body();
                     therapyCreatedId = String.valueOf(therapyViewModel.getTherapy_id());
-
                     Toast.makeText(mContext, PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
-                    showPhysiologicalParameterTherapy(physiologicalParametersTherapyAction,therapyCreatedId);
+                    redirectToPage(option,therapyCreatedId,physiologicalParametersTherapyAction);
 
                 } else {
                     Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
@@ -396,37 +384,23 @@ private  SharedPreferences sharedpreferences;
                 Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
-    /**
-     *
-     * Metodo creado por si el usuario decide guardar las rutinas de ejercicio antes de grabar como
-     * tal la terapia. Ya que las rutinas de ejercicio necesitan de una terapia creada
-     */
-    public void createTherapyIdForTherapyRoutineExercises() {
-        TherapyViewModel therapy = new TherapyViewModel();
-        therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if (response.isSuccessful()) {
-                    TherapyViewModel therapyViewModel=response.body();
-                    therapyCreatedId = String.valueOf(therapyViewModel.getTherapy_id());
-                    Toast.makeText(mContext, PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
-                    showRoutineExercisesTherapy(therapyCreatedId);
-                } else {
-                    Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-                Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
-            }
-        });
-
+    private void redirectToPage(int option, String therapyId,String physiologicalParameterActionKey){
+        switch (option){
+            case 1:
+                showPhysiologicalParameterTherapy(physiologicalParameterActionKey,therapyId);
+                break;
+            case 2:
+                showRoutineExercisesTherapy(therapyId);
+                break;
+            case 3:
+                showAddAdditionalInformationTherapy();
+                break;
+            default:
+                Toast.makeText(mContext, PreferencesData.therapyDetailOptionNotFound, Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 
     /**
@@ -458,64 +432,59 @@ private  SharedPreferences sharedpreferences;
 
     }
 
+    public void showAddAdditionalInformationTherapy() {
+        TherapyAdditionalInformationFragment fragment = new  TherapyAdditionalInformationFragment();
+        loadFragment(fragment);
+    }
+
     /**
      *
      * Fin metodos que redirigen a otros fragments
      */
 
+    public void updateTherapy() {
 
-    public void saveTherapy() {
+        TherapyViewModel therapy = getTherapyData();
+        if(therapy!=null) {
+            String therapyId = String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId, 0));
 
-        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapyId);
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if(response.isSuccessful())
-                {
-                    therapySelected = response.body();
-
-                    updateTherapy(therapySelected);
-
-                }else{
-                    if(response.raw().code()==404) {
-                        Toast.makeText(mContext, PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(mContext, HistoryTherapiesPatient.class);
-                        startActivity(intent);
+            Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().updateTherapy(therapy, therapyId);
+            call.enqueue(new Callback<TherapyViewModel>() {
+                @Override
+                public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                    if (response.isSuccessful()) {
+                        String msg = PreferencesData.therapyUpdateSuccessMsg + " Id " + response.body().getTherapy_id();
+                        Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+                    } else if (response.raw().code() == 404) {
+                        Toast.makeText(mContext, PreferencesData.therapyNotFoundMsg, Toast.LENGTH_LONG).show();
+                    } else {
+                        String error = "Error código # " + response.raw().code();
+                        Toast.makeText(mContext, error, Toast.LENGTH_LONG).show();
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-
-            }
-        });
+                @Override
+                public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                    Toast.makeText(mContext, PreferencesData.therapyUpdateFailedMsg, Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            Toast.makeText(mContext, PreferencesData.therapyUpdateDataFailedMsg, Toast.LENGTH_LONG).show();
+        }
     }
 
-    public void updateTherapy(final TherapyViewModel therapy) {
+    private TherapyViewModel getTherapyData(){
+        TherapyViewModel therapy=null;
 
+        int patientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId,"0"));
 
-        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().updateTherapy(therapy,therapyId);
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if(response.isSuccessful())
-                {
-                 String msg =PreferencesData.therapyUpdateSuccessMsg + " Id " +response.body().getTherapy_id();
-                 Toast.makeText(mContext,msg, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-                Toast.makeText(mContext, PreferencesData.therapyUpdateFailedMsg, Toast.LENGTH_LONG).show();
-            }
-        });
-
+        if(ValidateInputs.validate().ValidateValueZeroInIntegers(Arrays.asList(indexInstitutionSelected,indexTherapistSelected,patientId,institutionSelectedId,therapistSelectedId))) {
+                therapy= new TherapyViewModel();
+                therapy.setInstitution_id(institutionSelectedId);
+                therapy.setTherapist_id(therapistSelectedId);
+                therapy.setPatient_id(patientId);
+        }
+        return  therapy;
     }
 
 

@@ -35,7 +35,7 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_therapy_additional_information_dialog,null);
-
+        etAdditionalInformacion=view.findViewById(R.id.etAdditionalInformacion);
         builder
                 .setView(view)
                 .setTitle(getTitle())
@@ -53,7 +53,6 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
                     }
                 });
         LoadData();
-        etAdditionalInformacion=view.findViewById(R.id.etAdditionalInformacion);
         return builder.create();
     }
 
@@ -62,6 +61,7 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
     }
 
     public void LoadData() {
+
         getAdditionalInformation();
     }
 
@@ -72,7 +72,7 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
             public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
                 if(response.isSuccessful()){
                     TherapyViewModel therapy=response.body();
-                    etAdditionalInformacion.setText(therapy.getTherapy_additional_information()!=null?therapy.getTherapy_additional_information():"");
+                    etAdditionalInformacion.setText(therapy.getTherapy_observation()!=null?therapy.getTherapy_additional_information():"");
                 }
             }
             @Override
@@ -86,12 +86,13 @@ public class TherapyAdditionalInformationDialog extends AppCompatDialogFragment 
 
         public void addAdditionalInformation(){
         TherapyViewModel therapy = new TherapyViewModel();
-        therapy.setTherapy_additional_information(etAdditionalInformacion.getText().toString());
+        therapy.setTherapy_observation(etAdditionalInformacion.getText().toString());
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().addTherapyAdditionalInformation(therapy,therapyId);
         call.enqueue(new Callback<TherapyViewModel>() {
             @Override
             public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
                 if(response.isSuccessful()){
+                    TherapyViewModel therapy=response.body();
                     Toast.makeText(mContext, PreferencesData.therapyAddAdditionalInformationSuccessMsg, Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(mContext, PreferencesData.therapyAddAdditionalInformationFailedMsg, Toast.LENGTH_LONG).show();

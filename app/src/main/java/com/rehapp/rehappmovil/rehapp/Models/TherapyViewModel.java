@@ -22,7 +22,6 @@ public class TherapyViewModel extends ViewModel implements Serializable {
     List<PhysiologicalParameterTherapyViewModel>  physiologicalParametersOut;
     List<ExerciseRoutinesViewModel> exerciseRoutinesViewModelList;
 
-
     private String therapy_description;
     private String therapy_observation;
     private String therapy_date;

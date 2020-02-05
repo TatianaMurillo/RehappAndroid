@@ -41,6 +41,8 @@
     <string name="AddditionalInformationHint">Ingrese información adicional que desee para la terapia.</string>
     <string name="AddditionalInformationTitle">Información adicional</string>
     <string name="TherapySequence">Terapia # </string>
+    <string name="TherapistNonSelected">Seleccionar terapeuta</string>
+    <string name="InstitutionNonSelected">Seleccionar institución</string>
     <string name="MedicalHistorySequence">Historia médica # </string>
     <string name="title_activity_main"></string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

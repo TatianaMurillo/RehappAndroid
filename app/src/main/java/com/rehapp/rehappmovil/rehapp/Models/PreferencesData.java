@@ -53,6 +53,7 @@ public class PreferencesData {
     public static final String searchPatientPatient ="Hubo un error al buscar paciente.";
     public static final String searchPatientPatientNonExist ="Paciente no existe.";
     public static final String therapyDetailTherapyNonExist ="La terapia seleccionada no existe.";
+    public static final String therapyDetailOptionNotFound ="No se encontró opción a ejecutar";
     public static final String documentTypeList ="Hubo un error al listar tipos de documentos.";
     public static final String therapyListError ="Hubo un error al listar terapias.";
     public static final String patientMedicalHistoryListError ="Hubo un error al listar historias médicas.";
@@ -72,6 +73,9 @@ public class PreferencesData {
     public static final String therapyAddAdditionalInformationSuccessMsg ="Datos guardados correctamente.";
     public static final String therapyUpdateSuccessMsg ="Se actualizó la terapia con éxito.";
     public static final String therapyUpdateFailedMsg ="Hubo un error al crear terapia.";
+    public static final String therapyUpdateDataFailedMsg ="Ingresar los datos por favor.";
+    public static final String therapyNotFoundMsg ="No se encontró la terapia.";
+
     public static final String therapyCreationIdSuccessMsg ="Se creó la terapia con éxito.";
     public static final String therapyCreationIdFailedMsg ="Hubo un error al generar terapia.";
     public static final String therapyCreationSuccessMsg ="Se creó la terapia con éxito.";
