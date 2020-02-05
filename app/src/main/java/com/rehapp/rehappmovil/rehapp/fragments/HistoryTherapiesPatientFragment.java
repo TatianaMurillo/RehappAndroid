@@ -133,7 +133,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
     private void recoverySendData()
     {
         documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
-        documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,""));
+        documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,"0"));
         patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
 
     }

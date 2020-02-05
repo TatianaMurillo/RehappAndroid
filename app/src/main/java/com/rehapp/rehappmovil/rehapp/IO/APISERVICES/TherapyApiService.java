@@ -18,7 +18,10 @@ public interface TherapyApiService {
     @POST("therapies")
     Call<TherapyViewModel> createTherapyId(@Body TherapyViewModel therapy);
 
-    @PUT("therapies/update2/{idTherapy}")
+    @POST("therapies/deleteTherapyInfo/{therapy_id}")
+    Call<TherapyViewModel> deleteTherapyData(@Path("therapy_id") String therapyId);
+
+    @PUT("therapies/updateTherapy/{therapy_id}")
     Call<TherapyViewModel> updateTherapy(@Body TherapyViewModel therapy,@Path("therapy_id") String therapyId);
 
     @PUT("therapies/addAdditionalInformation/{therapy_id}")

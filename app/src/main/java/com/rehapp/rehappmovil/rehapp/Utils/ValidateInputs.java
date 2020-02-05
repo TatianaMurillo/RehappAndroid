@@ -36,11 +36,11 @@ public class ValidateInputs {
         return true;
     }
 
-    public boolean ValidateValueZeroInIntegers(List<Integer> dataInput)
+    public boolean validateNonAcceptableValueInInteger(List<Integer> dataInput)
     {
         for(int data:dataInput)
         {
-            if(data==0)
+            if(data==0 || data==-1)
             {
                 return false;
             }

@@ -22,7 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.HistoryTherapiesPatient;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.InstitutionApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
@@ -110,35 +109,40 @@ private  SharedPreferences sharedpreferences;
         tvPhisiologicalParametersIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToPage(1,PreferencesData.PhysiologicalParameterTherapySesionIN);
+                redirectToPage(1,PreferencesData.PhysiologicalParameterTherapySesionIN);
             }
         });
 
         tvPhisiologicalParametersOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToPage(1,PreferencesData.PhysiologicalParameterTherapySesionOUT);
+                redirectToPage(1,PreferencesData.PhysiologicalParameterTherapySesionOUT);
             }
         });
 
         tvWatchExercises.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToPage(2,"");
+                redirectToPage(2,"");
             }
         });
 
         tvAdditionalInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToPage(3,"");
+                redirectToPage(3,"");
             }
         });
 
         spnTherapist.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                therapistSelectedId=therapists.get(position).getTherapist_id();
+                /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                if(position == therapists.size()-1) {
+                    therapistSelectedId = therapists.get(position-1).getTherapist_id();
+                }else{
+                    therapistSelectedId = therapists.get(position).getTherapist_id();
+                }
                 indexTherapistSelected=position;
             }
 
@@ -151,7 +155,12 @@ private  SharedPreferences sharedpreferences;
         spnInstitution.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                institutionSelectedId=institutions.get(position).getInstitution_id();
+                /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                if(position == institutions.size()-1){
+                    institutionSelectedId=institutions.get(position-1).getInstitution_id();
+                }else{
+                    institutionSelectedId=institutions.get(position).getInstitution_id();
+                }
                 indexInstitutionSelected=position;
             }
             @Override
@@ -177,8 +186,8 @@ private  SharedPreferences sharedpreferences;
 
                 storeStringSharepreferences(PreferencesData.TherapyAction, action);
 
-                if(action.equals("ADD")) {
-
+                if("ADD".equals(action)) {
+                    createTherapyId();
                 }else
                 {
                     therapySelectedId = extras.getInt(PreferencesData.TherapySelectedId);
@@ -257,8 +266,8 @@ private  SharedPreferences sharedpreferences;
                 }else{
                     if(response.raw().code()==404) {
                         Toast.makeText(mContext, PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(mContext, HistoryTherapiesPatient.class);
-                        startActivity(intent);
+                        HistoryTherapiesPatientFragment fragment = new HistoryTherapiesPatientFragment();
+                        loadFragment(fragment);
                     }
                 }
             }
@@ -299,24 +308,6 @@ private  SharedPreferences sharedpreferences;
         item.setVisible(true);
     }
 
-
-    public void goToPage(int option,String physiologicalParameterActionKey) {
-
-        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
-        int therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
-
-        if(action.equals("ADD")) {
-            if (therapyId==0) {
-                createTherapyId(physiologicalParameterActionKey, option);
-            }else {
-                redirectToPage(option,String.valueOf(therapyId),physiologicalParameterActionKey);
-            }
-        }else{
-            redirectToPage(option,String.valueOf(therapyId),physiologicalParameterActionKey);
-        }
-
-    }
-
     /**
      **Se selecciona el terapeuta
      **/
@@ -325,13 +316,14 @@ private  SharedPreferences sharedpreferences;
         for(TherapistViewModel therapistViewModel : therapists)
         {
                 if (therapistViewModel.getTherapist_id() == therapySelected.getTherapist_id()) {
-                    indexOfTherapist = therapists.indexOf(therapistViewModel);
+                    /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                    indexOfTherapist = therapists.indexOf(therapistViewModel)+1;
             }
         }
             if (indexOfTherapist != -1) {
                 spnTherapist.setSelection(indexOfTherapist);
             } else {
-                Toast.makeText(mContext, PreferencesData.therapyDetailTherapistNonExist, Toast.LENGTH_LONG).show();
+                /**se selecciona al menos la opcion que se crea por defecto**/
                 spnTherapist.setSelection(0);
             }
     }
@@ -343,14 +335,15 @@ private  SharedPreferences sharedpreferences;
         for(InstitutionViewModel institutionViewModel : institutions)
         {
                 if (institutionViewModel.getInstitution_id() == therapySelected.getInstitution_id()) {
-                    indexOfInstitution = institutions.indexOf(institutionViewModel);
+                    /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                    indexOfInstitution = institutions.indexOf(institutionViewModel)+1;
                 }
         }
         if (indexOfInstitution != -1) {
               spnInstitution.setSelection(indexOfInstitution);
         }else {
-                    Toast.makeText(mContext, PreferencesData.therapyDetailInstitutionNonExist, Toast.LENGTH_LONG).show();
-                    spnInstitution.setSelection(0);
+            /**se selecciona al menos la opcion que se crea por defecto**/
+            spnInstitution.setSelection(0);
         }
     }
     /**
@@ -360,8 +353,10 @@ private  SharedPreferences sharedpreferences;
      * de una terapia creada.
      */
 
-    public void createTherapyId(final String physiologicalParametersTherapyAction,final int option) {
+    public void createTherapyId() {
+        int patientId = Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId, "0"));
         TherapyViewModel therapy = new TherapyViewModel();
+        therapy.setPatient_id(patientId);
         therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
         call.enqueue(new Callback<TherapyViewModel>() {
@@ -371,9 +366,9 @@ private  SharedPreferences sharedpreferences;
 
                     TherapyViewModel therapyViewModel=response.body();
                     therapyCreatedId = String.valueOf(therapyViewModel.getTherapy_id());
+                    tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyViewModel.getTherapy_sequence());
+                    storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyCreatedId));
                     Toast.makeText(mContext, PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
-                    redirectToPage(option,therapyCreatedId,physiologicalParametersTherapyAction);
-
                 } else {
                     Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
                 }
@@ -386,13 +381,13 @@ private  SharedPreferences sharedpreferences;
         });
     }
 
-    private void redirectToPage(int option, String therapyId,String physiologicalParameterActionKey){
+    private void redirectToPage(int option,String physiologicalParameterActionKey){
         switch (option){
             case 1:
-                showPhysiologicalParameterTherapy(physiologicalParameterActionKey,therapyId);
+                showPhysiologicalParameterTherapy(physiologicalParameterActionKey);
                 break;
             case 2:
-                showRoutineExercisesTherapy(therapyId);
+                showRoutineExercisesTherapy();
                 break;
             case 3:
                 showAddAdditionalInformationTherapy();
@@ -406,22 +401,14 @@ private  SharedPreferences sharedpreferences;
     /**
         * Metodos que redirigen a otros fragments
      **/
-    public void showPhysiologicalParameterTherapy(String physiologicalParameterAction, String therapyId){
-
-        tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
-
-        storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
+    public void showPhysiologicalParameterTherapy(String physiologicalParameterAction){
         storeStringSharepreferences(PreferencesData.PhysiologicalParameterAction,physiologicalParameterAction);
-
-
         loadFragment(new PhysiologicalParameterTherapyFragment());
 
     }
 
-    public void showRoutineExercisesTherapy(String therapyId) {
-        tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyId);
-
-        storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyId));
+    public void showRoutineExercisesTherapy() {
+        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
 
         Bundle args = new Bundle();
         args.putString(PreferencesData.TherapyId,therapyId);
@@ -473,18 +460,17 @@ private  SharedPreferences sharedpreferences;
         }
     }
 
-    private TherapyViewModel getTherapyData(){
-        TherapyViewModel therapy=null;
+    private TherapyViewModel getTherapyData() {
+        TherapyViewModel therapy = null;
 
-        int patientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId,"0"));
-
-        if(ValidateInputs.validate().ValidateValueZeroInIntegers(Arrays.asList(indexInstitutionSelected,indexTherapistSelected,patientId,institutionSelectedId,therapistSelectedId))) {
-                therapy= new TherapyViewModel();
+        int patientId = Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId, "0"));
+           if (ValidateInputs.validate().validateNonAcceptableValueInInteger(Arrays.asList(indexInstitutionSelected, indexTherapistSelected, patientId, institutionSelectedId, therapistSelectedId))) {
+                therapy = new TherapyViewModel();
                 therapy.setInstitution_id(institutionSelectedId);
                 therapy.setTherapist_id(therapistSelectedId);
                 therapy.setPatient_id(patientId);
-        }
-        return  therapy;
+            }
+            return therapy;
     }
 
 
@@ -513,4 +499,7 @@ private  SharedPreferences sharedpreferences;
     public void loadFragment(Fragment fragment){
         manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
+
+
+
 }
