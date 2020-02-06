@@ -1,14 +1,12 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
@@ -24,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.VitalSignApiAdapter;
-import com.rehapp.rehappmovil.rehapp.MedicalHistoryDetail;
 import com.rehapp.rehappmovil.rehapp.Models.PatientMedicalHistoryVitalSignViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.VitalSignViewModel;
@@ -64,21 +61,21 @@ public class PatientMedicalHistoryVitalSignsFragment extends Fragment {
 
         grid = view.findViewById(R.id.grid);
 
-        loadVitalSigns();
         recoverySendData();
+        loadVitalSigns();
+
 
         return view;
     }
 
     private void loadVitalSigns() {
-        Call<ArrayList<VitalSignViewModel>> call = VitalSignApiAdapter.getApiService().getVitalSigns();
+        Call<ArrayList<VitalSignViewModel>> call = VitalSignApiAdapter.getApiService().getVitalSignsByMedicalHistory2(medicalHistorySelectedId);
         call.enqueue(new Callback<ArrayList<VitalSignViewModel>>() {
             @Override
             public void onResponse(Call<ArrayList<VitalSignViewModel>> call, Response<ArrayList<VitalSignViewModel>> response) {
                 if (response.isSuccessful()) {
                    vitalSigns = response.body();
                     addVitalSignsToView(vitalSigns);
-                    addVitalSignsMedicalHistoryToView(vitalSigns);
                 }
             }
 
@@ -89,10 +86,17 @@ public class PatientMedicalHistoryVitalSignsFragment extends Fragment {
         });
     }
 
-    private void recoverySendData()
-    {
+    private void recoverySendData() {
         medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
     }
+
+
+    /**
+     *
+     * Una vez  consultados los signos vitales de la base de datos,
+     * Estos se cargan a la vista.
+     *
+     */
 
     private void addVitalSignsToView( ArrayList<VitalSignViewModel> vitalSigns) {
         EditText editText;
@@ -110,46 +114,26 @@ public class PatientMedicalHistoryVitalSignsFragment extends Fragment {
             editText.setSingleLine(true);
             editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             editText.setGravity(Gravity.CENTER);
+            if(vitalSign.getVital_sign_value()!=null){
+                editText.setText(vitalSign.getVital_sign_value());
+            }
             grid.addView(textView);
             grid.addView(editText);
         }
     }
 
 
-    private void addVitalSignsMedicalHistoryToView(final ArrayList<VitalSignViewModel> vitalSigns) {
+    /**
+     *
+     * Se obtienen los signos vitales de la vista para guardarlos en la BD
+     *
+     */
+    private List<PatientMedicalHistoryVitalSignViewModel> getVitalSignsFromView() {
 
-        Call<ArrayList<PatientMedicalHistoryVitalSignViewModel>> call = VitalSignApiAdapter.getApiService().getVitalSignsByMedicalHistory(medicalHistorySelectedId);
-        call.enqueue(new Callback<ArrayList<PatientMedicalHistoryVitalSignViewModel>>() {
-            @Override
-            public void onResponse(Call<ArrayList<PatientMedicalHistoryVitalSignViewModel>> call, Response<ArrayList<PatientMedicalHistoryVitalSignViewModel>> response) {
-                if (response.isSuccessful()) {
-                    ArrayList<PatientMedicalHistoryVitalSignViewModel> lVitalSignsPatient = response.body();
-                    for (PatientMedicalHistoryVitalSignViewModel vitalSignPatient : lVitalSignsPatient) {
-                        for (VitalSignViewModel vitalSign : vitalSigns) {
-                            if (vitalSign.getVital_sign_id().equals(vitalSignPatient.getVital_sign_id())) {
-                                setVitalSignsToView(vitalSign.getVital_sign_name(), vitalSignPatient.getPatient_vital_signs_value());
-                                break;
-                            }
-                        }
-                    }
-
-                } else if (response.raw().code() == 404) {
-                    System.out.println(PreferencesData.medicalHistoryVitalSignEmptyListMsg);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<PatientMedicalHistoryVitalSignViewModel>> call, Throwable t) {
-                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-    }
-
-    private  void setVitalSignsToView(String vitalSignName,String VitalSignValue) {
-
+        List<PatientMedicalHistoryVitalSignViewModel> data = new ArrayList<>();
+        PatientMedicalHistoryVitalSignViewModel patientMedicalHistoryQuestionaireOption;
         int childCount = grid.getChildCount();
+        String valueEditText;
         String valueTextView;
         Object childEditText;
         Object childTextView;
@@ -163,17 +147,27 @@ public class PatientMedicalHistoryVitalSignsFragment extends Fragment {
             textView = (TextView) childTextView;
             valueTextView = textView.getText().toString().trim();
             editText = (EditText) childEditText;
+            valueEditText = editText.getText().toString().trim();
 
-            if(vitalSignName.equals(valueTextView)) {
-                editText.setText(VitalSignValue);
-            }
+            patientMedicalHistoryQuestionaireOption=  new PatientMedicalHistoryVitalSignViewModel();
+            patientMedicalHistoryQuestionaireOption.setPtnt_mdcl_hstry_id(medicalHistorySelectedId);
+            patientMedicalHistoryQuestionaireOption.setVital_sign_id(getIdVitalSign(valueTextView));
+            patientMedicalHistoryQuestionaireOption.setPatient_vital_signs_value(valueEditText);
+            data.add(patientMedicalHistoryQuestionaireOption);
+
         }
+
+        return data;
     }
 
-
+    /**
+     *
+     * Guardar signos vitales de la historia  medica
+     *
+     */
     private void saveMedicalHistoryVitalSigns() {
 
-        List<PatientMedicalHistoryVitalSignViewModel> data = setVitalSignsFromView();
+        List<PatientMedicalHistoryVitalSignViewModel> data = getVitalSignsFromView();
 
         Call<List<PatientMedicalHistoryVitalSignViewModel>> call = VitalSignApiAdapter.getApiService().saveMedicalHistoryVitalSigns(data,medicalHistorySelectedId);
         call.enqueue(new Callback<List<PatientMedicalHistoryVitalSignViewModel>>() {
@@ -199,64 +193,18 @@ public class PatientMedicalHistoryVitalSignsFragment extends Fragment {
         });
     }
 
-    private List<PatientMedicalHistoryVitalSignViewModel> setVitalSignsFromView() {
 
-        List<PatientMedicalHistoryVitalSignViewModel> data = new ArrayList<>();
-        PatientMedicalHistoryVitalSignViewModel patientMedicalHistoryQuestionaireOption;
-        int childCount = grid.getChildCount();
-        String valueEditText;
-        String valueTextView;
-        Object childEditText;
-        Object childTextView;
-        TextView textView;
-        EditText editText;
-
-        for (int i = 1; i < childCount; i += 2) {
-            childEditText = grid.getChildAt(i);
-            childTextView = grid.getChildAt(i - 1);
-
-            textView = (TextView) childTextView;
-            valueTextView = textView.getText().toString().trim();
-            editText = (EditText) childEditText;
-
-            valueEditText = editText.getText().toString().trim();
-            patientMedicalHistoryQuestionaireOption=  new PatientMedicalHistoryVitalSignViewModel();
-            patientMedicalHistoryQuestionaireOption.setPtnt_mdcl_hstry_id(medicalHistorySelectedId);
-            patientMedicalHistoryQuestionaireOption.setVital_sign_id(getIdVitalSign(valueTextView));
-            patientMedicalHistoryQuestionaireOption.setPatient_vital_signs_value(valueEditText);
-            data.add(patientMedicalHistoryQuestionaireOption);
-
-        }
-
-        return data;
-
-    }
-
-    private String getIdVitalSign(String name) {
-        for (VitalSignViewModel vitalSign : vitalSigns) {
-            if (vitalSign.getVital_sign_name().equals(name)) {
-                return vitalSign.getVital_sign_id();
-            }
-        }
-        return "";
-    }
-
-    private void goToMedicalHistoryDetail(){
-        String medicalHistoryId=sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
-        MedicalHistoryDetailFragment fragment = new MedicalHistoryDetailFragment();
-        Bundle extras = new Bundle();
-        extras.putString(PreferencesData.MedicalHistorySelectedId, medicalHistoryId);
-        extras.putString(PreferencesData.MedicaHistoryAction, "DETAIL");
-        fragment.setArguments(extras);
-        loadFragment(fragment);
-    }
+    /**
+     *
+     * Eventos
+     *
+     */
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         showHideItems(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -272,6 +220,32 @@ public class PatientMedicalHistoryVitalSignsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
+    }
+
+
+    /**
+     *
+     * Metodos utiles
+     *
+     */
+    private String getIdVitalSign(String name) {
+        for (VitalSignViewModel vitalSign : vitalSigns) {
+            if (vitalSign.getVital_sign_name().equals(name)) {
+                return vitalSign.getVital_sign_id();
+            }
+        }
+        return "";
+    }
+
+    private void goToMedicalHistoryDetail(){
+        MedicalHistoryDetailFragment fragment = new MedicalHistoryDetailFragment();
+        loadFragment(fragment);
+    }
+
     public void showHideItems(Menu menu) {
         MenuItem item;
         item = menu.findItem(R.id.save);
@@ -281,16 +255,11 @@ public class PatientMedicalHistoryVitalSignsFragment extends Fragment {
 
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext=context;
-    }
-
     public void loadFragment(Fragment fragment){
         manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
+
+
 
 
 

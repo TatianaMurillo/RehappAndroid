@@ -19,8 +19,11 @@ public interface VitalSignApiService {
     @GET("vitalSigns")
     Call<ArrayList<VitalSignViewModel>> getVitalSigns();
 
-    @GET("vitalSignsMedicalHistory/showByMedicalHistory/{medicalhistory}")
-    Call<ArrayList<PatientMedicalHistoryVitalSignViewModel>> getVitalSignsByMedicalHistory(@Path("medicalhistory") String medicalhistory);
+    @GET("vitalSignsMedicalHistory/showByMedicalHistory/{medicalHistoryId}")
+    Call<ArrayList<VitalSignViewModel>> getVitalSignsByMedicalHistory2(@Path("medicalHistoryId") String medicalHistoryId);
+
+    @GET("vitalSignsMedicalHistory/showByMedicalHistory/{medicalHistoryId}")
+    Call<ArrayList<PatientMedicalHistoryVitalSignViewModel>> getVitalSignsByMedicalHistory(@Path("medicalHistoryId") String medicalHistoryId);
 
     @POST("patientMedicalHistoryVitalSigns/saveVitalSignsInMedicalHistory/{medicalHistoryId}")
     Call<List<PatientMedicalHistoryVitalSignViewModel>> saveMedicalHistoryVitalSigns(@Body List<PatientMedicalHistoryVitalSignViewModel> patientMedicalHistoryVitalSign, @Path("medicalHistoryId") String medicalHistoryId);
