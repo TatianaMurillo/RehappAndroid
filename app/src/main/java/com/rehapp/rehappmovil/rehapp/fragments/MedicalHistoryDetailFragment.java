@@ -44,6 +44,7 @@ private String therapyCreatedId;
 private TextView tvTherapySequence;
 private String action;
 private TextView tvPatientNameValue;
+private TextView tvNeighborhoodValue;
 private TextView tvAgeValue;
 private String documentPatient;
 private String medicalHistorySelectedId;
@@ -83,6 +84,7 @@ Calendar cal = Calendar.getInstance();
         tvDiseases=view.findViewById(R.id.tvDiseases);
         tvQuestionaries=view.findViewById(R.id.tvQuestionaries);
         tvTherapySequence=view.findViewById(R.id.tvTherapySequence);
+        tvNeighborhoodValue=view.findViewById(R.id.tvNeighborhoodValue);
 
         tvVitalSigns.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,8 +120,7 @@ Calendar cal = Calendar.getInstance();
         tvDateValue.setText(sdf.format(cal.getTime()));
     }
 
-    private void recoverySendData()
-    {
+    private void recoverySendData() {
         if(getArguments()!=null)
         {
                 Bundle extras = getArguments();
@@ -132,8 +133,7 @@ Calendar cal = Calendar.getInstance();
         documentPatient =sharedpreferences.getString(PreferencesData.PatientDocument,"");
     }
 
-    public void blockData()
-    {
+    public void blockData() {
 
     }
 
@@ -147,6 +147,8 @@ Calendar cal = Calendar.getInstance();
                     patientViewModel = response.body();
                     tvPatientNameValue.setText(patientViewModel.getPatient_first_name() + " " + patientViewModel.getPatient_first_lastname());
                     tvAgeValue.setText(String.valueOf(patientViewModel.getPatient_age()));
+                    tvNeighborhoodValue.setText(patientViewModel.getNeighborhood_name());
+
                 }else{
                     if(response.raw().code()==404) {
                         Toast.makeText(mContext, PreferencesData.searchPatientPatientNonExist, Toast.LENGTH_LONG).show();
@@ -188,6 +190,7 @@ Calendar cal = Calendar.getInstance();
             }
         });
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);

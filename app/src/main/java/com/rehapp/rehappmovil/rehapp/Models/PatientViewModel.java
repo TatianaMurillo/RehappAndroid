@@ -21,6 +21,7 @@ public class PatientViewModel extends ViewModel {
         private int document_type_id;
         private int gender_id;
         private DocumentTypeViewModel Document_typeObject;
+        private String neighborhood_name;
         private NeighborhoodViewModel neighborhoodViewModelObject;
 
         @SerializedName("error")
@@ -94,6 +95,10 @@ public class PatientViewModel extends ViewModel {
 
         public NeighborhoodViewModel getNeighborhood() {
             return neighborhoodViewModelObject;
+        }
+
+        public String getNeighborhood_name(){
+            return neighborhood_name;
         }
 
         // Setter Methods

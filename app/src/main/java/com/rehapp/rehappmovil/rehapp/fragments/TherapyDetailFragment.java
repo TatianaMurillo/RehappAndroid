@@ -139,7 +139,7 @@ private  SharedPreferences sharedpreferences;
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
                 if(position == therapists.size()-1) {
-                    therapistSelectedId = therapists.get(position-1).getTherapist_id();
+                    therapistSelectedId = therapists.get(position-2).getTherapist_id();
                 }else{
                     therapistSelectedId = therapists.get(position).getTherapist_id();
                 }
@@ -155,9 +155,9 @@ private  SharedPreferences sharedpreferences;
         spnInstitution.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                /**se le resta  dos porque se esta agregando una opción por defecto al spinner cuando se  llena**/
                 if(position == institutions.size()-1){
-                    institutionSelectedId=institutions.get(position-1).getInstitution_id();
+                    institutionSelectedId=institutions.get(position-2).getInstitution_id();
                 }else{
                     institutionSelectedId=institutions.get(position).getInstitution_id();
                 }

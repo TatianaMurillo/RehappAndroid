@@ -34,6 +34,7 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
     ArrayList<DiseaseViewModel> diseases = new ArrayList<>();
     ArrayList<DiseaseViewModel> medicalHistoryDiseases = new ArrayList<>();
     boolean isSelected;
+    private String medicalHistoryId;
     SharedPreferences sharedpreferences;
     String medicalHistorySelectedId;
     MedicalHistoryDiseaseAdapter adapter;
@@ -44,13 +45,12 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+        medicalHistoryId=getArguments().getString(PreferencesData.MedicalHistorySelectedId);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         adapter=null;
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_medical_history_diseases,null);
 
-
-        medicalHistorySelectedId=getArguments().getString(PreferencesData.MedicalHistorySelectedId);
         loadData();
 
         lvDiseases= view.findViewById(R.id.lvDiseases);
@@ -79,9 +79,8 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
         listDiseases();
     }
 
-    private void listDiseases()
-    {
-        Call<ArrayList<DiseaseViewModel>> call = DiseaseApiAdapter.getApiService().getDiseases();
+    private void listDiseases() {
+        Call<ArrayList<DiseaseViewModel>> call = DiseaseApiAdapter.getApiService().getDiseasesByMedicalHistory(medicalHistoryId);
         call.enqueue(new Callback<ArrayList<DiseaseViewModel>>() {
             @Override
             public void onResponse(Call<ArrayList<DiseaseViewModel>> call, Response<ArrayList<DiseaseViewModel>> response) {
@@ -89,7 +88,6 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
                     diseases = response.body();
                     adapter = new MedicalHistoryDiseaseAdapter(getActivity(),diseases);
                     lvDiseases.setAdapter(adapter);
-                    listMedicalHistoryDiseases();
 
                     lvDiseases.setOnItemClickListener(new AdapterView.OnItemClickListener()
                     {
@@ -110,57 +108,19 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
         });
     }
 
-    private void listMedicalHistoryDiseases() {
-        try {
-            Call<ArrayList<DiseaseViewModel>> call = DiseaseApiAdapter.getApiService().getDiseasesByMedicalHistory(medicalHistorySelectedId);
-            call.enqueue(new Callback<ArrayList<DiseaseViewModel>>() {
-                @Override
-                public void onResponse(Call<ArrayList<DiseaseViewModel>> call, Response<ArrayList<DiseaseViewModel>> response) {
-                    if (response.isSuccessful()) {
-
-                        medicalHistoryDiseases = response.body();
-                        for (DiseaseViewModel selectedDisease:medicalHistoryDiseases ) {
-
-                            for (DiseaseViewModel disease:diseases )
-                            {
-                                if(disease.getDisease_id().equals(selectedDisease.getDisease_id()))
-                                {
-                                    diseases.get(diseases.indexOf(disease)).setPatient_disease_is_base(selectedDisease.getPatient_disease_is_base());
-                                    adapter.updateRecords(diseases);
-                                    selectDiseaseItem(diseases.indexOf(disease));
-                                }
-                            }
-                        }
-                    }else if(response.raw().code()==404){
-                        System.out.println(PreferencesData.medicalHistoryDiseaseEmptyListMsg);
-                    }
-                }
-                @Override
-                public void onFailure(Call<ArrayList<DiseaseViewModel>> call, Throwable t) {
-                    Toast.makeText(mContext, PreferencesData.medicalHistoryDiseaseEmptyListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
-                }
-            });
-        }catch (Exception ex){}
-    }
-
-
-    public  void saveDisease()
-    {
+    public  void saveDisease() {
         List<DiseaseViewModel> diseasesFromView=new ArrayList<>();
-        DiseaseViewModel diseaseSelected=null;
 
         for (DiseaseViewModel disease: diseases) {
             if(disease.isSelected()) {
-                diseaseSelected = new DiseaseViewModel();
+                DiseaseViewModel diseaseSelected = new DiseaseViewModel();
                 diseaseSelected.setDisease_id(disease.getDisease_id());
-                diseaseSelected.setPtnt_mdcl_hstry_id(medicalHistorySelectedId);
+                diseaseSelected.setPtnt_mdcl_hstry_id(medicalHistoryId);
                 diseaseSelected.setPatient_disease_is_base(disease.getPatient_disease_is_base());
                 diseasesFromView.add(diseaseSelected);
             }
         }
-        if(diseasesFromView!=null)
-        {
-            Call<List<DiseaseViewModel>> call = PatientMedicalHistoryApiAdapter.getApiService().saveDiseases(diseasesFromView,medicalHistorySelectedId);
+            Call<List<DiseaseViewModel>> call = PatientMedicalHistoryApiAdapter.getApiService().saveDiseases(diseasesFromView,medicalHistoryId);
             call.enqueue(new Callback<List<DiseaseViewModel>>() {
                 @Override
                 public void onResponse(Call<List<DiseaseViewModel>> call, Response<List<DiseaseViewModel>> response) {
@@ -177,20 +137,9 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
 
                 }
             });
-
-
-        }else{
-            Toast.makeText(mContext, PreferencesData.medicalHistoryDiseaseSaveFailedMsg, Toast.LENGTH_LONG).show();
-        }
-
-
-
     }
 
-
-
-    private void selectDiseaseItem(int position)
-    {
+    private void selectDiseaseItem(int position) {
         DiseaseViewModel model = diseases.get(position);
         diseaseSelectedIndex=position;
         if (model.isSelected()) {

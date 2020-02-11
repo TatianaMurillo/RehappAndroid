@@ -76,20 +76,22 @@ public class MedicalHistoryDiseaseAdapter extends BaseAdapter{
                 holder.ivCheckbox.setBackgroundResource(R.drawable.unchecked);
             }
 
-            if ("0".equals(model.getPatient_disease_is_base())) {
-                holder.ivIsBase.setBackgroundResource(R.drawable.checked);
-            } else {
-                holder.ivIsBase.setBackgroundResource(R.drawable.unchecked);
-            }
+                if (model.getPatient_disease_is_base()) {
+                    holder.ivIsBase.setBackgroundResource(R.drawable.checked);
+                } else {
+                    holder.ivIsBase.setBackgroundResource(R.drawable.unchecked);
+                }
 
             holder.ivIsBase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DiseaseViewModel model = diseases.get(position);
-                if ("0".equals(model.getPatient_disease_is_base())) {
-                    model.setPatient_disease_is_base("1");
+
+                if (!model.getPatient_disease_is_base()) {
+                        model.setSelected(true);
+                        model.setPatient_disease_is_base(true);
                 } else {
-                    model.setPatient_disease_is_base("0");
+                        model.setPatient_disease_is_base(false);
                 }
                 diseases.set(position, model);
                 updateRecords(diseases);
