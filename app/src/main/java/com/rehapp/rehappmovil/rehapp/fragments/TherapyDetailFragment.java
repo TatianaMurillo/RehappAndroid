@@ -138,12 +138,11 @@ private  SharedPreferences sharedpreferences;
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
-                if(position == therapists.size()-1) {
-                    therapistSelectedId = therapists.get(position-2).getTherapist_id();
-                }else{
-                    therapistSelectedId = therapists.get(position).getTherapist_id();
+                int selectedOption=position-1;
+                if(selectedOption>-1) {
+                    therapistSelectedId = therapists.get(selectedOption).getTherapist_id();
                 }
-                indexTherapistSelected=position;
+                indexTherapistSelected = selectedOption;
             }
 
             @Override
@@ -156,12 +155,11 @@ private  SharedPreferences sharedpreferences;
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
                 /**se le resta  dos porque se esta agregando una opción por defecto al spinner cuando se  llena**/
-                if(position == institutions.size()-1){
-                    institutionSelectedId=institutions.get(position-2).getInstitution_id();
-                }else{
-                    institutionSelectedId=institutions.get(position).getInstitution_id();
+                int selectedOption=position-1;
+                if(selectedOption>-1) {
+                    institutionSelectedId = institutions.get(selectedOption).getInstitution_id();
                 }
-                indexInstitutionSelected=position;
+                indexInstitutionSelected = selectedOption;
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {

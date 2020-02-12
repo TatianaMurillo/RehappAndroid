@@ -15,24 +15,30 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.HistoryTherapiesPatient;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientMedicalHistoryApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.MedicalHistoriesPatient;
 import com.rehapp.rehappmovil.rehapp.MedicalHistoryDiseasesDialog;
+import com.rehapp.rehappmovil.rehapp.Models.PatientMedicalHistoryViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.PatientMedicalHistoryQuestionaries;
 import com.rehapp.rehappmovil.rehapp.PatientMedicalHistoryVitalSigns;
 import com.rehapp.rehappmovil.rehapp.R;
+import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.concurrent.Callable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,7 +47,7 @@ import retrofit2.Response;
 public class MedicalHistoryDetailFragment extends Fragment {
 
 private String therapyCreatedId;
-private TextView tvTherapySequence;
+private TextView tvMedicalHistorySequence;
 private String action;
 private TextView tvPatientNameValue;
 private TextView tvNeighborhoodValue;
@@ -49,12 +55,13 @@ private TextView tvAgeValue;
 private String documentPatient;
 private String medicalHistorySelectedId;
 private PatientViewModel patientViewModel;
-private TherapyViewModel therapySelected;
 private SharedPreferences sharedpreferences;
 private TextView tvDateValue;
 private TextView  tvVitalSigns;
 private TextView  tvDiseases;
 private TextView  tvQuestionaries;
+private EditText etHistoryName;
+private EditText etAdditionalInfo;
 
 
 private Context mContext;
@@ -63,6 +70,13 @@ private Context mContext;
 
 private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 Calendar cal = Calendar.getInstance();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
 
     @Nullable
     @Override
@@ -83,8 +97,10 @@ Calendar cal = Calendar.getInstance();
         tvVitalSigns=view.findViewById(R.id.tvVitalSigns);
         tvDiseases=view.findViewById(R.id.tvDiseases);
         tvQuestionaries=view.findViewById(R.id.tvQuestionaries);
-        tvTherapySequence=view.findViewById(R.id.tvTherapySequence);
+        tvMedicalHistorySequence=view.findViewById(R.id.tvMedicalHistorySequence);
         tvNeighborhoodValue=view.findViewById(R.id.tvNeighborhoodValue);
+        etHistoryName=view.findViewById(R.id.etHistoryName);
+        etAdditionalInfo=view.findViewById(R.id.etAdditionalInfo);
 
         tvVitalSigns.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,12 +128,14 @@ Calendar cal = Calendar.getInstance();
         recoverySendData();
         loadData();
         searchPatient();
+        searchMedicalHistory();
 
         return view;
     }
 
     private void loadData(){
         tvDateValue.setText(sdf.format(cal.getTime()));
+        tvMedicalHistorySequence.setText(getResources().getString(R.string.MedicalHistorySequence) + sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,""));
     }
 
     private void recoverySendData() {
@@ -131,10 +149,6 @@ Calendar cal = Calendar.getInstance();
         }
 
         documentPatient =sharedpreferences.getString(PreferencesData.PatientDocument,"");
-    }
-
-    public void blockData() {
-
     }
 
     public  void searchPatient() {
@@ -165,83 +179,62 @@ Calendar cal = Calendar.getInstance();
         });
     }
 
-    private void searchTherapy(){
-        String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
-        call.enqueue(new Callback<TherapyViewModel>() {
+    public  void searchMedicalHistory() {
+        String medicalHistory=sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+        Call<PatientMedicalHistoryViewModel>  call = PatientMedicalHistoryApiAdapter.getApiService().getMedicalHistory(medicalHistory);
+        call.enqueue(new Callback<PatientMedicalHistoryViewModel>() {
             @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if(response.isSuccessful())
-                {
-                    therapySelected = response.body();
-                    tvTherapySequence.setText(R.string.TherapySequence + therapySelected.getTherapy_sequence());
-                    blockData();
-
-                }else{
-                    if(response.raw().code()==404) {
-                        Toast.makeText(mContext, PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(mContext, HistoryTherapiesPatient.class);
-                        startActivity(intent);
-                    }
+            public void onResponse(Call<PatientMedicalHistoryViewModel> call, Response<PatientMedicalHistoryViewModel> response) {
+                if(response.isSuccessful()){
+                    PatientMedicalHistoryViewModel object=response.body();
+                    etAdditionalInfo.setText(object.getPtnt_mdcl_hstry_addtnl_info());
+                    etHistoryName.setText(object.getPtnt_mdcl_hstry_name());
                 }
             }
+
             @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+            public void onFailure(Call<PatientMedicalHistoryViewModel> call, Throwable t) {
+                Toast.makeText(mContext, t.getMessage() , Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        showHideItems(menu);
-    }
+    /**
+     * Metodo para actualizar historia medica
+     */
+    public void updateMedicalHistory(){
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        PatientMedicalHistoryViewModel object=getData();
+        if(object!=null) {
+            String medicalHistoryId=sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+            Call<PatientMedicalHistoryViewModel> call = PatientMedicalHistoryApiAdapter.getApiService().createOrUpdateMedicalHistory(object, medicalHistoryId);
+            call.enqueue(new Callback<PatientMedicalHistoryViewModel>() {
+                @Override
+                public void onResponse(Call<PatientMedicalHistoryViewModel> call, Response<PatientMedicalHistoryViewModel> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(mContext, PreferencesData.medicalHistoryDetailUpdateSuccesfullMsg , Toast.LENGTH_LONG).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<PatientMedicalHistoryViewModel> call, Throwable t) {
+                    Toast.makeText(mContext, t.getMessage() , Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            Toast.makeText(mContext, PreferencesData.medicalHistoryDetailDataMessage , Toast.LENGTH_LONG).show();
         }
-
-
-
-        return super.onOptionsItemSelected(item);
     }
 
-    public void showHideItems(Menu menu) {
-        MenuItem item;
+    /**
+     * Metodo para consultar historia medica
+     */
 
-        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
 
-        if(action.equals("DETAIL")) {
-            item = menu.findItem(R.id.create_therapy);
-            item.setVisible(false);
+    /**
+     *
+     * Agregar items a la historia medica
+     */
 
-            item = menu.findItem(R.id.save);
-            item.setVisible(false);
-        }else
-       {
-            item = menu.findItem(R.id.create_therapy);
-            item.setVisible(false);
-       }
-    }
-
-    private  void storeStringSharepreferences(String key, String value){
-
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(key, value);
-        editor.commit();
-
-    }
-
-    private  void storeIntSharepreferences(String key, int value){
-
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putInt(key, value);
-        editor.commit();
-
-    }
 
     public void addVitalSigns(View view) {
 
@@ -272,15 +265,85 @@ Calendar cal = Calendar.getInstance();
 
     }
 
+    /**
+     *
+     * Eventos
+     */
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext=context;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        showHideItems(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.save:
+                    updateMedicalHistory();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     *
+     * Metodos varios
+     */
+
     public void loadFragment(Fragment fragment){
         manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
 
+    public void showHideItems(Menu menu) {
+        MenuItem item;
+        item= menu.findItem(R.id.create_therapy);
+        item.setVisible(false);
+        item= menu.findItem(R.id.save);
+        item.setVisible(true);
+    }
 
+    private  void storeStringSharepreferences(String key, String value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+
+    }
+
+    private  void storeIntSharepreferences(String key, int value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+
+    }
+
+    public PatientMedicalHistoryViewModel getData(){
+
+        PatientMedicalHistoryViewModel object= new PatientMedicalHistoryViewModel();
+        String medicalHistoryId=sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+        String patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
+        String historyName=etHistoryName.getText().toString();
+        String additionalInfo=etAdditionalInfo.getText().toString();
+
+        if(!ValidateInputs.validate().ValidateString(Arrays.asList(medicalHistoryId,patientId)))
+        {
+            return null;
+        }
+
+        object.setPatient_id(patientId);
+        object.setPtnt_mdcl_hstry_addtnl_info(additionalInfo);
+        object.setPtnt_mdcl_hstry_name(historyName);
+
+        return object;
+    }
 }

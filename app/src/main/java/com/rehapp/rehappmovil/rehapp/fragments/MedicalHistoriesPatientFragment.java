@@ -21,12 +21,12 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientMedicalHistoryApiAdapter;
 import com.rehapp.rehappmovil.rehapp.MedicalHistoriesAdapter;
-import com.rehapp.rehappmovil.rehapp.MedicalHistoryDetail;
 import com.rehapp.rehappmovil.rehapp.Models.PatientMedicalHistoryViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +51,6 @@ public class MedicalHistoriesPatientFragment extends Fragment {
     }
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,15 +61,13 @@ public class MedicalHistoriesPatientFragment extends Fragment {
         sharedpreferences=mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
 
-        sharedpreferences=mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
-
-
         lvMedicalHistoriesPatient = view.findViewById(R.id.lvMedicalHistoriesPatient);
         recoverySendData();
         loadMedicalHistoriesPatient();
 
         return  view;
     }
+
 
     public void loadMedicalHistoriesPatient()
     {
@@ -112,13 +109,51 @@ public class MedicalHistoriesPatientFragment extends Fragment {
 
     }
 
-
     private void recoverySendData()
     {
         patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
     }
 
+    /**
+     * Metodo para crear historial medica cuando se le de click al boton crear
+     */
 
+    public void createMedicalHistory(String medicalHistoryId){
+
+        PatientMedicalHistoryViewModel object=getObjectToCreate();
+        Call<PatientMedicalHistoryViewModel> call = PatientMedicalHistoryApiAdapter.getApiService().createOrUpdateMedicalHistory(object,medicalHistoryId);
+        call.enqueue(new Callback<PatientMedicalHistoryViewModel>() {
+            @Override
+            public void onResponse(Call<PatientMedicalHistoryViewModel> call, Response<PatientMedicalHistoryViewModel> response) {
+                if(response.isSuccessful()){
+                    PatientMedicalHistoryViewModel medicalHistoryCreated=response.body();
+
+                    MedicalHistoryDetailFragment fragment = new MedicalHistoryDetailFragment();
+                    Bundle extras = new Bundle();
+                    extras.putString(PreferencesData.MedicalHistorySelectedId, medicalHistoryCreated.getPtnt_mdcl_hstry_id());
+                    extras.putString(PreferencesData.MedicaHistoryAction, "ADD");
+                    fragment.setArguments(extras);
+                    loadFragment(fragment);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PatientMedicalHistoryViewModel> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    /**
+     *
+     * Eventos
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -126,33 +161,26 @@ public class MedicalHistoriesPatientFragment extends Fragment {
         showHideItems(menu);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case R.id.create_therapy:
                 cleanPreferenceData();
-                MedicalHistoryDetailFragment fragment = new MedicalHistoryDetailFragment();
-
-                Bundle extras = new Bundle();
-                extras.putString(PreferencesData.MedicaHistoryAction, "ADD");
-
-                fragment.setArguments(extras);
-                loadFragment(fragment);
-
+                createMedicalHistory("0");
                 return true;
-                default:
-                    return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
-    public void showHideItems(Menu menu)
-    {
-        MenuItem item;
+    /**
+     *
+     * Metodos utiles
+     */
 
-        item= menu.findItem(R.id.save);
-        item.setVisible(false);
+    public void loadFragment(Fragment fragment){
+        manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
 
     private void cleanPreferenceData()
@@ -175,15 +203,25 @@ public class MedicalHistoriesPatientFragment extends Fragment {
         editor.commit();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext=context;
+    public void showHideItems(Menu menu) {
+        MenuItem item;
+        item= menu.findItem(R.id.save);
+        item.setVisible(false);
+        item= menu.findItem(R.id.create_therapy);
+        item.setVisible(true);
+    }
+
+    public PatientMedicalHistoryViewModel getObjectToCreate(){
+        PatientMedicalHistoryViewModel object= new PatientMedicalHistoryViewModel();
+
+       object.setPatient_id(patientId);
+       object.setPtnt_mdcl_hstry_addtnl_info(PreferencesData.medicalHistoryDetailDefaultDescription);
+       object.setPtnt_mdcl_hstry_name(PreferencesData.medicalHistoryDetailDefaultName);
+
+        return object;
     }
 
 
-    public void loadFragment(Fragment fragment){
-        manager.beginTransaction().replace(R.id.content,fragment).commit();
-    }
+
 
 }

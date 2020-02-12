@@ -59,17 +59,23 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="end" />
-
+            <EditText
+                android:id="@+id/etHistoryName"
+                android:hint="@string/medicalHistoryName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:maxLines="1"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvTherapySequence"
+        <TextView
+        android:id="@+id/tvMedicalHistorySequence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
-        android:text="@string/MedicalHistorySequence"
         android:layout_gravity="center"/>
 
         <LinearLayout
@@ -131,6 +137,7 @@
 
         </TableRow>
         </TableLayout>
+
         <LinearLayout
             android:id="@+id/lyMedicalHistoryInformation"
             android:layout_width="wrap_content"
@@ -159,6 +166,21 @@
                 android:text="Cuestionarios"
                 android:layout_margin="10dp"/>
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/etAdditionalInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minLines="1"
+                android:maxLines="3"
+                android:gravity="center_horizontal"
+                android:inputType="textMultiLine"
+                android:hint="@string/AddditionalInformationMedicalHistory"
+                android:layout_margin="10dp"/>
         </LinearLayout>
 
     </LinearLayout>

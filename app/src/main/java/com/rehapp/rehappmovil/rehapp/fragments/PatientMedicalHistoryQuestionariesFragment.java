@@ -120,8 +120,7 @@ public class PatientMedicalHistoryQuestionariesFragment extends Fragment {
         medicalHistorySelectedId =sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
     }
 
-    private void saveQuestionaireOptions()
-    {
+    private void saveQuestionaireOptions() {
         List<PatientMedicalHistoryQuestionaireOptionViewModel> data;
         data=getQuestionaryOptionIdFromView();
         if(data!=null) {

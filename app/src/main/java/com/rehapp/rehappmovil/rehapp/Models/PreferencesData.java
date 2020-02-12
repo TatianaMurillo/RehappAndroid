@@ -90,7 +90,10 @@ public class PreferencesData {
     public static final String therapyDetailSaveExerciseRoutineSuccessMsg ="Ejercicios de terapia guardados correctamente.";
     public static final String medicalHistoryDiseaseSaveSuccessMsg ="enfermedades guardadas correctamente.";
 
-
+    public static final String medicalHistoryDetailDataMessage ="Los datos para actualizar la terapia no estan completos.";
+    public static final String medicalHistoryDetailUpdateSuccesfullMsg ="Se actualizó la historia medica exitosamente.";
+    public static final String medicalHistoryDetailDefaultName ="Nombre";
+    public static final String medicalHistoryDetailDefaultDescription ="Descripción";
     public static final String medicalHistoryVitalSignEmptyListMsg ="No se encontraron toma de vitales para el paciente.";
     public static final String therapyDetailPhysiologicalParameterTherapyEmptyListMsg ="No se encontraron parametros fisiologicos para la terapia.";
     public static final String medicalHistoryDiseaseEmptyListMsg ="No se registraron enfermedades en la historia medica.";

@@ -15,10 +15,18 @@ import retrofit2.http.Path;
 
 public interface PatientMedicalHistoryApiService {
 
+    @GET("medicalHistories/{idMedicalHistory}")
+    Call<PatientMedicalHistoryViewModel> getMedicalHistory(@Path("idMedicalHistory") String idMedicalHistory);
+
+
     @GET("medicalHistories/showByPatient/{patientId}")
     Call<ArrayList<PatientMedicalHistoryViewModel>> getMedicalHistoriesByPatient(@Path("patientId") String patientId);
 
     @POST("historyDiseases/saveDiseases/{idHistoryDisease}")
     Call<List<DiseaseViewModel>> saveDiseases(@Body List<DiseaseViewModel> diseases, @Path("idHistoryDisease") String idHistoryDisease);
+
+
+    @POST("medicalHistories/updateOrCreate/{idMedicalHistory}")
+    Call<PatientMedicalHistoryViewModel> createOrUpdateMedicalHistory(@Body PatientMedicalHistoryViewModel medicalHistory, @Path("idMedicalHistory") String idMedicalHistory);
 
 }
