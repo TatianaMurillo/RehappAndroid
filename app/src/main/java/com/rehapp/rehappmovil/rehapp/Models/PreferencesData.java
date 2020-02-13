@@ -107,6 +107,7 @@ public class PreferencesData {
     public static final String therapyRoutineDetailDataMessage="Ingrese los valores en los parametros indicados.";
 
     public static final String therapyRoutineSuccessCreationMessage="Valores de rutina actualizados correctamente.";
+    public static final String therapyRoutineUpdateWithoutRowsMsg="Rutina no registrada para la terapia, por favor crear.";
     public static final String therapyRoutineFailedCreationMessage="Hubo un error al actualizar rutina.";
 
     public static final String listDocumentTypesFailed="No se pudieron cargar los tipos de documento correctamente.";

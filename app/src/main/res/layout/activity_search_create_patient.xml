@@ -1,53 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <ScrollView
 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_margin="50dp"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="50dp"
+        android:text="@string/welcome" />
     <TextView
         android:id="@+id/tvDocumentType"
-        android:layout_width="152dp"
-        android:layout_height="32dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/spnDocumentType"
-        android:layout_alignLeft="@+id/spnDocumentType"
-        android:layout_marginTop="123dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:text="@string/documentTypeViewModel" />
 
     <Spinner
         android:id="@+id/spnDocumentType"
-        android:layout_width="321dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="173dp" />
-
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content" />
     <EditText
         android:id="@+id/etDocument"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvDocumentType"
-        android:layout_alignLeft="@+id/tvDocumentType"
-        android:layout_marginTop="239dp"
         android:ems="10"
+        android:layout_marginTop="100dp"
         android:hint="@string/document"
         android:inputType="number|text" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_margin="50dp"
+        android:orientation="horizontal">
 
     <ImageButton
         android:id="@+id/ibtnAddPatient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="133dp"
-        android:layout_toEndOf="@+id/etDocument"
-        android:layout_toRightOf="@id/etDocument"
         android:background="#00000000"
+        android:layout_margin="30dp"
         android:onClick="createPatient"
         app:srcCompat="@drawable/add" />
 
@@ -55,26 +63,13 @@
         android:id="@+id/ibtnSearchPatient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/ibtnAddPatient"
-        android:layout_marginEnd="33dp"
-        android:layout_marginRight="33dp"
         android:background="#00000000"
+        android:layout_margin="30dp"
         android:onClick="searchPatient"
         app:srcCompat="@drawable/search" />
-
-    <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp"
-        android:text="@string/welcome" />
+        </LinearLayout>
+</LinearLayout>
+  </ScrollView>
 
 
-</RelativeLayout>
+</LinearLayout>

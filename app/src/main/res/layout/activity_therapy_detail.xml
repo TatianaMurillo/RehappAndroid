@@ -92,11 +92,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
-        android:text="Therapist" />
+        android:text="Terapeuta" />
 
         <Spinner
             android:id="@+id/spnTherapist"
-            android:layout_width="235dp"
+            android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_margin="10dp" />
 
@@ -112,7 +112,7 @@
 
         <Spinner
             android:id="@+id/spnInstitution"
-            android:layout_width="242dp"
+            android:layout_width="match_parent"
             android:layout_height="37dp"
             android:layout_alignParentBottom="true"
             android:layout_margin="10dp"

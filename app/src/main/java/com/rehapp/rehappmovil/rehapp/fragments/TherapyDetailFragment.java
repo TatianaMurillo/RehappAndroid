@@ -175,6 +175,7 @@ private  SharedPreferences sharedpreferences;
         tvDateAndTime.setText(sdf.format(cal.getTime()));
         listTherapists();
     }
+
     private void recoverySendData() {
         if( getArguments()!=null)
             {

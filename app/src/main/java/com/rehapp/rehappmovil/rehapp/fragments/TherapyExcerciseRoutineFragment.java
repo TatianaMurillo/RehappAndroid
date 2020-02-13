@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,16 +19,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.ExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 import com.rehapp.rehappmovil.rehapp.YoutubeVideo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,7 +46,6 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     EditText etExerciseFrequent;
     EditText etExerciseIntensity;
     EditText etDuration;
-    EditText etConditions;
     EditText etPreConditions;
     EditText etObservations;
 
@@ -77,7 +73,6 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         etExerciseSpeed=view.findViewById(R.id.etExerciseSpeed);
         etExerciseFrequent=view.findViewById(R.id.etExerciseFrequent);
         etExerciseIntensity=view.findViewById(R.id.etExerciseIntensity);
-        etConditions=view.findViewById(R.id.etConditions);
         etPreConditions=view.findViewById(R.id.etPreConditions);
         etObservations=view.findViewById(R.id.etObservations);
         etDuration=view.findViewById(R.id.etDuration);
@@ -133,7 +128,9 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
                 public void onResponse(Call<TherapyExcerciseRoutineViewModel> call, Response<TherapyExcerciseRoutineViewModel> response) {
 
                     if (response.isSuccessful()) {
-                        Toast.makeText(mContext, PreferencesData.therapyRoutineSuccessCreationMessage, Toast.LENGTH_LONG).show();
+                        saveTherapyTotalDuration();
+                    }else if(response.raw().code()==404){
+                        Toast.makeText(mContext, PreferencesData.therapyRoutineUpdateWithoutRowsMsg, Toast.LENGTH_LONG).show();
                         loadFragment(new TherapyDetailFragment());
                     }
                 }
@@ -151,14 +148,13 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     private List<Object> getDataFromView(){
         TherapyExcerciseRoutineViewModel therapyExcerciseRoutine= new TherapyExcerciseRoutineViewModel();
         float speed;float frequent;float intensity;float duration;
-        String conditions;String preconditions; String observation;
+        String preconditions; String observation;
 
         if(validateDataFromView()) {
              speed = Float.parseFloat(etExerciseSpeed.getText().toString());
              frequent = Float.parseFloat(etExerciseFrequent.getText().toString());
              intensity = Float.parseFloat(etExerciseIntensity.getText().toString());
              duration = Float.parseFloat(etDuration.getText().toString());
-             conditions = etConditions.getText().toString();
              preconditions = etPreConditions.getText().toString();
              observation = etObservations.getText().toString();
 
@@ -169,7 +165,6 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         therapyExcerciseRoutine.setTherapy_excercise_routine_speed(speed);
         therapyExcerciseRoutine.setTherapy_excercise_routine_frequent(frequent);
         therapyExcerciseRoutine.setTherapyExcerciseRoutineIntensity(intensity);
-        therapyExcerciseRoutine.setConditions(conditions);
         therapyExcerciseRoutine.setPreconditions(preconditions);
         therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation(observation);
         }else{
@@ -186,7 +181,6 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
                 etExerciseFrequent.getText().toString(),
                 etExerciseIntensity.getText().toString(),
                 etDuration.getText().toString(),
-                etConditions.getText().toString(),
                 etPreConditions.getText().toString(),
                 etObservations.getText().toString()
         );
@@ -199,7 +193,6 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         etExerciseFrequent.setText(String.valueOf(therapyExcerciseRoutine.getFrequency()));
         etExerciseIntensity.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineIntensity()));
         etDuration.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineDuration()));
-        etConditions.setText(therapyExcerciseRoutine.getConditions());
         etPreConditions.setText(therapyExcerciseRoutine.getConditions());
         etObservations.setText(therapyExcerciseRoutine.getTherapyExcerciseRoutineObservation());
     }
@@ -227,10 +220,28 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
     }
 
-    public void loadFragment(Fragment fragment){
-        FragmentTransaction fragmentTransaction=manager.beginTransaction();
-        fragmentTransaction.replace(R.id.content,fragment);
-        fragmentTransaction.commit();
+    private void saveTherapyTotalDuration(){
+        String therapyId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
+        Call<TherapyViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().updateTherapyDuration(therapyId);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(mContext, PreferencesData.therapyRoutineSuccessCreationMessage, Toast.LENGTH_LONG).show();
+                    loadFragment(new TherapyDetailFragment());
+
+                }else if(response.raw().code()==404){
+                    Toast.makeText(mContext, PreferencesData.therapyNotFoundMsg, Toast.LENGTH_LONG).show();
+                    loadFragment(new TherapyDetailFragment());
+                }else{
+                    Toast.makeText(mContext, PreferencesData.therapyRoutineFailedCreationMessage, Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -250,23 +261,23 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext=context;
+    }
+
+    /**
+     *
+     * Metodos utiles
+     */
     public void showHideItems(Menu menu) {
         MenuItem item;
 
-        String action=sharedpreferences.getString(PreferencesData.TherapyAction,"");
-
-        if(action.equals("DETAIL")) {
-            item = menu.findItem(R.id.create_therapy);
-            item.setVisible(false);
             item = menu.findItem(R.id.save);
             item.setVisible(true);
-        }else
-        {
-            item = menu.findItem(R.id.save);
-            item.setVisible(false);
             item = menu.findItem(R.id.create_therapy);
-            item.setVisible(true);
-        }
+            item.setVisible(false);
     }
 
     private  void storeStringSharepreferences(String key, String value){
@@ -285,9 +296,9 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext=context;
+    public void loadFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction=manager.beginTransaction();
+        fragmentTransaction.replace(R.id.content,fragment);
+        fragmentTransaction.commit();
     }
 }
