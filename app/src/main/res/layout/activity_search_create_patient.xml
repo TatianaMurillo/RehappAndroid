@@ -6,70 +6,88 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/tvWelcome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@string/documentTypeViewModel" />
 
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:layout_margin="50dp"
-        android:orientation="vertical">
-    <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="50dp"
-        android:text="@string/welcome" />
-    <TextView
-        android:id="@+id/tvDocumentType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="@string/documentTypeViewModel" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop ="100dp">
+                                <TextView
+                                    android:id="@+id/tvDocumentType"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="@string/documentTypeViewModel" />
+                                <Spinner
+                                    android:id="@+id/spnDocumentType"
+                                    android:layout_width="match_parent"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:layout_height="wrap_content" />
+                                <EditText
+                                    android:id="@+id/etDocument"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:hint="@string/document"
+                                    android:inputType="number|text" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="end"
+                                    android:orientation="horizontal">
 
-    <Spinner
-        android:id="@+id/spnDocumentType"
-        android:layout_width="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/etDocument"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_marginTop="100dp"
-        android:hint="@string/document"
-        android:inputType="number|text" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:layout_margin="50dp"
-        android:orientation="horizontal">
+                                            <ImageButton
+                                                android:id="@+id/ibtnAddPatient"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:background="#00000000"
+                                                android:onClick="createPatient"
+                                                android:layout_marginLeft="10dp"
+                                                android:layout_marginRight="10dp"
+                                                android:layout_marginTop="50dp"
+                                                android:layout_marginBottom="10dp"
+                                                app:srcCompat="@drawable/add" />
 
-    <ImageButton
-        android:id="@+id/ibtnAddPatient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:layout_margin="30dp"
-        android:onClick="createPatient"
-        app:srcCompat="@drawable/add" />
+                                            <ImageButton
+                                                android:id="@+id/ibtnSearchPatient"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:background="#00000000"
+                                                android:layout_marginLeft="10dp"
+                                                android:layout_marginRight="10dp"
+                                                android:layout_marginTop="50dp"
+                                                android:layout_marginBottom="10dp"
+                                                android:onClick="searchPatient"
+                                                app:srcCompat="@drawable/search" />
+                                </LinearLayout>
+                        </LinearLayout>
+            </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/ibtnSearchPatient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:layout_margin="30dp"
-        android:onClick="searchPatient"
-        app:srcCompat="@drawable/search" />
-        </LinearLayout>
-</LinearLayout>
-  </ScrollView>
-
-
+</ScrollView>
 </LinearLayout>

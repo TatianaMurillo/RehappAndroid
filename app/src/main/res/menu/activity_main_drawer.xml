@@ -3,25 +3,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_menu_profile"
-            android:title="@string/menu_profile" />
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_search"
-            android:title="@string/menu_home" />
-        <item
-            android:id="@+id/nav_exercises"
-            android:icon="@drawable/ic_menu_routines"
-            android:title="@string/menu_exercises" />
-    </group>
+    <item android:title="Terapias">
+
+        <menu>
+            <item
+                android:id="@+id/therapies"
+                android:icon="@drawable/ic_menu_search"
+                android:title="@string/therapies" >
+            </item>
+            <item
+                android:id="@+id/therapy_detail"
+                android:icon="@drawable/ic_menu_search"
+                android:title="@string/therapy_detail" >
+            </item>
+        </menu>
+    </item>
+    <item android:title="Historias médicas">
+        <menu>
+            <item
+                android:id="@+id/medical_histories"
+                android:icon="@drawable/ic_menu_search"
+                android:title="@string/medical_histories" >
+            </item>
+
+            <item
+                android:id="@+id/medical_history_detail"
+                android:icon="@drawable/ic_menu_routines"
+                android:title="@string/medical_history_detail" />
+        </menu>
+    </item>
+    <item android:title="Rutinas">
+        <menu>
+            <item
+                android:id="@+id/menu_exercises"
+                android:icon="@drawable/ic_menu_routines"
+                android:title="@string/menu_exercises" >
+            </item>
+
+        </menu>
+    </item>
+
+
+    <item android:title="Personas">
+
+        <menu>
+            <item
+                android:id="@+id/seach_create_patient"
+                android:icon="@drawable/ic_menu_search"
+                android:title="@string/seach_create_patient" />
+            <item
+                android:id="@+id/search_patient"
+                android:icon="@drawable/ic_menu_search"
+                android:title="@string/search_patient" />
+            <item
+                android:id="@+id/therapist"
+                android:icon="@drawable/ic_menu_profile"
+                android:title="@string/menu_profile" />
+        </menu>
+    </item>
 
     <item android:title="Aplicación">
         <menu>
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/logout"
                 android:icon="@drawable/ic_menu_logout"
                 android:title="@string/menu_logout" />
         </menu>

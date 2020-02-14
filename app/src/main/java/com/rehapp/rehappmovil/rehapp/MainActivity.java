@@ -15,7 +15,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.rehapp.rehappmovil.rehapp.fragments.HistoryTherapiesPatientFragment;
+import com.rehapp.rehappmovil.rehapp.fragments.MedicalHistoriesPatientFragment;
+import com.rehapp.rehappmovil.rehapp.fragments.MedicalHistoryDetailFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.SearchCreatePatientFragment;
+import com.rehapp.rehappmovil.rehapp.fragments.SearchPatientFragment;
+import com.rehapp.rehappmovil.rehapp.fragments.TherapyDetailFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -110,11 +115,35 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            loadFragment(new SearchCreatePatientFragment());
+        switch (id) {
+            case R.id.therapies:
+                loadFragment(new HistoryTherapiesPatientFragment());
+                break;
+            case R.id.therapy_detail:
+                loadFragment(new TherapyDetailFragment());
+                break;
+            case R.id.medical_histories:
+                loadFragment(new MedicalHistoriesPatientFragment());
+                break;
+            case R.id.medical_history_detail:
+                loadFragment(new MedicalHistoryDetailFragment());
+                break;
+            case R.id.menu_exercises:
+                loadFragment(null);
+                break;
+            case R.id.seach_create_patient:
+                loadFragment(new SearchCreatePatientFragment());
+                break;
+            case R.id.search_patient:
+                loadFragment(new SearchPatientFragment());
+                break;
+            case R.id.therapist:
+                loadFragment(null);
+                break;
+            case R.id.logout:
+                loadFragment(null);
+                break;
         }
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
