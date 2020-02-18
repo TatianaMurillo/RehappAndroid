@@ -3,17 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="Terapias">
+
+    <item android:title="Personas">
+
+        <menu>
+            <item
+                android:id="@+id/seach_create_patient"
+                android:icon="@drawable/home"
+                android:title="@string/seach_create_patient" />
+            <item
+                android:id="@+id/search_patient"
+                android:icon="@drawable/search_patient"
+                android:title="@string/search_patient" />
+            <item
+                android:id="@+id/therapist"
+                android:icon="@drawable/profile"
+                android:title="@string/menu_profile" />
+
+        </menu>
+    </item>
+    <item android:title="Rehabilitación pulmonar">
 
         <menu>
             <item
                 android:id="@+id/therapies"
-                android:icon="@drawable/ic_menu_search"
+                android:icon="@drawable/therapies"
                 android:title="@string/therapies" >
             </item>
             <item
                 android:id="@+id/therapy_detail"
-                android:icon="@drawable/ic_menu_search"
+                android:icon="@drawable/watch_later"
                 android:title="@string/therapy_detail" >
             </item>
         </menu>
@@ -22,13 +41,13 @@
         <menu>
             <item
                 android:id="@+id/medical_histories"
-                android:icon="@drawable/ic_menu_search"
+                android:icon="@drawable/medical_histories"
                 android:title="@string/medical_histories" >
             </item>
 
             <item
                 android:id="@+id/medical_history_detail"
-                android:icon="@drawable/ic_menu_routines"
+                android:icon="@drawable/watch_later"
                 android:title="@string/medical_history_detail" />
         </menu>
     </item>
@@ -36,7 +55,7 @@
         <menu>
             <item
                 android:id="@+id/menu_exercises"
-                android:icon="@drawable/ic_menu_routines"
+                android:icon="@drawable/routines"
                 android:title="@string/menu_exercises" >
             </item>
 
@@ -44,23 +63,6 @@
     </item>
 
 
-    <item android:title="Personas">
-
-        <menu>
-            <item
-                android:id="@+id/seach_create_patient"
-                android:icon="@drawable/ic_menu_search"
-                android:title="@string/seach_create_patient" />
-            <item
-                android:id="@+id/search_patient"
-                android:icon="@drawable/ic_menu_search"
-                android:title="@string/search_patient" />
-            <item
-                android:id="@+id/therapist"
-                android:icon="@drawable/ic_menu_profile"
-                android:title="@string/menu_profile" />
-        </menu>
-    </item>
 
     <item android:title="Aplicación">
         <menu>

@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/back-search-patient-page"
-        app:showAsAction="never"
-        android:title="Buscar paciente" />
-
-    <item
         android:id="@+id/create-therapy"
         app:showAsAction="ifRoom"
         android:title="Crear terapia"
