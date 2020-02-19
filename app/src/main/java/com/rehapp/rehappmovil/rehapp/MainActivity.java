@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.fragments.HistoryTherapiesPatientFragment;
@@ -90,6 +91,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void logout(){
+        String token = sharedpreferences.getString(PreferencesData.loginToken,"");
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -125,16 +131,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.therapies:
-                loadFragment(new HistoryTherapiesPatientFragment());
+                checkHistoryTherapiesPatientFragment();
                 break;
             case R.id.therapy_detail:
-                loadFragment(new TherapyDetailFragment());
+                checkTherapyDetailFragment();
                 break;
             case R.id.medical_histories:
-                loadFragment(new MedicalHistoriesPatientFragment());
+                checkMedicalHistoriesFragment();
                 break;
             case R.id.medical_history_detail:
-                loadFragment(new MedicalHistoryDetailFragment());
+                checkMedicalHistoryDetailFragment();
                 break;
             case R.id.menu_exercises:
                 loadFragment(null);
@@ -143,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                 loadFragment(new SearchCreatePatientFragment());
                 break;
             case R.id.search_patient:
-                loadFragment(new SearchPatientFragment());
+                checkSearchPatient();
                 break;
             case R.id.therapist:
                 loadFragment(null);
@@ -155,6 +161,67 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void checkTherapyDetailFragment(){
+        String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
+        String patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
+        if(patientId.equals("")){
+            loadFragment(new SearchCreatePatientFragment());
+            Toast.makeText(getApplicationContext(), PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+        } else if(therapySelectedId.equals("0")){
+                loadFragment(new HistoryTherapiesPatientFragment());
+                Toast.makeText(getApplicationContext(), PreferencesData.HistoryTherapiesPatientFragment,Toast.LENGTH_LONG).show();
+        }else{
+                loadFragment(new TherapyDetailFragment());
+        }
+    }
+
+    private void checkHistoryTherapiesPatientFragment(){
+        String patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
+        if(patientId.equals("")){
+            loadFragment(new SearchCreatePatientFragment());
+            Toast.makeText(getApplicationContext(), PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+        }else{
+            loadFragment(new HistoryTherapiesPatientFragment());
+        }
+    }
+
+    private void checkMedicalHistoriesFragment(){
+        String patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
+        if(patientId.equals("")){
+            loadFragment(new SearchCreatePatientFragment());
+            Toast.makeText(getApplicationContext(), PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+        }else{
+            loadFragment(new MedicalHistoriesPatientFragment());
+        }
+    }
+
+    private void checkMedicalHistoryDetailFragment(){
+
+            String documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
+            String medicalHistory=sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+            if(documentPatient.equals("")){
+                loadFragment(new SearchCreatePatientFragment());
+                Toast.makeText(getApplicationContext(), PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+            }else if (medicalHistory.equals("")){
+                loadFragment(new MedicalHistoriesPatientFragment());
+                Toast.makeText(getApplicationContext(), PreferencesData.MedicalHistoriesPatientFragment,Toast.LENGTH_LONG).show();
+            }else{
+                loadFragment(new MedicalHistoryDetailFragment());
+            }
+
+    }
+    private void checkSearchPatient(){
+        String documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
+        int documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,"0"));
+
+        if(documentPatient.equals("") || documentTypePatientId==0){
+            loadFragment(new SearchCreatePatientFragment());
+            Toast.makeText(getApplicationContext(), PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+        }else{
+            loadFragment(new SearchPatientFragment());
+        }
     }
 
     public void loadFragment(Fragment fragment){

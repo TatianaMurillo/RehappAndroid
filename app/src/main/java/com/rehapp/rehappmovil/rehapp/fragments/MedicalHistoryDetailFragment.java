@@ -45,7 +45,6 @@ private String action;
 private TextView tvPatientNameValue;
 private TextView tvNeighborhoodValue;
 private TextView tvAgeValue;
-private String documentPatient;
 private String medicalHistorySelectedId;
 private PatientViewModel patientViewModel;
 private SharedPreferences sharedpreferences;
@@ -139,21 +138,11 @@ Calendar cal = Calendar.getInstance();
                 medicalHistorySelectedId=extras.getString(PreferencesData.MedicalHistorySelectedId);
                 storeStringSharepreferences(PreferencesData.MedicalHistorySelectedId, medicalHistorySelectedId);
                 storeStringSharepreferences(PreferencesData.MedicaHistoryAction, action);
-        }else{
-
-            documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
-            String medicalHistory=sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
-            if(documentPatient.equals("")){
-                loadFragment(new SearchCreatePatientFragment());
-                Toast.makeText(mContext, PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
-            }else if (medicalHistory.equals("")){
-                loadFragment(new MedicalHistoriesPatientFragment());
-                Toast.makeText(mContext, PreferencesData.MedicalHistoriesPatientFragment,Toast.LENGTH_LONG).show();
-            }
         }
     }
 
     public  void searchPatient() {
+        String documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
         Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(documentPatient);
         call.enqueue(new Callback<PatientViewModel>() {
             @Override

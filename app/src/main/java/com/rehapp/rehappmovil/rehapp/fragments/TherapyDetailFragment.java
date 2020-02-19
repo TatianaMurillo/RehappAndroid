@@ -189,12 +189,6 @@ private  SharedPreferences sharedpreferences;
                     therapySelectedId = extras.getInt(PreferencesData.TherapySelectedId);
                     storeIntSharepreferences(PreferencesData.TherapyId, therapySelectedId);
                 }
-        }else{
-            String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-            if(therapySelectedId.equals("0")){
-                loadFragment(new HistoryTherapiesPatientFragment());
-                Toast.makeText(mContext, PreferencesData.HistoryTherapiesPatientFragment,Toast.LENGTH_LONG).show();
-            }
         }
     }
 

@@ -123,10 +123,6 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
 
     private void recoverySendData() {
         patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
-        if(patientId.equals("")){
-            loadFragment(new SearchCreatePatientFragment());
-            Toast.makeText(mContext, PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
-        }
     }
 
 
