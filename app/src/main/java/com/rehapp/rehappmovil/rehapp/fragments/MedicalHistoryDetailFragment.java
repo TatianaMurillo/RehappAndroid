@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,18 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.HistoryTherapiesPatient;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientMedicalHistoryApiAdapter;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.MedicalHistoriesPatient;
 import com.rehapp.rehappmovil.rehapp.MedicalHistoryDiseasesDialog;
 import com.rehapp.rehappmovil.rehapp.Models.PatientMedicalHistoryViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
-import com.rehapp.rehappmovil.rehapp.PatientMedicalHistoryQuestionaries;
-import com.rehapp.rehappmovil.rehapp.PatientMedicalHistoryVitalSigns;
 import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
@@ -38,7 +32,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.concurrent.Callable;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,7 +39,7 @@ import retrofit2.Response;
 
 public class MedicalHistoryDetailFragment extends Fragment {
 
-private String therapyCreatedId;
+
 private TextView tvMedicalHistorySequence;
 private String action;
 private TextView tvPatientNameValue;
@@ -146,9 +139,18 @@ Calendar cal = Calendar.getInstance();
                 medicalHistorySelectedId=extras.getString(PreferencesData.MedicalHistorySelectedId);
                 storeStringSharepreferences(PreferencesData.MedicalHistorySelectedId, medicalHistorySelectedId);
                 storeStringSharepreferences(PreferencesData.MedicaHistoryAction, action);
-        }
+        }else{
 
-        documentPatient =sharedpreferences.getString(PreferencesData.PatientDocument,"");
+            documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
+            String medicalHistory=sharedpreferences.getString(PreferencesData.MedicalHistorySelectedId,"");
+            if(documentPatient.equals("")){
+                loadFragment(new SearchCreatePatientFragment());
+                Toast.makeText(mContext, PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+            }else if (medicalHistory.equals("")){
+                loadFragment(new MedicalHistoriesPatientFragment());
+                Toast.makeText(mContext, PreferencesData.MedicalHistoriesPatientFragment,Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     public  void searchPatient() {

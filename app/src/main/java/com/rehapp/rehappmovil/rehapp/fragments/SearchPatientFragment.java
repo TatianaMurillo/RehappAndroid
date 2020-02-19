@@ -2,17 +2,14 @@ package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +21,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.CreatePatient;
-import com.rehapp.rehappmovil.rehapp.HistoryTherapiesPatient;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
-import com.rehapp.rehappmovil.rehapp.MedicalHistoriesPatient;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.R;
-import com.rehapp.rehappmovil.rehapp.SearchCreatePatient;
-import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 
 import java.util.ArrayList;
 
@@ -109,8 +101,8 @@ public class SearchPatientFragment extends  Fragment {
                 watchTherapies();
             }
         });
-        spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+
+        spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
@@ -122,6 +114,7 @@ public class SearchPatientFragment extends  Fragment {
             {
             }
         });
+
           listDocumentTypes();
           searchPatient();
           return  view;
@@ -207,7 +200,12 @@ public class SearchPatientFragment extends  Fragment {
 
     private void recoverySendData() {
         documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
-        documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,""));
+        documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,"0"));
+
+        if(documentPatient.equals("") || documentTypePatientId==0){
+            loadFragment(new SearchCreatePatientFragment());
+            Toast.makeText(mContext, PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+        }
     }
 
     public void checkDataSearchPatient() {

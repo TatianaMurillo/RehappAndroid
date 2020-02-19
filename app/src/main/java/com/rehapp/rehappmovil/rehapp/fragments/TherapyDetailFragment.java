@@ -52,7 +52,6 @@ private String action;
 private TextView tvDateAndTime;
 private Spinner spnTherapist;
 private Spinner spnInstitution;
-private TherapyMasterDetailViewModel therapyViewModel;
 private TextView tvWatchExercises;
 private TextView tvPhisiologicalParametersIn;
 private TextView tvPhisiologicalParametersOut;
@@ -101,7 +100,6 @@ private  SharedPreferences sharedpreferences;
         tvDateAndTime=view.findViewById(R.id.tvDateAndTime);
         spnTherapist = view.findViewById(R.id.spnTherapist);
         etTherapyDuration=view.findViewById(R.id.etTherapyDuration);
-        therapyViewModel = ViewModelProviders.of(this).get(TherapyMasterDetailViewModel.class);
         therapyCreatedId="";
         recoverySendData();
         loadData();
@@ -179,7 +177,6 @@ private  SharedPreferences sharedpreferences;
     private void recoverySendData() {
         if( getArguments()!=null)
             {
-
                 Bundle extras = getArguments();
                 action= extras.getString(PreferencesData.TherapyAction);
 
@@ -192,6 +189,12 @@ private  SharedPreferences sharedpreferences;
                     therapySelectedId = extras.getInt(PreferencesData.TherapySelectedId);
                     storeIntSharepreferences(PreferencesData.TherapyId, therapySelectedId);
                 }
+        }else{
+            String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
+            if(therapySelectedId.equals("0")){
+                loadFragment(new HistoryTherapiesPatientFragment());
+                Toast.makeText(mContext, PreferencesData.HistoryTherapiesPatientFragment,Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -245,35 +248,6 @@ private  SharedPreferences sharedpreferences;
             @Override
             public void onFailure(Call<ArrayList<InstitutionViewModel>> call, Throwable t) {
                 Toast.makeText(mContext, PreferencesData.therapyDetailInstitutionListMsg,Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    public  void searchTherapy(){
-        String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if(response.isSuccessful())
-                {
-                    therapySelected = response.body();
-                    tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapySelected.getTherapy_sequence());
-                    etTherapyDuration.setText(String.valueOf(therapySelected.getTherapy_total_duration()));
-                    selectInstitution(therapySelected);
-                    selectTherapist(therapySelected);
-                }else{
-                    if(response.raw().code()==404) {
-                        Toast.makeText(mContext, PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
-                        HistoryTherapiesPatientFragment fragment = new HistoryTherapiesPatientFragment();
-                        loadFragment(fragment);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-
             }
         });
     }
@@ -376,6 +350,35 @@ private  SharedPreferences sharedpreferences;
             @Override
             public void onFailure(Call<TherapyViewModel> call, Throwable t) {
                 Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public  void searchTherapy(){
+        String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().getTherapy(therapySelectedId);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                if(response.isSuccessful())
+                {
+                    therapySelected = response.body();
+                    tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapySelected.getTherapy_sequence());
+                    etTherapyDuration.setText(String.valueOf(therapySelected.getTherapy_total_duration()));
+                    selectInstitution(therapySelected);
+                    selectTherapist(therapySelected);
+                }else{
+                    if(response.raw().code()==404) {
+                        Toast.makeText(mContext, PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
+                        HistoryTherapiesPatientFragment fragment = new HistoryTherapiesPatientFragment();
+                        loadFragment(fragment);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+
             }
         });
     }

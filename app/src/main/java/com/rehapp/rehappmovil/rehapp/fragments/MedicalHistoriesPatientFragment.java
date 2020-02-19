@@ -69,8 +69,7 @@ public class MedicalHistoriesPatientFragment extends Fragment {
     }
 
 
-    public void loadMedicalHistoriesPatient()
-    {
+    public void loadMedicalHistoriesPatient() {
         Call<ArrayList<PatientMedicalHistoryViewModel>> call = PatientMedicalHistoryApiAdapter.getApiService().getMedicalHistoriesByPatient(patientId);
         call.enqueue(new Callback<ArrayList<PatientMedicalHistoryViewModel>>() {
             @Override
@@ -109,9 +108,12 @@ public class MedicalHistoriesPatientFragment extends Fragment {
 
     }
 
-    private void recoverySendData()
-    {
+    private void recoverySendData() {
         patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
+        if(patientId.equals("")){
+            loadFragment(new SearchCreatePatientFragment());
+            Toast.makeText(mContext, PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -186,14 +188,6 @@ public class MedicalHistoriesPatientFragment extends Fragment {
     private void cleanPreferenceData()
     {
         storeIntSharepreferences(PreferencesData.TherapyId,0);
-    }
-
-    private  void storeStringSharepreferences(String key, String value){
-
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(key, value);
-        editor.commit();
-
     }
 
     private  void storeIntSharepreferences(String key, int value){

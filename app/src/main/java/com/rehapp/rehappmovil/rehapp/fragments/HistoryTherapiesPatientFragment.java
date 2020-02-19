@@ -1,14 +1,12 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,12 +19,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
-import com.rehapp.rehappmovil.rehapp.TherapyDetail;
 
 import java.util.ArrayList;
 
@@ -39,11 +34,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
     private ListView lvTherapies;
     private ArrayList<TherapyViewModel> therapies = new ArrayList<>();
     private ArrayList<String> therapiesNames= new ArrayList<>();
-    private String documentPatient;
-    private PatientViewModel patientViewModel;
-    private int documentTypePatientId;
     private String patientId;
-    private TherapyMasterDetailViewModel therapy;
     SharedPreferences sharedpreferences;
 
     private Context mContext;
@@ -130,12 +121,12 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
 
     }
 
-    private void recoverySendData()
-    {
-        documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
-        documentTypePatientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientTpoDocument,"0"));
+    private void recoverySendData() {
         patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
-
+        if(patientId.equals("")){
+            loadFragment(new SearchCreatePatientFragment());
+            Toast.makeText(mContext, PreferencesData.SearchCreatePatientFragment,Toast.LENGTH_LONG).show();
+        }
     }
 
 

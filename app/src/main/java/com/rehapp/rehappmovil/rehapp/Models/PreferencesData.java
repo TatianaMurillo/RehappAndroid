@@ -3,7 +3,6 @@ package com.rehapp.rehappmovil.rehapp.Models;
 public class PreferencesData {
 
     public static final String PreferenceFileName = "infoToRestore";
-    public static final String loginKey = "login_info";
     public static final String loginToken = "token";
     public static final String userActive ="userActive";
     public static final String userActiveId ="userActiveId";
@@ -17,7 +16,6 @@ public class PreferencesData {
     public static final String PatientTpoDocument ="tpoDocument";
     public static final String TherapySelectedId="TherapySelectedId";
     public static final String MedicalHistorySelectedId="MedicalHistorySelectedId";
-    public static final String TherapyMasterDetailViewModel="therapyMasterDetailViewModel";
     public static final String ExerciseRoutineUrl="exerciseRoutineUrl";
     public static final String TherapyExerciseRoutineId="therapyExerciseRoutineId";
     public static final String ExerciseRoutineId="exerciseRoutineId";
@@ -29,9 +27,6 @@ public class PreferencesData {
     public static final String TherapyAction="TherapyAction";
     public static final String MedicaHistoryAction="MedicaHistoryAction";
     public static final String PhysiologicalParameterAction="PhysiologicalParameterAction";
-    public static final String PhysiologicalParameterIn="PhysiologicalParameterIn";
-    public static final String PhysiologicalParameterOut="PhysiologicalParameterOut";
-    public static final String PhysiologicalParameterTherapyDataMgs ="Diligenciar todos los datos por favor.";
     public static final String PhysiologicalParameterTherapyDataListFailed ="Hubo un error al consultar los parametros fisiológicos.";
     public static final String PhysiologicalParameterTherapyDataMgsError ="Error al diligenciar  los parametros fisiológicos. Contacte al administrador.";
     public static final String MedicalHistoryVitalSignsDataMgsError ="Error al diligenciar los signos vitales. Contacte al administrador.";
@@ -42,7 +37,6 @@ public class PreferencesData {
     public static final String PhysiologicalParameterTherapySesionOUT ="OUT";
 
     public static final String loginIncorrectDataMgs ="Por favor ingrese los datos para iniciar sesión.";
-    public static final String searchPatientIncorrectDataMgs ="Diligenciar todos los datos por favor.";
     public static final String loginFailureMsg="Error en la aplicacion.";
     public static final String searchPatientListDocumentTypesMgs ="Diligenciar todos los datos por favor.";
     public static final String registerUserDataMgs ="Diligenciar todos los datos por favor.";
@@ -78,13 +72,10 @@ public class PreferencesData {
 
     public static final String therapyCreationIdSuccessMsg ="Se creó la terapia con éxito.";
     public static final String therapyCreationIdFailedMsg ="Hubo un error al generar terapia.";
-    public static final String therapyCreationSuccessMsg ="Se creó la terapia con éxito.";
-    public static final String therapyCreationFailedMsg ="Falló al crear terapia.";
     public static final String therapyDetailTherapistListMsg ="Hubo un error al listar terapeutas.";
     public static final String therapyDetailExerciseRoutineListMsg ="Hubo un error al listar ejercicios de rutina.";
     public static final String medicalHistoryDiseasesListMsg ="Hubo un error al listar las enfermedades.";
 
-    public static final String therapyDetailSaveExerciseRoutineDataFailedMsg ="Debe seleccionar al menos (1) ejercicio de rutina.";
     public static final String therapyDetailSaveExerciseRoutineFailedMsg ="Hubo un error al guardar ejercicios de terapia.";
     public static final String medicalHistoryDiseaseSaveFailedMsg ="Hubo un error al guardar las enfermedades.";
     public static final String therapyDetailSaveExerciseRoutineSuccessMsg ="Ejercicios de terapia guardados correctamente.";
@@ -96,7 +87,6 @@ public class PreferencesData {
     public static final String medicalHistoryDetailDefaultDescription ="Descripción";
     public static final String medicalHistoryVitalSignEmptyListMsg ="No se encontraron toma de vitales para el paciente.";
     public static final String therapyDetailPhysiologicalParameterTherapyEmptyListMsg ="No se encontraron parametros fisiologicos para la terapia.";
-    public static final String medicalHistoryDiseaseEmptyListMsg ="No se registraron enfermedades en la historia medica.";
     public static final String therapyDetailTherapyExerciseRoutinesEmptyListMsg ="No se encontraron rutinas para la terapia.";
     public static final String therapyDetailTherapyExerciseRoutinesListMsg ="Hubo un error al listar los ejercicios previamente seleccionados.";
     public static final String therapyDetailInstitutionListMsg ="Hubo un error al listar instituciones.";
@@ -123,10 +113,13 @@ public class PreferencesData {
 
     public static final int PhysiologicalParameterTherapyValueSize=5;
     public static final int VitalSignsTherapyValueSize=5;
-
-    public static final int PhysiologicalParameterTherapyINPositionArray=0;
-    public static final int PhysiologicalParameterTherapyOUTPositionArray=1;
-
     public static final String therapyDetailWatchVideo="Ver.";
 
+
+    /**
+     * Mensajes para redirigir a los fragments si no se tienen los datos a utiliza
+     */
+    public static final String MedicalHistoriesPatientFragment ="Seleccionar o crear una historia médica";
+    public static final String HistoryTherapiesPatientFragment ="Seleccionar o crear una terapia";
+    public static final String SearchCreatePatientFragment ="Buscar o registrar un paciente.";
 }
