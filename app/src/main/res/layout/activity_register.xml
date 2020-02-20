@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Register">
 
     <EditText
         android:id="@+id/etName"
-        android:layout_width="237dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="35dp"
         android:ems="10"
+        android:layout_margin="10sp"
         android:hint="@string/name"
         android:inputType="text" />
+
+    <Spinner
+        android:id="@+id/spnTherapistDocumentType"
+        android:layout_width="237dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp"
+        android:ems="10"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/etTherapistDocument"
+        android:layout_width="237dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp"
+        android:ems="10"
+        android:hint="@string/therapistDocument"
+        android:inputType="number" />
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="241dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etName"
-        android:layout_alignLeft="@+id/etName"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginTop="102dp"
+        android:layout_marginTop="50sp"
+        android:layout_marginStart="10sp"
+        android:layout_marginLeft="10sp"
         android:ems="10"
         android:hint="@string/e_mail"
         android:inputType="textEmailAddress" />
@@ -38,26 +48,18 @@
         android:id="@+id/etConfirmarEmail"
         android:layout_width="238dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etEmail"
-        android:layout_alignStart="@+id/etEmail"
-        android:layout_alignLeft="@+id/etEmail"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="34dp"
+        android:layout_margin="10sp"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:hint="@string/ConfirmEmail" />
+        android:hint="@string/ConfirmEmail"
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/etUserPassword"
         android:layout_width="243dp"
+        android:layout_marginStart="10sp"
+        android:layout_marginLeft="10sp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etEmail"
-        android:layout_alignLeft="@+id/etEmail"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="-1dp"
-        android:layout_marginLeft="-1dp"
-        android:layout_marginBottom="402dp"
+        android:layout_marginTop="50sp"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword" />
@@ -65,13 +67,8 @@
     <EditText
         android:id="@+id/etConfirmUserPassword"
         android:layout_width="240dp"
+        android:layout_margin="10sp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etEmail"
-        android:layout_alignLeft="@+id/etEmail"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="-2dp"
-        android:layout_marginLeft="-2dp"
-        android:layout_marginBottom="309dp"
         android:ems="10"
         android:hint="@string/ConfirmPassword"
         android:inputType="textPassword" />
@@ -79,13 +76,9 @@
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="109dp"
+        android:layout_margin="10sp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="269dp"
-        android:layout_marginLeft="269dp"
-        android:layout_marginBottom="205dp"
+        android:layout_gravity="end|bottom"
         android:hint="@string/Save"
         android:onClick="register" />
-</RelativeLayout>
+</LinearLayout>

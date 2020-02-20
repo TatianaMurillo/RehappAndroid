@@ -1,5 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
 
 import retrofit2.Call;
@@ -13,7 +14,7 @@ public interface UserApiService {
     Call <UserViewModel> login(@Body UserViewModel user);
 
     @POST("register")
-    Call <UserViewModel> newUSer(@Body UserViewModel user);
+    Call <TherapistViewModel> newUSer(@Body UserViewModel therapist);
 
     @POST("logout")
     Call <UserViewModel> logout(@Body UserViewModel user);

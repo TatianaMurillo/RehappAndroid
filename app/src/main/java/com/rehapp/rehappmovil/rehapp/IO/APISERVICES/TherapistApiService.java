@@ -5,7 +5,10 @@ import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 
 public interface TherapistApiService {
 
@@ -13,27 +16,10 @@ public interface TherapistApiService {
     @GET("therapists")
     Call<ArrayList<TherapistViewModel>> getTherapists();
 
-/*
-    @FormUrlEncoded
-    @POST("upload/photo")
-    Call<SimpleResponse> postPhoto(
-            @Field("image") String base64,
-            @Field("extension") String extension,
-            @Field("user_id") String user_id
-    );
+    @GET("therapists/{therapistId}")
+    Call<TherapistViewModel> getTherapist(@Path("therapistId") String therapistId);
 
-    @GET("login")
-    Call<LoginResponse> getLogin(
-            @Query("username") String username,
-            @Query("password") String password
-    );
+    @PUT("therapists/{therapistId}")
+    Call<TherapistViewModel> updateTherapist(@Body TherapistViewModel therapist, @Path("therapistId") String therapistId);
 
-    @FormUrlEncoded
-    @POST("product")
-    Call<SimpleResponse> postNewProduct(
-            @Field("code") String code,
-            @Field("name") String name,
-            @Field("description") String description
-    );
-    */
 }

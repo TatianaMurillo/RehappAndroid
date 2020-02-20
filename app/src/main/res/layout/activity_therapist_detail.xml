@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CreatePatient">
+
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+        <TableRow>
+        <TextView
+            android:id="@+id/tvfirstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Primer nombre" />
+
+                <EditText
+                    android:id="@+id/etFirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_span="4"
+                    android:inputType="text"
+                    android:hint="Primer nombre"
+                    />
+            </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvSecondName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Segundo nombre" />
+
+        <EditText
+            android:id="@+id/etSecondName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Segundo nombre"
+            android:layout_span="4"
+            android:inputType="text" />
+    </TableRow>
+
+    <TableRow>
+
+    <TextView
+        android:id="@+id/tvFirstLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_span="1"
+        android:text="Primer apellido" />
+
+    <EditText
+        android:id="@+id/etFirstLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_span="4"
+        android:inputType="text"
+        android:hint="Primer apellido" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvSecondLastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Segundo apellido" />
+
+        <EditText
+            android:id="@+id/etSecondLastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4"
+            android:inputType="text"
+            android:hint="Segundo apellido" />
+    </TableRow>
+        <TableRow>
+
+            <TextView
+                android:id="@+id/tvAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="1"
+                android:text="Edad" />
+
+            <EditText
+                android:id="@+id/etAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="4"
+                android:inputType="number"
+                android:hint="Ingrese edad" />
+
+        </TableRow>
+    <TableRow>
+        <TextView
+            android:id="@+id/tvGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Género" />
+
+        <Spinner
+            android:id="@+id/spnGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4"/>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvDocumentType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo documento"
+            android:layout_span="1"/>
+        <Spinner
+            android:id="@+id/spnDocumentType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4"/>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvDocument"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Documento" />
+
+        <EditText
+            android:id="@+id/etDocument"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4"
+            android:inputType="number"
+            android:hint="Ingrese documento" />
+
+    </TableRow>
+
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Direccion" />
+
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4"
+            android:hint="Ingrese direccion" />
+
+    </TableRow>
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvNeighborhood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Barrio" />
+
+        <Spinner
+            android:id="@+id/spnNeighborhood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4"
+            android:hint="Ingrese el barrio." />
+
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvCellPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Celular" />
+
+        <EditText
+            android:id="@+id/etCellphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4"
+            android:inputType="number"
+            android:hint="Ingrese numero de celular" />
+
+    </TableRow>
+    <TableRow>
+
+        <TextView
+            android:id="@+id/tvLandLinePhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Telefono fijo"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/etLandLinePhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="4"
+            android:inputType="number"
+            android:hint="Ingrese telefono fijo" />
+
+    </TableRow>
+
+    </TableLayout>
+
+
+</ScrollView>
+</LinearLayout>

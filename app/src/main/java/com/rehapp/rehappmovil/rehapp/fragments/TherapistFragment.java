@@ -94,7 +94,7 @@ public class TherapistFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         manager = this.getFragmentManager();
-        view =inflater.inflate(R.layout.activity_create_patient,container,false);
+        view =inflater.inflate(R.layout.activity_therapist_detail,container,false);
         sharedpreferences =mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
 

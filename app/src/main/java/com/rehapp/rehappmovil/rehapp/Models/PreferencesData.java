@@ -21,6 +21,7 @@ public class PreferencesData {
     public static final String ExerciseRoutineId="exerciseRoutineId";
 
     public static final String TherapyId="TherapyId";
+    public static final String TherapistId="TherapistId";
     public static final String ADD="ADD";
     public static final String DETAIL="DETAIL";
     public static final String PatientAction="PatientAction";

@@ -22,6 +22,28 @@ public class ValidateInputs {
             return true;
     }
 
+    public boolean ValidateStringsAndIntegers(List<String> dataInput,List<Integer> dataIntegerInput)
+    {
+        for(String data:dataInput)
+        {
+            if("".equals(data)){
+                return false;
+            }
+
+        }
+
+        for(int data:dataIntegerInput)
+        {
+            if(data==-1)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
 
     public boolean ValidateIntegers(List<Integer> dataInput)
     {

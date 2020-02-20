@@ -6,14 +6,20 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
+import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
+import com.rehapp.rehappmovil.rehapp.Utils.Constants.Therapist;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
@@ -31,6 +37,12 @@ public class Register extends AppCompatActivity {
     EditText etConfirmarEmail;
     EditText etUserPassword;
     EditText etConfirmPassword;
+    EditText etTherapistDocument;
+    Spinner spnTherapistDocumentType;
+    int documentTypeSelectedId=-1,indexDocumentTypeSelected=-1;
+    ArrayList<DocumentTypeViewModel> documentTypes =new ArrayList<>();
+    ArrayList<String> documentTypeNames= new ArrayList<>();
+
     Button btnRegister;
     private SharedPreferences sharedpreferences;
     private UserViewModel userViewModel;
@@ -50,23 +62,72 @@ public class Register extends AppCompatActivity {
          etUserPassword= findViewById(R.id.etUserPassword);
          etConfirmPassword= findViewById(R.id.etConfirmUserPassword);
          btnRegister= findViewById(R.id.btnRegister);
+         etTherapistDocument=findViewById(R.id.etTherapistDocument);
+         spnTherapistDocumentType=findViewById(R.id.spnTherapistDocumentType);
+        loadData();
+        spnTherapistDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                documentTypeSelectedId = documentTypes.get(position).getDocument_type_id();
+                indexDocumentTypeSelected=position;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
 
+    }
+
+    private void loadData(){
+        loadDocumentTypes();
+    }
+
+    private void loadDocumentTypes()
+    {
+        Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
+        call.enqueue(new Callback<ArrayList<DocumentTypeViewModel>>() {
+
+                         @Override
+                         public void onResponse(Call<ArrayList<DocumentTypeViewModel>> call, Response<ArrayList<DocumentTypeViewModel>> response) {
+                             if(response.isSuccessful())
+                             {
+                                 documentTypes= response.body();
+                                 for (DocumentTypeViewModel documentTypeViewModel : documentTypes) {
+                                     documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
+                                 }
+                                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, documentTypeNames);
+                                 spnTherapistDocumentType.setAdapter(arrayAdapter);
+
+                             }
+                         }
+                         @Override
+                         public void onFailure(Call<ArrayList<DocumentTypeViewModel>> call, Throwable t) {
+                             t.printStackTrace();
+                             Toast.makeText(getApplicationContext(), PreferencesData.listDocumentTypesFailed, Toast.LENGTH_LONG).show();
+                         }
+                     }
+        );
     }
 
 
     public void register(View view) {
 
-        String name, email,confirmEmail, password, confirmPassword;
+        String name, email,confirmEmail, password, confirmPassword,therapistDocument;
+        int therapistDocumentTypeId=documentTypeSelectedId;
 
+        therapistDocument=etTherapistDocument.getText().toString();
         name = etName.getText().toString().trim();
         email = etEmail.getText().toString().trim();
         confirmEmail = etConfirmarEmail.getText().toString().trim();
         password = etUserPassword.getText().toString().trim();
         confirmPassword = etConfirmPassword.getText().toString().trim();
-        ArrayList<String> data =new ArrayList<>(Arrays.asList(name,email,confirmEmail,password,confirmPassword));
+        ArrayList<String> data =new ArrayList<>(Arrays.asList(therapistDocument,name,email,confirmEmail,password,confirmPassword));
+        ArrayList<Integer> dataInteger =new ArrayList<>(Arrays.asList(therapistDocumentTypeId));
 
-        if(!ValidateInputs.validate().ValidateString(data)){
-
+        if(!ValidateInputs.validate().ValidateStringsAndIntegers(data,dataInteger)){
 
             Toast.makeText(getApplicationContext(),PreferencesData.registerUserDataMgs,Toast.LENGTH_LONG).show();
 
@@ -89,23 +150,22 @@ public class Register extends AppCompatActivity {
 
         private void registerUser(final UserViewModel newUser) {
 
-            Call<UserViewModel> call = UserApiAdapter.getApiService().newUSer(newUser);
-            call.enqueue(new Callback<UserViewModel>() {
-
-            @Override
-            public void onResponse (Call < UserViewModel > call, Response < UserViewModel > response)
-            {
-
-                if (response.isSuccessful()) {
-                        login(newUser);
-                } else {
-                        Toast.makeText(getApplicationContext(), PreferencesData.registerUserFailedMgs, Toast.LENGTH_LONG).show();
-
-                }
-            }
+            Call<TherapistViewModel> call = UserApiAdapter.getApiService().newUSer(newUser);
+            call.enqueue(new Callback<TherapistViewModel>() {
 
                 @Override
-                public void onFailure (Call < UserViewModel > call, Throwable t){
+                public void onResponse (Call < TherapistViewModel > call, Response < TherapistViewModel > response)
+                {
+                    if (response.isSuccessful()) {
+                            TherapistViewModel therapist=response.body();
+                            storeIntSharepreferences(PreferencesData.TherapistId, therapist.getTherapist_id());
+                            login(newUser);
+                    } else {
+                            Toast.makeText(getApplicationContext(), PreferencesData.registerUserFailedMgs, Toast.LENGTH_LONG).show();
+                    }
+                }
+                @Override
+                public void onFailure (Call < TherapistViewModel > call, Throwable t){
                     Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
