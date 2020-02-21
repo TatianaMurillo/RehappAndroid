@@ -14,12 +14,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
-import com.rehapp.rehappmovil.rehapp.Utils.Constants.Therapist;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
@@ -70,8 +70,12 @@ public class Register extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                documentTypeSelectedId = documentTypes.get(position).getDocument_type_id();
-                indexDocumentTypeSelected=position;
+                /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                int selectedOption=position-1;
+                if(selectedOption>-1) {
+                    documentTypeSelectedId = documentTypes.get(selectedOption).getDocument_type_id();
+                }
+                indexDocumentTypeSelected = selectedOption;
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent)
@@ -80,6 +84,8 @@ public class Register extends AppCompatActivity {
         });
 
     }
+
+
 
     private void loadData(){
         loadDocumentTypes();
@@ -95,12 +101,12 @@ public class Register extends AppCompatActivity {
                              if(response.isSuccessful())
                              {
                                  documentTypes= response.body();
+                                 documentTypeNames.add(getResources().getString(R.string.DocumentTypeNonSelected));
                                  for (DocumentTypeViewModel documentTypeViewModel : documentTypes) {
                                      documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
                                  }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, documentTypeNames);
                                  spnTherapistDocumentType.setAdapter(arrayAdapter);
-
                              }
                          }
                          @Override
@@ -142,7 +148,7 @@ public class Register extends AppCompatActivity {
 
             }else
             {
-                UserViewModel user = new UserViewModel(email, password, name);
+                UserViewModel user = new UserViewModel(email, password, name,therapistDocument,documentTypeSelectedId);
                 registerUser(user);
             }
 
@@ -159,9 +165,13 @@ public class Register extends AppCompatActivity {
                     if (response.isSuccessful()) {
                             TherapistViewModel therapist=response.body();
                             storeIntSharepreferences(PreferencesData.TherapistId, therapist.getTherapist_id());
+                            storeStringSharepreferences(PreferencesData.TherapistName, therapist.getTherapist_first_name());
+                            storeStringSharepreferences(PreferencesData.TherapistEmail, therapist.getTherapist_email());
                             login(newUser);
-                    } else {
-                            Toast.makeText(getApplicationContext(), PreferencesData.registerUserFailedMgs, Toast.LENGTH_LONG).show();
+                    } else if(response.raw().code()==409){
+                            Toast.makeText(getApplicationContext(), PreferencesData.registerExistedUserMgs, Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), PreferencesData.registerUserFailedMgs, Toast.LENGTH_LONG).show();
                     }
                 }
                 @Override
@@ -173,7 +183,7 @@ public class Register extends AppCompatActivity {
 
 
 
-    private void login(UserViewModel user){
+    private void login(final UserViewModel user){
         Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);
         call.enqueue(new Callback<UserViewModel>() {
             @Override
@@ -191,13 +201,11 @@ public class Register extends AppCompatActivity {
                         storeStringSharepreferences(PreferencesData.loginToken, userViewModel.getToken());
                         storeStringSharepreferences(PreferencesData.userActive, userViewModel.getName());
                         storeIntSharepreferences(PreferencesData.userActiveId, userViewModel.getId());
-
                         Intent intent = new Intent(Register.this, MainActivity.class);
                         startActivity(intent);
                     }else
                     {
                         Toast.makeText(getApplicationContext(), userViewModel.getError(),   Toast.LENGTH_LONG).show();
-
                     }
                 }
             }

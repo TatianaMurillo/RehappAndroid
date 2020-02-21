@@ -47,7 +47,6 @@ public class SearchCreatePatientFragment  extends Fragment {
     private TextView tvWelcome;
     private EditText etDocument;
     private Spinner spnDocumentType;
-    private String userActive;
     private SearchCreatePatientViewModel searchCreatePatientViewModel;
     private int documentTypeSelected, indexDocumentTypeSelected=0;
 

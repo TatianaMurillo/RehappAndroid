@@ -28,6 +28,7 @@ import com.rehapp.rehappmovil.rehapp.fragments.MedicalHistoriesPatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.MedicalHistoryDetailFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.SearchCreatePatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.SearchPatientFragment;
+import com.rehapp.rehappmovil.rehapp.fragments.TherapistFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.TherapyDetailFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -59,15 +60,23 @@ public class MainActivity extends AppCompatActivity
         tvTherapistName=view.findViewById(R.id.tvTherapistName);;
         tvTherapistEmail=view.findViewById(R.id.tvTherapistEmail);;
         imageViewCircle.setImageResource(R.drawable.profile);
-        tvTherapistName.setText("terapeuta name");
-        tvTherapistEmail.setText("terapeuta email");
+
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        recoveryData();
         loadData();
     }
 
     private void loadData(){
         loadFragment(new SearchCreatePatientFragment());
+    }
+
+    private void recoveryData(){
+        String therapistName = sharedpreferences.getString(PreferencesData.TherapistName,"");
+        String therapistEmail = sharedpreferences.getString(PreferencesData.TherapistEmail,"");
+
+        tvTherapistName.setText(therapistName);
+        tvTherapistEmail.setText(therapistEmail);
     }
 
     @Override
@@ -168,7 +177,7 @@ public class MainActivity extends AppCompatActivity
                 checkSearchPatient();
                 break;
             case R.id.therapist:
-                loadFragment(null);
+                checkTherapistFragment();
                 break;
             case R.id.logout:
                 loadFragment(null);
@@ -177,6 +186,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void checkTherapistFragment(){
+        int therapistId=sharedpreferences.getInt(PreferencesData.TherapistId,0);
+        if(therapistId==0){
+            loadFragment(new SearchCreatePatientFragment());
+            Toast.makeText(getApplicationContext(), PreferencesData.TherapistFragment,Toast.LENGTH_LONG).show();
+        }else{
+            loadFragment(new TherapistFragment());
+        }
     }
 
     private void checkTherapyDetailFragment(){

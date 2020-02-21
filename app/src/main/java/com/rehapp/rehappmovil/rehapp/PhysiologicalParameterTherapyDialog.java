@@ -22,18 +22,9 @@ import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterTherap
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
-import com.rehapp.rehappmovil.rehapp.Utils.Constants.Constants;
-import com.rehapp.rehappmovil.rehapp.Utils.Constants.PhysiologicalParameterTherapy;
-import com.rehapp.rehappmovil.rehapp.Utils.DBHelper;
-import com.rehapp.rehappmovil.rehapp.Utils.DBHelper2;
-import com.rehapp.rehappmovil.rehapp.Utils.ReadCSVFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -1,8 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
-import android.arch.lifecycle.ViewModelProviders;
+
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,7 +27,6 @@ import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.TherapyExercisesDialog;

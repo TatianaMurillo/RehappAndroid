@@ -22,6 +22,8 @@ public class PreferencesData {
 
     public static final String TherapyId="TherapyId";
     public static final String TherapistId="TherapistId";
+    public static final String TherapistName="TherapistName";
+    public static final String TherapistEmail="TherapistEmail";
     public static final String ADD="ADD";
     public static final String DETAIL="DETAIL";
     public static final String PatientAction="PatientAction";
@@ -42,9 +44,12 @@ public class PreferencesData {
     public static final String searchPatientListDocumentTypesMgs ="Diligenciar todos los datos por favor.";
     public static final String registerUserDataMgs ="Diligenciar todos los datos por favor.";
     public static final String registerUserFailedMgs ="Error al registrar usuario.";
+    public static final String registerExistedUserMgs ="El terapeuta ya se encuentra registrado o presenta conflictos.";
     public static final String registerUserEmailDataMgs ="Los correos no coinciden.";
     public static final String registerUserPasswordDataMgs ="Las contraseñas no coinciden.";
 
+    public static final String searchTherapistPatient ="Hubo un error al buscar terapeuta.";
+    public static final String TherapistNotFoundPatient ="El terapeuta no existe.";
     public static final String searchPatientPatient ="Hubo un error al buscar paciente.";
     public static final String searchPatientPatientNonExist ="Paciente no existe.";
     public static final String therapyDetailTherapyNonExist ="La terapia seleccionada no existe.";
@@ -105,12 +110,15 @@ public class PreferencesData {
     public static final String listNeighborhoodFailed="No se pudieron cargar los barrios correctamente.";
     public static final String listGenderFailed="No se pudieron cargar los géneros correctamente.";
 
+    public static final String updateTherapistSuccess="Terapeuta actualizado exitosamente.";
     public static final String storePatientSuccess="Paciente creado exitosamente.";
     public static final String updatePatientSuccess="Paciente actualizado exitosamente.";
     public static final String storePatientFailed="Error al crear paciente.";
     public static final String udpatePatientFailed="Error al actualizar paciente.";
+    public static final String udpateTherapistFailed="Error al actualizar terapeuta.";
 
     public static final String storePatientEmptyDataMsg="Diligenciar todos los datos por favor.";
+    public static final String storeTherapistEmptyDataMsg="Diligenciar todos los datos por favor.";
 
     public static final int PhysiologicalParameterTherapyValueSize=5;
     public static final int VitalSignsTherapyValueSize=5;
@@ -123,4 +131,5 @@ public class PreferencesData {
     public static final String MedicalHistoriesPatientFragment ="Seleccionar o crear una historia médica";
     public static final String HistoryTherapiesPatientFragment ="Seleccionar o crear una terapia";
     public static final String SearchCreatePatientFragment ="Buscar o registrar un paciente.";
+    public static final String TherapistFragment ="Error al sincronizar datos terapeuta. Contacte admin.";
 }

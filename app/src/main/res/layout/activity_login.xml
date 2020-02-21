@@ -14,9 +14,13 @@
         android:layout_width="157dp"
         android:layout_height="120dp"
         android:layout_alignEnd="@+id/btnLogin"
+        android:layout_alignRight="@+id/btnLogin"
+        android:layout_alignStart="@+id/btnLogin"
+        android:layout_alignLeft="@+id/btnLogin"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="-13dp"
+        android:layout_marginRight="-13dp"
         android:src="@mipmap/login" />
 
     <EditText

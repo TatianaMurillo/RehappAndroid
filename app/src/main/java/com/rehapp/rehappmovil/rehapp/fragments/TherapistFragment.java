@@ -18,18 +18,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.GenderApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.NeighborhoodApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.GenderViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.NeighborhoodViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
@@ -43,15 +44,14 @@ import retrofit2.Response;
 public class TherapistFragment extends Fragment {
 
 
-    private EditText etfirstName;
+    private EditText etFirstName;
     private EditText etSecondName;
     private EditText etFirstLastName;
     private EditText etSecondLastName;
     private EditText etDocument;
-    private EditText etAddress;
     private EditText etAge;
-    private EditText etCellPhone;
-    private EditText etLandLinePhone;
+    private EditText etEmail;
+
     private Spinner  spnGender;
     private Spinner  spnDocumentType;
     private Spinner  spnNeighborhood;
@@ -60,9 +60,7 @@ public class TherapistFragment extends Fragment {
     private int documentTypeSelectedId=-1,indexDocumentTypeSelected=-1;
     private int genderSelectedId=-1,indexGenderSelected=-1;
     private int neighborhoodSelectedId=-1,indexNeighborhoodSelected=-1;
-    PatientViewModel patientResponse;
 
-    TextView tvSiguientePagina;
     ArrayList<DocumentTypeViewModel> documentTypes =new ArrayList<>();
     ArrayList<String> documentTypeNames= new ArrayList<>();
 
@@ -72,10 +70,7 @@ public class TherapistFragment extends Fragment {
     ArrayList<GenderViewModel> genders =new ArrayList<>();
     ArrayList<String> genderNames= new ArrayList<>();
 
-    String documentPatient;
-    String patientTypeDocument;
-    String action;
-    PatientViewModel patient;
+    String therapistId;
     SharedPreferences sharedpreferences;
     private Context mContext;
 
@@ -99,26 +94,29 @@ public class TherapistFragment extends Fragment {
 
 
 
-        etfirstName=view.findViewById(R.id.etFirstName);
+        etFirstName=view.findViewById(R.id.etFirstName);
         etSecondName=view.findViewById(R.id.etSecondName);
         etFirstLastName=view.findViewById(R.id.etFirstLastName);
         etSecondLastName=view.findViewById(R.id.etSecondLastName);
         etDocument=view.findViewById(R.id.etDocument);
-        etAddress=view.findViewById(R.id.etAddress);
-        etCellPhone=view.findViewById(R.id.etCellphone);
-        etLandLinePhone=view.findViewById(R.id.etLandLinePhone);
+        etEmail=view.findViewById(R.id.etEmail);
         etAge=view.findViewById(R.id.etAge);
+
+
         spnNeighborhood = view.findViewById(R.id.spnNeighborhood);
         spnDocumentType = view.findViewById(R.id.spnDocumentType);
         spnGender = view.findViewById(R.id.spnGender);
 
-        spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                documentTypeSelectedId = documentTypes.get(position).getDocument_type_id();
-                indexDocumentTypeSelected=position;
+                /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                int selectedOption=position-1;
+                if(selectedOption>-1) {
+                    documentTypeSelectedId = documentTypes.get(selectedOption).getDocument_type_id();
+                }
+                indexDocumentTypeSelected = selectedOption;
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent)
@@ -126,13 +124,15 @@ public class TherapistFragment extends Fragment {
             }
         });
 
-        spnGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spnGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                genderSelectedId = genders.get(position).getGender_id();
-                indexGenderSelected=position;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                int selectedOption=position-1;
+                if(selectedOption>-1) {
+                    genderSelectedId = genders.get(selectedOption).getGender_id();
+                }
+                indexGenderSelected = selectedOption;
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent)
@@ -140,13 +140,15 @@ public class TherapistFragment extends Fragment {
             }
         });
 
-        spnNeighborhood.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spnNeighborhood.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                neighborhoodSelectedId = neighborhoods.get(position).getNeighborhood_id();
-                indexNeighborhoodSelected=position;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                int selectedOption=position-1;
+                if(selectedOption>-1) {
+                    neighborhoodSelectedId = neighborhoods.get(selectedOption).getNeighborhood_id();
+                }
+                indexNeighborhoodSelected = selectedOption;
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent)
@@ -156,147 +158,82 @@ public class TherapistFragment extends Fragment {
 
         recoverySendData();
 
+        loadData();
         return view;
     }
 
-
-    private void recoverySendData()
-    {
-        documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
-        patientTypeDocument=sharedpreferences.getString(PreferencesData.PatientTpoDocument,"");
-        if( getArguments()!=null)
-        {
-            Bundle extras = getArguments();
-            action= extras.getString(PreferencesData.PatientAction);
-
-            storeStringSharepreferences(PreferencesData.PatientAction, action);
-
-            if(action.equals("DETAIL")) {
-                searchPatient();
-            }else{
-                loadNeigborhoods();
-                loadDocumentTypes();
-                loadGenders();
-            }
-        }
+    private void loadData(){
+        loadNeigborhoods();
+    }
+    private void recoverySendData() {
+        therapistId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapistId,0));
     }
 
-
-    public  void searchPatient()
-    {
-        Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(documentPatient);
-        call.enqueue(new Callback<PatientViewModel>() {
+    public  void searchTherapist() {
+        Call<TherapistViewModel> call = TherapistApiAdapter.getApiService().getTherapist(therapistId);
+        call.enqueue(new Callback<TherapistViewModel>() {
             @Override
-            public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
+            public void onResponse(Call<TherapistViewModel> call, Response<TherapistViewModel> response) {
                 if(response.isSuccessful())
                 {
-                    patient = response.body();
-                    setPatientViewModelToView(patient);
-                    loadNeigborhoods();
-                    loadDocumentTypes();
-                    loadGenders();
+                    TherapistViewModel therapist = response.body();
+                    selectDocumentType(therapist);
+                    selectGender(therapist);
+                    selectNeighborhood(therapist);
+                    setTherapistViewModelToView(therapist);
 
                 }else{
                     if(response.raw().code()==404) {
-                        Toast.makeText(mContext, PreferencesData.searchPatientPatient,Toast.LENGTH_LONG).show();
-                        redirectToSearchPatient();
+                        Toast.makeText(mContext, PreferencesData.searchTherapistPatient,Toast.LENGTH_LONG).show();
+                        redirectToSearchCreatePatient();
                     }
                 }
             }
             @Override
-            public void onFailure(Call<PatientViewModel> call, Throwable t)
+            public void onFailure(Call<TherapistViewModel> call, Throwable t)
             {
-                Toast.makeText(mContext, PreferencesData.searchPatientPatient +" "+ t.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, PreferencesData.searchTherapistPatient +" "+ t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public void savePatient() {
+    public void updateTherapist() {
 
         setInputData();
 
         if(ValidateInputs.validate().ValidateString(dataInputString))
 
         {
-                if(ValidateInputs.validate().ValidateIntegers(dataInputInteger)) {
+            if(ValidateInputs.validate().validateNonAcceptableValueInInteger(dataInputInteger)) {
 
-                    PatientViewModel patient = getPatientViewModelFromView();
-
-                    Call<PatientViewModel> call = PatientApiAdapter.getApiService().createPatient(patient);
-                    call.enqueue(new Callback<PatientViewModel>() {
+                final TherapistViewModel therapist = getTherapistViewModelFromView();
+                Call<TherapistViewModel> call = TherapistApiAdapter.getApiService().updateTherapist(therapist,therapistId);
+                call.enqueue(new Callback<TherapistViewModel>() {
                     @Override
-                    public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
+                    public void onResponse(Call<TherapistViewModel> call, Response<TherapistViewModel> response) {
                         if(response.isSuccessful())
                         {
-                            patientResponse= response.body();
-                            Toast.makeText(mContext, PreferencesData.storePatientSuccess, Toast.LENGTH_LONG).show();
-                            redirectToSearchCreatePatient();
+                            Toast.makeText(mContext, PreferencesData.updateTherapistSuccess, Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<PatientViewModel> call, Throwable t) {
-                        Toast.makeText(mContext, PreferencesData.storePatientFailed, Toast.LENGTH_LONG).show();
+                    public void onFailure(Call<TherapistViewModel> call, Throwable t) {
+                        Toast.makeText(mContext, PreferencesData.udpateTherapistFailed, Toast.LENGTH_LONG).show();
                     }
                 });
             }else{
-                    Toast.makeText(mContext, PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
-
-                }
-
-        }else{
-            Toast.makeText(mContext, PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
-
-        }
-
-    }
-
-
-    public void updatePatient() {
-
-        setInputData();
-
-        if(ValidateInputs.validate().ValidateString(dataInputString))
-
-        {
-            if(ValidateInputs.validate().ValidateIntegers(dataInputInteger)) {
-                String patientId=String.valueOf(patient.getPatient_id());
-                final PatientViewModel patient = getPatientViewModelFromView();
-                Call<PatientViewModel> call = PatientApiAdapter.getApiService().updatePatient(patient,patientId);
-                call.enqueue(new Callback<PatientViewModel>() {
-                    @Override
-                    public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
-                        if(response.isSuccessful())
-                        {
-                            patientResponse= response.body();
-                            Toast.makeText(mContext, PreferencesData.updatePatientSuccess, Toast.LENGTH_LONG).show();
-
-                            storeStringSharepreferences(PreferencesData.PatientDocument, patientResponse.getPatient_document());
-                            storeStringSharepreferences(PreferencesData.PatientTpoDocument, String.valueOf(patientResponse.getDocument_type_id()));
-                            redirectToSearchPatient();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<PatientViewModel> call, Throwable t) {
-                        Toast.makeText(mContext, PreferencesData.udpatePatientFailed, Toast.LENGTH_LONG).show();
-                    }
-                });
-            }else{
-                Toast.makeText(mContext, PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
-
+                Toast.makeText(mContext, PreferencesData.storeTherapistEmptyDataMsg, Toast.LENGTH_LONG).show();
             }
 
         }else{
-            Toast.makeText(mContext, PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, PreferencesData.storeTherapistEmptyDataMsg, Toast.LENGTH_LONG).show();
 
         }
 
     }
 
-
-    private void loadDocumentTypes()
-    {
+    private void loadDocumentTypes() {
         Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
         call.enqueue(new Callback<ArrayList<DocumentTypeViewModel>>() {
 
@@ -305,23 +242,13 @@ public class TherapistFragment extends Fragment {
                              if(response.isSuccessful())
                              {
                                  documentTypes= response.body();
+                                 documentTypeNames.add(getResources().getString(R.string.DocumentTypeNonSelected));
                                      for (DocumentTypeViewModel documentTypeViewModel : documentTypes) {
-                                         if(action.equals("DETAIL")) {
-                                             if (documentTypeViewModel.getDocument_type_id() == patient.getDocument_type_id()) {
-                                                 indexDocumentTypeSelected = documentTypes.indexOf(documentTypeViewModel);
-                                             }
-                                         }
-
                                          documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
                                      }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, documentTypeNames);
                                  spnDocumentType.setAdapter(arrayAdapter);
-                                 if(action.equals("DETAIL")) {
-                                     spnDocumentType.setSelection(indexDocumentTypeSelected);
-                                 }else
-                                 {
-                                     spnDocumentType.setSelection(0);
-                                 }
+                                 loadGenders();
                              }
                          }
                          @Override
@@ -333,8 +260,7 @@ public class TherapistFragment extends Fragment {
         );
     }
 
-    private void loadNeigborhoods()
-    {
+    private void loadNeigborhoods() {
         Call<ArrayList<NeighborhoodViewModel>> call = NeighborhoodApiAdapter.getApiService().getNeighborhoods();
         call.enqueue(new Callback<ArrayList<NeighborhoodViewModel>>() {
 
@@ -343,24 +269,13 @@ public class TherapistFragment extends Fragment {
                              if(response.isSuccessful())
                              {
                                  neighborhoods= response.body();
+                                 neighborhoodNames.add(getResources().getString(R.string.NeighborhoodNonSelected));
                                  for (NeighborhoodViewModel neighborhoodViewModel : neighborhoods) {
-
-                                     if(action.equals("DETAIL")) {
-                                         if (neighborhoodViewModel.getNeighborhood_id() == patient.getNeighborhood_id()) {
-                                             indexNeighborhoodSelected = neighborhoods.indexOf(neighborhoodViewModel);
-                                         }
-                                     }
-
                                      neighborhoodNames.add(neighborhoodViewModel.getNeighborhood_name());
                                  }
-                                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, neighborhoodNames);
+                                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, neighborhoodNames);
                                  spnNeighborhood.setAdapter(arrayAdapter);
-                                 if("DETAIL".equals(action)){
-                                     spnNeighborhood.setSelection(indexNeighborhoodSelected);
-                                 }else{
-                                     spnNeighborhood.setSelection(0);
-                                 }
-
+                                 loadDocumentTypes();
                              }
                          }
                          @Override
@@ -372,8 +287,7 @@ public class TherapistFragment extends Fragment {
         );
     }
 
-    private void loadGenders()
-    {
+    private void loadGenders() {
         Call<ArrayList<GenderViewModel>> call = GenderApiAdapter.getApiService().getGenders();
         call.enqueue(new Callback<ArrayList<GenderViewModel>>() {
 
@@ -382,23 +296,13 @@ public class TherapistFragment extends Fragment {
                              if(response.isSuccessful())
                              {
                                  genders= response.body();
+                                 genderNames.add(getResources().getString(R.string.GenderNonSelected));
                                  for (GenderViewModel genderViewModel : genders) {
-                                     if(action.equals("DETAIL")) {
-                                         if (genderViewModel.getGender_id() == patient.getGender_id()) {
-                                             indexGenderSelected = genders.indexOf(genderViewModel);
-                                         }
-                                     }
-
                                      genderNames.add(genderViewModel.getGender_name());
                                  }
-                                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, genderNames);
+                                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, genderNames);
                                  spnGender.setAdapter(arrayAdapter);
-                                 if("DETAIL".equals(action)){
-                                     spnGender.setSelection(indexGenderSelected);
-                                 }else{
-                                     spnGender.setSelection(0);
-
-                                 }
+                                 searchTherapist();
                              }
                          }
                          @Override
@@ -410,52 +314,111 @@ public class TherapistFragment extends Fragment {
         );
     }
 
-    private void setPatientViewModelToView(PatientViewModel patient)
-    {
-        etfirstName.setText(patient.getPatient_first_name());
-        etSecondName.setText(patient.getPatient_second_name());
-        etFirstLastName.setText(patient.getPatient_first_lastname());
-        etSecondLastName.setText(patient.getPatient_second_lastname());
-        etDocument.setText(patient.getPatient_document());
-        etAge.setText(String.valueOf(patient.getPatient_age()));
-        etAddress.setText(patient.getPatient_address());
-        etCellPhone.setText(patient.getPatient_mobile_number());
-        etLandLinePhone.setText(patient.getPatient_landline_phone());
+    /**
+     **Se selecciona el genero
+     **/
+    private void selectGender(TherapistViewModel therapist){
+        int indexOfGender=-1;
+        for(GenderViewModel genderViewModel : genders)
+        {
+            if (genderViewModel.getGender_id() == therapist.getGenderId()) {
+                /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                indexOfGender = genders.indexOf(genderViewModel)+1;
+            }
+        }
+        if (indexOfGender != -1) {
+            spnGender.setSelection(indexOfGender);
+        }else {
+            /**se selecciona al menos la opcion que se crea por defecto**/
+            spnGender.setSelection(0);
+            Toast.makeText(mContext, "no selecciono genero", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     **Se selecciona el barrio
+     **/
+    private void selectNeighborhood(TherapistViewModel therapist){
+        int indexOfNeighborhood=-1;
+        for(NeighborhoodViewModel neighborhoodViewModel : neighborhoods)
+        {
+            if (neighborhoodViewModel.getNeighborhood_id() == therapist.getNeighborhoodId()) {
+                /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                indexOfNeighborhood = neighborhoods.indexOf(neighborhoodViewModel)+1;
+            }
+        }
+        if (indexOfNeighborhood != -1) {
+            spnNeighborhood.setSelection(indexOfNeighborhood);
+        }else {
+            /**se selecciona al menos la opcion que se crea por defecto**/
+            spnNeighborhood.setSelection(0);
+        }
+    }
+
+    /**
+     **Se selecciona el documentType
+     **/
+    private void selectDocumentType(TherapistViewModel therapist){
+        int indexOfDocumentType=-1;
+        for(DocumentTypeViewModel documentTypeViewModel : documentTypes)
+        {
+            if (documentTypeViewModel.getDocument_type_id() == therapist.getDocumentTypeId()) {
+                /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                indexOfDocumentType = documentTypes.indexOf(documentTypeViewModel)+1;
+            }
+        }
+        if (indexOfDocumentType != -1) {
+            spnDocumentType.setSelection(indexOfDocumentType);
+        }else {
+            /**se selecciona al menos la opcion que se crea por defecto**/
+            spnDocumentType.setSelection(0);
+        }
+    }
+
+    private void setTherapistViewModelToView(TherapistViewModel therapist) {
+        Object getTherapist_first_name=therapist.getTherapist_first_name();
+        Object getTherapist_second_name=therapist.getTherapist_second_name();
+        Object getTherapist_first_lastname=therapist.getTherapist_first_lastname();
+        Object getTherapist_second_lastname=therapist.getTherapist_second_lastname();
+        Object getTherapist_document=therapist.getTherapist_document();
+        Object getTherapist_email = therapist.getTherapist_email();
+        Object getTherapist_age=therapist.getTherapist_age();
+
+
+
+        etFirstName.setText(getTherapist_first_name!=null?getTherapist_first_name.toString():"");
+        etSecondName.setText(getTherapist_second_name!=null?getTherapist_second_name.toString():"");
+        etFirstLastName.setText(getTherapist_first_lastname!=null?getTherapist_first_lastname.toString():"");
+        etSecondLastName.setText(getTherapist_second_lastname!=null?getTherapist_second_lastname.toString():"");
+        etDocument.setText(getTherapist_document!=null?getTherapist_document.toString():"");
+        etEmail.setText(getTherapist_email!=null?getTherapist_email.toString():"");
+        etAge.setText(getTherapist_age.toString());
 
     }
 
-    private PatientViewModel getPatientViewModelFromView()
-    {
-        PatientViewModel patient = new PatientViewModel();
+    private TherapistViewModel getTherapistViewModelFromView() {
 
-        patient.setPatient_first_name(etfirstName.getText().toString());
-        patient.setPatient_second_name(etSecondName.getText().toString());
-        patient.setPatient_first_lastname(etFirstLastName.getText().toString());
-        patient.setPatient_second_lastname(etSecondLastName.getText().toString());
-        patient.setPatient_document(etDocument.getText().toString());
-        patient.setPatient_age(Integer.parseInt(etAge.getText().toString()));
-        patient.setPatient_address(etAddress.getText().toString());
-        patient.setPatient_mobile_number(etCellPhone.getText().toString());
-        patient.setPatient_landline_phone(etLandLinePhone.getText().toString());
-        patient.setDocument_type_id(documentTypeSelectedId);
-        patient.setGender_id(genderSelectedId);
-        patient.setNeighborhood_id(neighborhoodSelectedId);
+        TherapistViewModel therapist = new TherapistViewModel();
 
-        return  patient;
+        therapist.setTherapist_first_name(etFirstName.getText().toString());
+        therapist.setTherapist_second_name(etSecondName.getText().toString());
+        therapist.setTherapist_first_lastname(etFirstLastName.getText().toString());
+        therapist.setTherapist_second_lastname(etSecondLastName.getText().toString());
+        therapist.setTherapist_email(etEmail.getText().toString());
+        therapist.setTherapist_age(Integer.parseInt(etAge.getText().toString()));
+
+        return  therapist;
     }
 
-    private void setInputData()
-    {
+    private void setInputData() {
         dataInputString =new ArrayList();
-        dataInputString.add(etfirstName.getText().toString());
+        dataInputString.add(etFirstName.getText().toString());
         dataInputString.add(etSecondName.getText().toString());
         dataInputString.add(etFirstLastName.getText().toString());
         dataInputString.add(etSecondLastName.getText().toString());
-        dataInputString.add(etDocument.getText().toString());
-        dataInputString.add(etAddress.getText().toString());
-        dataInputString.add(etCellPhone.getText().toString());
-        dataInputString.add(etLandLinePhone.getText().toString());
+        dataInputString.add(etEmail.getText().toString());
         dataInputString.add(etAge.getText().toString());
+
 
         dataInputInteger =new ArrayList();
         dataInputInteger.add(genderSelectedId);
@@ -463,16 +426,10 @@ public class TherapistFragment extends Fragment {
         dataInputInteger.add(documentTypeSelectedId);
     }
 
-
-    private void redirectToSearchPatient()
-    {
-        loadFragment(new SearchPatientFragment());
-    }
-
-    private void redirectToSearchCreatePatient()
-    {
+    private void redirectToSearchCreatePatient() {
         loadFragment(new SearchCreatePatientFragment());
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -481,23 +438,13 @@ public class TherapistFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case  R.id.save:
-                if("DETAIL".equals(action))
-                {
-                    updatePatient();
-                }else{
-                    savePatient();
-                }
-
+                    updateTherapist();
                 break;
         }
-
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -508,8 +455,7 @@ public class TherapistFragment extends Fragment {
         mContext=context;
     }
 
-    public void showHideItems(Menu menu)
-    {
+    public void showHideItems(Menu menu) {
         MenuItem item;
         item= menu.findItem(R.id.create_therapy);
         item.setVisible(false);
@@ -517,19 +463,15 @@ public class TherapistFragment extends Fragment {
         item.setVisible(true);
     }
 
-
     public void loadFragment(Fragment fragment){
         manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
 
-
     private  void storeStringSharepreferences(String key, String value){
-
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(key, value);
         editor.commit();
 
     }
-
 
 }

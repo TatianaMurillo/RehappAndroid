@@ -44,6 +44,9 @@
     <string name="AddditionalInformationTitle">Información adicional</string>
     <string name="TherapySequence">Terapia # </string>
     <string name="TherapistNonSelected"><![CDATA[<Seleccionar terapeuta>]]></string>
+    <string name="DocumentTypeNonSelected"><![CDATA[<Seleccionar tipo documento>]]></string>
+    <string name="GenderNonSelected"><![CDATA[<Seleccionar género>]]></string>
+    <string name="NeighborhoodNonSelected"><![CDATA[<Seleccionar barrio>]]></string>
     <string name="MedicalHistorySequence">Historia médica # </string>
     <string name="title_activity_main"></string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

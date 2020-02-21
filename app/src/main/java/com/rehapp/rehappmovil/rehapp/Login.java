@@ -14,10 +14,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
-import com.rehapp.rehappmovil.rehapp.Utils.ReadCSVFile;
 
 
 import retrofit2.Call;
@@ -77,7 +78,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    private void login(UserViewModel user){
+    private void login(final UserViewModel user){
         Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);
         call.enqueue(new Callback<UserViewModel>() {
             @Override
@@ -93,9 +94,8 @@ public class Login extends AppCompatActivity {
                         userViewModel.setName(userViewModel.getName());
                         storeStringSharepreferences(PreferencesData.loginToken, userViewModel.getToken());
                         storeStringSharepreferences(PreferencesData.userActive, userViewModel.getName());
+                        searchTherapist(user.getEmail());
 
-                        Intent intent = new Intent(Login.this,MainActivity.class);
-                        startActivity(intent);
                     }else
                     {
                         Toast.makeText(getApplicationContext(), userViewModel.getError(),   Toast.LENGTH_LONG).show();
@@ -109,7 +109,34 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+    public  void searchTherapist(String email) {
 
+        TherapistViewModel therapist= new TherapistViewModel();
+        therapist.setTherapist_email(email);
+        Call<TherapistViewModel> call = TherapistApiAdapter.getApiService().getTherapistByEmail(therapist);
+        call.enqueue(new Callback<TherapistViewModel>() {
+            @Override
+            public void onResponse(Call<TherapistViewModel> call, Response<TherapistViewModel> response) {
+                if(response.isSuccessful())
+                {
+                    TherapistViewModel therapist = response.body();
+                    storeIntSharepreferences(PreferencesData.TherapistId, therapist.getTherapist_id());
+                    storeStringSharepreferences(PreferencesData.TherapistName, therapist.getTherapist_first_name());
+                    storeStringSharepreferences(PreferencesData.TherapistEmail, therapist.getTherapist_email());
+                    Intent intent = new Intent(Login.this,MainActivity.class);
+                    startActivity(intent);
+
+                }else if(response.raw().code()==404) {
+                       Toast.makeText(getApplicationContext(), PreferencesData.TherapistNotFoundPatient,Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<TherapistViewModel> call, Throwable t)
+            {
+                Toast.makeText(getApplicationContext(), PreferencesData.searchTherapistPatient +" "+ t.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 
 
@@ -136,6 +163,13 @@ public class Login extends AppCompatActivity {
 
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(key, value);
+        editor.commit();
+
+    }
+    private  void storeIntSharepreferences(String key, int value){
+
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt(key, value);
         editor.commit();
 
     }
