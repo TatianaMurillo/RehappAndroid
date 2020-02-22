@@ -93,6 +93,7 @@ public class UserViewModel extends ViewModel {
                 this.name = name;
             }
 
+            public void setToken(String token) { this.token = token; }
 
             public void setEmail(String email) {
                 this.email = email;

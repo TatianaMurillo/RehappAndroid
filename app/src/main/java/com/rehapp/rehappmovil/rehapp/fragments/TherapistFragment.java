@@ -319,11 +319,16 @@ public class TherapistFragment extends Fragment {
      **/
     private void selectGender(TherapistViewModel therapist){
         int indexOfGender=-1;
-        for(GenderViewModel genderViewModel : genders)
-        {
-            if (genderViewModel.getGender_id() == therapist.getGenderId()) {
-                /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
-                indexOfGender = genders.indexOf(genderViewModel)+1;
+
+        Object therapistGender=therapist.getNeighborhoodId();
+        int therapistGenderInt=((Integer) therapistGender).intValue();
+
+        if(therapistGender!=null) {
+            for (GenderViewModel genderViewModel : genders) {
+                if (genderViewModel.getGender_id() == therapistGenderInt) {
+                    /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                    indexOfGender = genders.indexOf(genderViewModel) + 1;
+                }
             }
         }
         if (indexOfGender != -1) {
@@ -331,7 +336,7 @@ public class TherapistFragment extends Fragment {
         }else {
             /**se selecciona al menos la opcion que se crea por defecto**/
             spnGender.setSelection(0);
-            Toast.makeText(mContext, "no selecciono genero", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "no seleccionó género", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -340,11 +345,16 @@ public class TherapistFragment extends Fragment {
      **/
     private void selectNeighborhood(TherapistViewModel therapist){
         int indexOfNeighborhood=-1;
-        for(NeighborhoodViewModel neighborhoodViewModel : neighborhoods)
-        {
-            if (neighborhoodViewModel.getNeighborhood_id() == therapist.getNeighborhoodId()) {
-                /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
-                indexOfNeighborhood = neighborhoods.indexOf(neighborhoodViewModel)+1;
+
+        Object therapistNeighborhood=therapist.getNeighborhoodId();
+        int therapistNeighborhoodInt=((Integer) therapistNeighborhood).intValue();
+
+        if(therapistNeighborhood!=null) {
+            for (NeighborhoodViewModel neighborhoodViewModel : neighborhoods) {
+                if (neighborhoodViewModel.getNeighborhood_id() == therapistNeighborhoodInt) {
+                    /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                    indexOfNeighborhood = neighborhoods.indexOf(neighborhoodViewModel) + 1;
+                }
             }
         }
         if (indexOfNeighborhood != -1) {
@@ -360,11 +370,15 @@ public class TherapistFragment extends Fragment {
      **/
     private void selectDocumentType(TherapistViewModel therapist){
         int indexOfDocumentType=-1;
-        for(DocumentTypeViewModel documentTypeViewModel : documentTypes)
-        {
-            if (documentTypeViewModel.getDocument_type_id() == therapist.getDocumentTypeId()) {
-                /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
-                indexOfDocumentType = documentTypes.indexOf(documentTypeViewModel)+1;
+        Object therapistDocumentType=therapist.getDocumentTypeId();
+        int therapistDocumentTypeInt=((Integer) therapistDocumentType).intValue();
+
+        if(therapistDocumentType!=null){
+            for(DocumentTypeViewModel documentTypeViewModel : documentTypes) {
+                if (documentTypeViewModel.getDocument_type_id() == therapistDocumentTypeInt) {
+                    /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                    indexOfDocumentType = documentTypes.indexOf(documentTypeViewModel)+1;
+                }
             }
         }
         if (indexOfDocumentType != -1) {
@@ -406,6 +420,8 @@ public class TherapistFragment extends Fragment {
         therapist.setTherapist_second_lastname(etSecondLastName.getText().toString());
         therapist.setTherapist_email(etEmail.getText().toString());
         therapist.setTherapist_age(Integer.parseInt(etAge.getText().toString()));
+        therapist.setGender(genderSelectedId);
+        therapist.setNeighborhood(neighborhoodSelectedId);
 
         return  therapist;
     }

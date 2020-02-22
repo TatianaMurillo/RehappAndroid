@@ -7,6 +7,18 @@
     android:orientation="vertical"
     tools:context=".CreatePatient">
 
+
+        <TextView
+            android:id="@+id/tvTherapistData"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="@dimen/activity_horizontal_margin"
+            android:text="Datos del terapeuta"
+            android:layout_span="5" />
+
     <ScrollView
 
         android:layout_width="match_parent"
@@ -22,6 +34,7 @@
             <Spinner
                 android:id="@+id/spnDocumentType"
                 android:layout_height="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_span="5" />
 
         </TableRow>
@@ -155,6 +168,7 @@
             <Spinner
                 android:id="@+id/spnNeighborhood"
                 android:layout_height="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_span="5" />
 
         </TableRow>
@@ -163,6 +177,7 @@
             <Spinner
                 android:id="@+id/spnGender"
                 android:layout_height="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_span="5"/>
         </TableRow>
 

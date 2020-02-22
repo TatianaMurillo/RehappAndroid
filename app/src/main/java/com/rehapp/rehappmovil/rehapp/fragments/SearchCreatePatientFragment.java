@@ -109,15 +109,13 @@ public class SearchCreatePatientFragment  extends Fragment {
 
     private void loadCurrentData()
     {
-        String activeUser=sharedpreferences.getString(PreferencesData.userActive,"");
+        String activeUser=sharedpreferences.getString(PreferencesData.TherapistName,"");
 
         tvWelcome.setText( "¡Bienvenido " +activeUser+"!" );
 
         loadDocumentTypes();
     }
-    private void recoverySendData()
-    {
-    }
+    private void recoverySendData() { }
 
     private void loadDocumentTypes(){
 

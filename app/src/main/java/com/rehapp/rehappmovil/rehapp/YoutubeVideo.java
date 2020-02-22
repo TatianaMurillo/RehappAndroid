@@ -10,15 +10,8 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.ExerciseRoutineApiAdapter;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.rehapp.rehappmovil.rehapp.Models.PlayerConfig.API_KEY;
 

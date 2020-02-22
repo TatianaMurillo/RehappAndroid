@@ -3,11 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="Menú">
-
-        <item    android:title=""/>
-    </item>
-
     <item android:title="Personas">
 
         <menu>

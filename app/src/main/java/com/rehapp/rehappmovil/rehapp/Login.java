@@ -92,6 +92,7 @@ public class Login extends AppCompatActivity {
                     if(userViewModel.getCode()==200)
                     {
                         userViewModel.setName(userViewModel.getName());
+                        storeStringSharepreferences(PreferencesData.userActive,"");
                         storeStringSharepreferences(PreferencesData.loginToken, userViewModel.getToken());
                         storeStringSharepreferences(PreferencesData.userActive, userViewModel.getName());
                         searchTherapist(user.getEmail());

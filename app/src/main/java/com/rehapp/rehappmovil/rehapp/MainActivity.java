@@ -2,6 +2,7 @@ package com.rehapp.rehappmovil.rehapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
 import com.rehapp.rehappmovil.rehapp.fragments.HistoryTherapiesPatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.MedicalHistoriesPatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.MedicalHistoryDetailFragment;
@@ -30,6 +33,10 @@ import com.rehapp.rehappmovil.rehapp.fragments.SearchCreatePatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.SearchPatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.TherapistFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.TherapyDetailFragment;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -85,7 +92,6 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //super.onBackPressed();
             IsFinish("¿Cerrar sesion?");
         }
     }
@@ -98,9 +104,7 @@ public class MainActivity extends AppCompatActivity
 
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        android.os.Process.killProcess(android.os.Process.myPid());
-                        // This above line close correctly
-                        //finish();
+                        logout();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -118,6 +122,30 @@ public class MainActivity extends AppCompatActivity
 
     private void logout(){
         String token = sharedpreferences.getString(PreferencesData.loginToken,"");
+        if(!"".equals(token)){
+            UserViewModel user = new UserViewModel();
+            user.setToken(token);
+
+            Call<UserViewModel> call = UserApiAdapter.getApiService().logout(user);
+            call.enqueue(new Callback<UserViewModel>() {
+                @Override
+                public void onResponse(Call<UserViewModel> call, Response<UserViewModel> response) {
+                    if(response.isSuccessful()){
+                        Intent intent = new Intent(MainActivity.this,Login.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(getApplicationContext(), response.raw().message(),Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserViewModel> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), PreferencesData.LogoutError,Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            Toast.makeText(getApplicationContext(), PreferencesData.LogoutToken,Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -180,7 +208,7 @@ public class MainActivity extends AppCompatActivity
                 checkTherapistFragment();
                 break;
             case R.id.logout:
-                loadFragment(null);
+                logout();
                 break;
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -12,9 +12,9 @@ public class TherapistViewModel extends ViewModel {
         private String therapist_email;
         private String therapist_document;
         private int therapist_age;
-        private int genderId;
-        private int documentTypeId;
-        private  int neighborhoodId;
+        private int gender_id;
+        private int document_type_id;
+        private  int neighborhood_id;
 
     public TherapistViewModel() { }
 
@@ -29,9 +29,9 @@ public class TherapistViewModel extends ViewModel {
         this.therapist_first_lastname = therapist_first_lastname;
         this.therapist_second_lastname = therapist_second_lastname;
         this.therapist_age = therapist_age;
-        this.genderId = genderId;
-        this.documentTypeId = documentTypeId;
-        this.neighborhoodId = neighborhoodId;
+        this.gender_id = genderId;
+        this.document_type_id = documentTypeId;
+        this.neighborhood_id = neighborhoodId;
         this.therapist_email=therapist_email;
     }
 
@@ -59,13 +59,14 @@ public class TherapistViewModel extends ViewModel {
             return therapist_age;
         }
         public int getGenderId() {
-            return genderId;
+            return gender_id;
         }
+
         public int getDocumentTypeId() {
-            return documentTypeId;
+            return document_type_id;
         }
         public int getNeighborhoodId() {
-            return neighborhoodId;
+            return neighborhood_id;
         }
 
         public String getTherapist_document() {
@@ -109,15 +110,15 @@ public class TherapistViewModel extends ViewModel {
         }
 
         public void setGender(int genderId) {
-            this.genderId = genderId;
+            this.gender_id = genderId;
         }
 
         public void setDocumentType(int documentTypeId) {
-            this.documentTypeId = documentTypeId;
+            this.document_type_id = documentTypeId;
         }
 
         public void setNeighborhood(int neighborhoodId) {
-            this.neighborhoodId = neighborhoodId;
+            this.neighborhood_id = neighborhoodId;
         }
 
         public void setTherapist_email(String therapist_email) {

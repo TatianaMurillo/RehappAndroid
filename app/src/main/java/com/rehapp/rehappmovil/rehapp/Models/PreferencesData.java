@@ -9,7 +9,8 @@ public class PreferencesData {
 
     public static final String TherapistEmailLogin = "therapistEmailLogin";
     public static final String TherapistPasswordlLogin = "therapistPasswordlLogin";
-
+    public static final String LogoutToken ="El token para salir de sesión no fue generado. Contactar admin.";
+    public static final String LogoutError ="Hubo un error al salir de sesión. Contactar admin.";
 
     public static final String PatientId ="patientId";
     public static final String PatientDocument ="document";
@@ -131,5 +132,5 @@ public class PreferencesData {
     public static final String MedicalHistoriesPatientFragment ="Seleccionar o crear una historia médica";
     public static final String HistoryTherapiesPatientFragment ="Seleccionar o crear una terapia";
     public static final String SearchCreatePatientFragment ="Buscar o registrar un paciente.";
-    public static final String TherapistFragment ="Error al sincronizar datos terapeuta. Contacte admin.";
+    public static final String TherapistFragment ="Error al sincronizar datos terapeuta. Contactar admin.";
 }
