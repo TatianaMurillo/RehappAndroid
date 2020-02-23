@@ -2,14 +2,12 @@ package com.rehapp.rehappmovil.rehapp.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
@@ -33,9 +30,6 @@ import com.rehapp.rehappmovil.rehapp.Models.NeighborhoodViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.R;
-import com.rehapp.rehappmovil.rehapp.SearchCreatePatient;
-import com.rehapp.rehappmovil.rehapp.SearchPatient;
-import com.rehapp.rehappmovil.rehapp.Utils.UserMethods;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
@@ -67,7 +61,6 @@ public class CreatePatientFragment extends Fragment {
     private int neighborhoodSelectedId=-1,indexNeighborhoodSelected=-1;
     PatientViewModel patientResponse;
 
-    TextView tvSiguientePagina;
     ArrayList<DocumentTypeViewModel> documentTypes =new ArrayList<>();
     ArrayList<String> documentTypeNames= new ArrayList<>();
 
@@ -165,8 +158,7 @@ public class CreatePatientFragment extends Fragment {
     }
 
 
-    private void recoverySendData()
-    {
+    private void recoverySendData() {
         documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
         patientTypeDocument=sharedpreferences.getString(PreferencesData.PatientTpoDocument,"");
         if( getArguments()!=null)
@@ -186,9 +178,7 @@ public class CreatePatientFragment extends Fragment {
         }
     }
 
-
-    public  void searchPatient()
-    {
+    public  void searchPatient() {
         Call<PatientViewModel> call = PatientApiAdapter.getApiService().getPatient(documentPatient);
         call.enqueue(new Callback<PatientViewModel>() {
             @Override
@@ -256,7 +246,6 @@ public class CreatePatientFragment extends Fragment {
 
     }
 
-
     public void updatePatient() {
 
         setInputData();
@@ -299,9 +288,7 @@ public class CreatePatientFragment extends Fragment {
 
     }
 
-
-    private void loadDocumentTypes()
-    {
+    private void loadDocumentTypes() {
         Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
         call.enqueue(new Callback<ArrayList<DocumentTypeViewModel>>() {
 
@@ -338,8 +325,7 @@ public class CreatePatientFragment extends Fragment {
         );
     }
 
-    private void loadNeigborhoods()
-    {
+    private void loadNeigborhoods() {
         Call<ArrayList<NeighborhoodViewModel>> call = NeighborhoodApiAdapter.getApiService().getNeighborhoods();
         call.enqueue(new Callback<ArrayList<NeighborhoodViewModel>>() {
 
@@ -377,8 +363,7 @@ public class CreatePatientFragment extends Fragment {
         );
     }
 
-    private void loadGenders()
-    {
+    private void loadGenders() {
         Call<ArrayList<GenderViewModel>> call = GenderApiAdapter.getApiService().getGenders();
         call.enqueue(new Callback<ArrayList<GenderViewModel>>() {
 
@@ -415,8 +400,7 @@ public class CreatePatientFragment extends Fragment {
         );
     }
 
-    private void setPatientViewModelToView(PatientViewModel patient)
-    {
+    private void setPatientViewModelToView(PatientViewModel patient) {
         etfirstName.setText(patient.getPatient_first_name());
         etSecondName.setText(patient.getPatient_second_name());
         etFirstLastName.setText(patient.getPatient_first_lastname());
@@ -429,8 +413,7 @@ public class CreatePatientFragment extends Fragment {
 
     }
 
-    private PatientViewModel getPatientViewModelFromView()
-    {
+    private PatientViewModel getPatientViewModelFromView() {
         PatientViewModel patient = new PatientViewModel();
 
         patient.setPatient_first_name(etfirstName.getText().toString());
@@ -449,8 +432,7 @@ public class CreatePatientFragment extends Fragment {
         return  patient;
     }
 
-    private void setInputData()
-    {
+    private void setInputData() {
         dataInputString =new ArrayList();
         dataInputString.add(etfirstName.getText().toString());
         dataInputString.add(etSecondName.getText().toString());
@@ -468,14 +450,12 @@ public class CreatePatientFragment extends Fragment {
         dataInputInteger.add(documentTypeSelectedId);
     }
 
-
     private void redirectToSearchPatient()
     {
         loadFragment(new SearchPatientFragment());
     }
 
-    private void redirectToSearchCreatePatient()
-    {
+    private void redirectToSearchCreatePatient() {
         loadFragment(new SearchCreatePatientFragment());
     }
 
@@ -486,8 +466,7 @@ public class CreatePatientFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
             case  R.id.save:
@@ -513,8 +492,7 @@ public class CreatePatientFragment extends Fragment {
         mContext=context;
     }
 
-    public void showHideItems(Menu menu)
-    {
+    public void showHideItems(Menu menu) {
         MenuItem item;
         item= menu.findItem(R.id.create_therapy);
         item.setVisible(false);
@@ -522,11 +500,9 @@ public class CreatePatientFragment extends Fragment {
         item.setVisible(true);
     }
 
-
     public void loadFragment(Fragment fragment){
         manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
-
 
     private  void storeStringSharepreferences(String key, String value){
 

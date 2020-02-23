@@ -29,6 +29,7 @@ import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
 import com.rehapp.rehappmovil.rehapp.fragments.HistoryTherapiesPatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.MedicalHistoriesPatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.MedicalHistoryDetailFragment;
+import com.rehapp.rehappmovil.rehapp.fragments.RoutinesFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.SearchCreatePatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.SearchPatientFragment;
 import com.rehapp.rehappmovil.rehapp.fragments.TherapistFragment;
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(alertmessage)
-                .setPositiveButton("Yes", dialogClickListener)
+                .setPositiveButton("Si", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
     }
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity
                 checkMedicalHistoryDetailFragment();
                 break;
             case R.id.menu_exercises:
-                loadFragment(null);
+                loadFragment(new RoutinesFragment());
                 break;
             case R.id.seach_create_patient:
                 loadFragment(new SearchCreatePatientFragment());

@@ -3,8 +3,12 @@ package com.rehapp.rehappmovil.rehapp;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -77,6 +81,37 @@ public class Login extends AppCompatActivity {
             login(user);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+
+        isFinish("Iniciar sesion.");
+
+    }
+
+    public void isFinish(String alertmessage) {
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(alertmessage)
+                .setPositiveButton("De acuerdo.", dialogClickListener).show();
+
+    }
+
 
     private void login(final UserViewModel user){
         Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);

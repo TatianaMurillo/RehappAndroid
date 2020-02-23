@@ -58,9 +58,9 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
         {
             view = inflater.inflate(R.layout.list_view_item, parent,false);
             holder = new ViewHolder();
-            holder.tvExerciseName=(TextView)view.findViewById(R.id.tvExerciseName);
-            holder.ivCheckbox=(ImageView) view.findViewById(R.id.ivCheckbox);
-            holder.tvVideoUrl=(TextView)view.findViewById(R.id.tvExerciseUrl);
+            holder.tvExerciseName=view.findViewById(R.id.tvExerciseName);
+            holder.ivCheckbox= view.findViewById(R.id.ivCheckbox);
+            holder.tvVideoUrl=view.findViewById(R.id.tvExerciseUrl);
 
             view.setTag(holder);
         }else {

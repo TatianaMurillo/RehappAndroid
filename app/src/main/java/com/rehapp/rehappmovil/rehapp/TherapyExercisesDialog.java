@@ -3,7 +3,6 @@ package com.rehapp.rehappmovil.rehapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.ExerciseRoutineApiAdapter;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
@@ -134,8 +132,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
         });
     }
 
-    private void listTherapyExercisesRoutines()
-    {
+    private void listTherapyExercisesRoutines() {
         try {
             Call<ArrayList<TherapyExcerciseRoutineViewModel>> callTherapyExcerciseRoutines = TherapyExerciseRoutineApiAdapter.getApiService().getTherapyExerciseRoutines(therapyId);
             callTherapyExcerciseRoutines.enqueue(new Callback<ArrayList<TherapyExcerciseRoutineViewModel>>() {
@@ -202,8 +199,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
         }
     }
 
-    public  void saveExercises()
-    {
+    public  void saveExercises() {
         List<TherapyExcerciseRoutineViewModel> therapyExcerciseRoutines=new ArrayList<>();
         TherapyExcerciseRoutineViewModel therapyExcerciseRoutine;
         for (ExerciseRoutinesViewModel exerciseRoutine: exercises) {

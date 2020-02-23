@@ -8,6 +8,7 @@ public class ExerciseRoutinesViewModel {
     private String exercise_routine_description;
     private String conditions;
     private String preconditions;
+    private String html;
     private float frequency;
     private float duration;
     private float speed;
@@ -15,9 +16,20 @@ public class ExerciseRoutinesViewModel {
     private String observations;
     boolean isSelected;
 
+
+    public ExerciseRoutinesViewModel() { }
+
+    public ExerciseRoutinesViewModel(String html) {
+        this.html=html;
+    }
+
     public ExerciseRoutinesViewModel(boolean isSelected, String exerciseName) {
         this.isSelected = isSelected;
         this.exercise_routine_name = exerciseName;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
     }
 
     public void setConditions(String conditions) {
@@ -75,6 +87,10 @@ public class ExerciseRoutinesViewModel {
         this.exercise_routine_name = exercise_routine_name;
     }
 
+
+    public String getHtml() {
+        return html;
+    }
 
     public String getConditions() {
         return conditions;

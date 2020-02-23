@@ -15,5 +15,5 @@ public interface ExerciseRoutineApiService {
     Call<ArrayList<ExerciseRoutinesViewModel>> getExerciseRoutines();
 
     @GET("exerciseRoutines/{routineId}")
-    Call<ExerciseRoutinesViewModel> getExerciseRoutine(@Path("routineId") String routineId);
+    Call<ExerciseRoutinesViewModel> getExerciseRoutine(@Path("routineId") int routineId);
 }

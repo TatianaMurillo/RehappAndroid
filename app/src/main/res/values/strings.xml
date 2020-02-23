@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rehapp</string>
+    <string name="app_name">Rehabilitación pulmonar</string>
     <string name="document">Documento</string>
     <string name="documentTypeViewModel">Tipo de documento</string>
     <string name="patient">Paciente</string>

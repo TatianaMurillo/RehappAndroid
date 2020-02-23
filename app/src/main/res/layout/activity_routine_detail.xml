@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="180dp">
+
+        <WebView
+            android:layout_margin="10dp"
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></WebView>
+    </LinearLayout>
+
+
+    <ScrollView  android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvFullScreenVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver pantalla completa"
+                android:layout_span="1"
+                android:layout_margin="10sp"
+                android:layout_gravity="end" />
+
+            <TextView
+                android:id="@+id/tvRoutineData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:text="Datos de rutina" />
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+                <TableRow>
+                    <TextView
+                        android:id="@+id/tvSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Velocidad"
+                        android:layout_span="1"
+                        android:layout_margin="10sp"/>
+                    <EditText
+                        android:id="@+id/etExerciseSpeed"
+                        android:enabled="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:layout_span="2"
+                        android:layout_margin="10sp" />
+                </TableRow>
+            </TableLayout>
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+                <TableRow>
+                    <TextView
+                        android:id="@+id/tvFrequent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Frecuencia"
+                        android:layout_span="1"
+                        android:layout_margin="10sp"/>
+                    <EditText
+                        android:id="@+id/etExerciseFrequent"
+                        android:layout_width="wrap_content"
+                        android:enabled="false"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:layout_span="2"
+                        android:layout_margin="10sp" />
+                </TableRow>
+            </TableLayout>
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+                <TableRow>
+                    <TextView
+                        android:id="@+id/tvIntensity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Intensidad"
+                        android:layout_span="1"
+                        android:layout_margin="10sp"/>
+                    <EditText
+                        android:id="@+id/etExerciseIntensity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="numberDecimal"
+                        android:layout_span="2"
+                        android:layout_margin="10sp" />
+                </TableRow>
+            </TableLayout>
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+                <TableRow>
+                    <TextView
+                        android:id="@+id/tvDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Duración"
+                        android:layout_span="1"
+                        android:layout_margin="10sp"/>
+                    <EditText
+                        android:id="@+id/etDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="numberDecimal"
+                        android:layout_span="2"
+                        android:layout_margin="10sp" />
+                </TableRow>
+            </TableLayout>
+            <TextView
+                android:id="@+id/tvExercisePreconditions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Precondiciones"
+                android:layout_margin="10sp" />
+
+            <EditText
+                android:id="@+id/etPreConditions"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_span="2"
+                android:enabled="false"
+                android:minLines="1"
+                android:maxLines="4"
+                android:inputType="textMultiLine"
+                android:layout_margin="10sp" />
+
+
+            <TextView
+                android:id="@+id/tvExerciseObservations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Observaciones"
+                android:layout_span="1"
+                android:layout_margin="10sp"/>
+            <EditText
+                android:id="@+id/etObservations"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:enabled="false"
+                android:layout_span="2"
+                android:minLines="1"
+                android:maxLines="4"
+                android:inputType="textMultiLine"
+                android:layout_margin="10sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

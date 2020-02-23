@@ -12,6 +12,8 @@ public class PreferencesData {
     public static final String LogoutToken ="El token para salir de sesión no fue generado. Contactar admin.";
     public static final String LogoutError ="Hubo un error al salir de sesión. Contactar admin.";
 
+    public static final String html ="<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/{0}\" frameborder=\"0\" allowfullscreen></iframe>";
+    public static final String htmlTagToReplace="{0}";
     public static final String PatientId ="patientId";
     public static final String PatientDocument ="document";
     public static final String PatientTpoDocument ="tpoDocument";
@@ -82,6 +84,9 @@ public class PreferencesData {
     public static final String therapyDetailTherapistListMsg ="Hubo un error al listar terapeutas.";
     public static final String therapyDetailExerciseRoutineListMsg ="Hubo un error al listar ejercicios de rutina.";
     public static final String medicalHistoryDiseasesListMsg ="Hubo un error al listar las enfermedades.";
+    public static final String routinesFragmentNotInternet ="No detectó conexion a internet.";
+
+
 
     public static final String therapyDetailSaveExerciseRoutineFailedMsg ="Hubo un error al guardar ejercicios de terapia.";
     public static final String medicalHistoryDiseaseSaveFailedMsg ="Hubo un error al guardar las enfermedades.";
