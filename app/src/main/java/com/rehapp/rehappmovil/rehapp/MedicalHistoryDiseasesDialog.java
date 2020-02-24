@@ -16,9 +16,7 @@ import android.widget.Toast;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DiseaseApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientMedicalHistoryApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DiseaseViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 
 
 import java.util.ArrayList;
@@ -32,11 +30,8 @@ public class MedicalHistoryDiseasesDialog extends AppCompatDialogFragment {
 
     ListView lvDiseases;
     ArrayList<DiseaseViewModel> diseases = new ArrayList<>();
-    ArrayList<DiseaseViewModel> medicalHistoryDiseases = new ArrayList<>();
-    boolean isSelected;
     private String medicalHistoryId;
     SharedPreferences sharedpreferences;
-    String medicalHistorySelectedId;
     MedicalHistoryDiseaseAdapter adapter;
     int  diseaseSelectedIndex=-1;
     private Context mContext;

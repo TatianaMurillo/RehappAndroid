@@ -52,6 +52,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     @Override
     public void onBindViewHolder(@NonNull VideoAdapter.VideoViewHolder videoViewHolder, int i) {
         videoViewHolder.webView.loadData(exercises.get(i).getHtml(),"text/html","utf-8");
+        videoViewHolder.tvRoutineName.setText(exercises.get(i).getExercise_routine_name());
     }
 
     @Override
@@ -65,6 +66,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         WebView webView;
         ImageView ibtnDetail;
         TextView tvFullScreenVideo;
+        TextView tvRoutineName;
         OnVideoClickListener onVideoClickListener;
 
         public VideoViewHolder(View itemView,final OnVideoClickListener onVideoClickListener){
@@ -74,6 +76,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             webView=itemView.findViewById(R.id.webView);
             ibtnDetail=itemView.findViewById(R.id.ibtnDetail);
             tvFullScreenVideo=itemView.findViewById(R.id.tvFullScreenVideo);
+            tvRoutineName=itemView.findViewById(R.id.tvRoutineName);
 
             webView.setWebViewClient(new WebViewClient(){
                 @Override

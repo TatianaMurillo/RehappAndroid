@@ -22,17 +22,15 @@ import java.util.List;
 public class TherapyExercisesAdapter  extends BaseAdapter{
 
     Activity activity;
-    TherapyExercisesDialog dialog;
     List<ExerciseRoutinesViewModel> exercises;
     FragmentManager fragment;
     LayoutInflater inflater;
 
-    public TherapyExercisesAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises, FragmentManager fragment,TherapyExercisesDialog dialog) {
+    public TherapyExercisesAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises, FragmentManager fragment) {
         this.activity = activity;
         this.exercises = exercises;
         inflater = activity.getLayoutInflater();
         this.fragment=fragment;
-        this.dialog=dialog;
     }
 
 
@@ -74,7 +72,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
             holder.tvVideoUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
+
                     TherapyExcerciseRoutineFragment fragment=new TherapyExcerciseRoutineFragment();
                     Bundle extras = new Bundle();
                     extras.putString(PreferencesData.ExerciseRoutineUrl, model.getExercise_routine_url());

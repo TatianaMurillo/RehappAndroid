@@ -1,6 +1,5 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
-import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 
 public class UserViewModel extends ViewModel {

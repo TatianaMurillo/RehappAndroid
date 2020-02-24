@@ -44,9 +44,7 @@ public class PatientMedicalHistoryQuestionariesFragment extends Fragment {
     private ListView lvQuestionaries;
     private String medicalHistorySelectedId;
     ArrayList<QuestionaryOptionViewModel> questionariesOptions;
-    ArrayList<QuestionaryOptionViewModel> patientQuestionaries;
     private SharedPreferences sharedpreferences;
-    ArrayList<String> optionNames= new ArrayList<>();
     MedicalHistoryQuestionariesAdapter adapter;
     View view;
     FragmentManager manager;

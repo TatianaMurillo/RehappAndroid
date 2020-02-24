@@ -145,6 +145,7 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
     public  void searchTherapist(String email) {
 
         TherapistViewModel therapist= new TherapistViewModel();

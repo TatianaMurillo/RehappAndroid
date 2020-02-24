@@ -62,14 +62,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ExerciseVideo"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="landscape">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".PatientTherapy">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -96,11 +88,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".menuItems" />
-        <activity android:name=".addTherapyExercises">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".YoutubeVideo">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

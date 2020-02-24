@@ -140,15 +140,51 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
             case R.id.create_therapy:
 
                 cleanPreferenceData();
-                TherapyDetailFragment fragment = new TherapyDetailFragment();
-                Bundle extras = new Bundle();
-                extras.putString(PreferencesData.TherapyAction, "ADD");
-                fragment.setArguments(extras);
-                loadFragment(fragment );
+                createTherapyId();
                 return true;
                 default:
                     return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     *
+     * Metodo creado por si el usuario decide ejecutar cualquier otra opcion antes de grabar como
+     * tal la terapia. Ya que opciones como crear rutinas, parametros fisiologicos u observaciones requieren
+     * de una terapia creada.
+     */
+
+    public void createTherapyId() {
+        int patientId = Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId, "0"));
+        TherapyViewModel therapy = new TherapyViewModel();
+        therapy.setPatient_id(patientId);
+        therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
+        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
+        call.enqueue(new Callback<TherapyViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                if (response.isSuccessful()) {
+                    String therapyCreatedId;
+                    TherapyViewModel therapyViewModel=response.body();
+                    therapyCreatedId = String.valueOf(therapyViewModel.getTherapy_id());
+                    storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyCreatedId));
+                    Toast.makeText(mContext, PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
+                    TherapyDetailFragment fragment = new TherapyDetailFragment();
+                    Bundle extras = new Bundle();
+                    extras.putString(PreferencesData.TherapyAction, "ADD");
+                    fragment.setArguments(extras);
+                    loadFragment(fragment );
+
+                } else {
+                    Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

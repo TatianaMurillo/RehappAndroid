@@ -43,8 +43,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TherapyDetailFragment extends Fragment {
+
 private int therapySelectedId;
-private String therapyCreatedId;
 private TextView tvTherapySequence;
 private String action;
 private TextView tvDateAndTime;
@@ -98,7 +98,6 @@ private  SharedPreferences sharedpreferences;
         tvDateAndTime=view.findViewById(R.id.tvDateAndTime);
         spnTherapist = view.findViewById(R.id.spnTherapist);
         etTherapyDuration=view.findViewById(R.id.etTherapyDuration);
-        therapyCreatedId="";
         recoverySendData();
         loadData();
 
@@ -181,7 +180,8 @@ private  SharedPreferences sharedpreferences;
                 storeStringSharepreferences(PreferencesData.TherapyAction, action);
 
                 if("ADD".equals(action)) {
-                    createTherapyId();
+                    therapySelectedId = extras.getInt(PreferencesData.TherapySelectedId);
+                    storeIntSharepreferences(PreferencesData.TherapyId, therapySelectedId);
                 }else
                 {
                     therapySelectedId = extras.getInt(PreferencesData.TherapySelectedId);
@@ -311,40 +311,7 @@ private  SharedPreferences sharedpreferences;
             spnInstitution.setSelection(0);
         }
     }
-    /**
-     *
-     * Metodo creado por si el usuario decide ejecutar cualquier otra opcion antes de grabar como
-     * tal la terapia. Ya que opciones como crear rutinas, parametros fisiologicos u observaciones requieren
-     * de una terapia creada.
-     */
 
-    public void createTherapyId() {
-        int patientId = Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId, "0"));
-        TherapyViewModel therapy = new TherapyViewModel();
-        therapy.setPatient_id(patientId);
-        therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if (response.isSuccessful()) {
-
-                    TherapyViewModel therapyViewModel=response.body();
-                    therapyCreatedId = String.valueOf(therapyViewModel.getTherapy_id());
-                    tvTherapySequence.setText(getResources().getString(R.string.TherapySequence) + therapyViewModel.getTherapy_sequence());
-                    storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyCreatedId));
-                    Toast.makeText(mContext, PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-                Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
     public  void searchTherapy(){
         String therapySelectedId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
@@ -407,9 +374,9 @@ private  SharedPreferences sharedpreferences;
         Bundle args = new Bundle();
         args.putString(PreferencesData.TherapyId,therapyId);
 
-        TherapyExercisesDialog therapyExercisesDialog = new  TherapyExercisesDialog();
-        therapyExercisesDialog.setArguments(args);
-        therapyExercisesDialog.show(getFragmentManager(),"");
+        TherapyExercisesFragment fragment = new  TherapyExercisesFragment();
+        fragment.setArguments(args);
+        loadFragment(fragment);
 
     }
 
