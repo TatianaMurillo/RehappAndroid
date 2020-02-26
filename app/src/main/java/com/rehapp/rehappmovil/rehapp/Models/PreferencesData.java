@@ -80,6 +80,7 @@ public class PreferencesData {
     public static final String therapyNotFoundMsg ="No se encontró la terapia.";
 
     public static final String therapyCreationIdSuccessMsg ="Se creó la terapia con éxito.";
+    public static final String therapySelectionSuccessMsg ="Se seleccionó la terapia ";
     public static final String therapyCreationIdFailedMsg ="Hubo un error al generar terapia.";
     public static final String therapyDetailTherapistListMsg ="Hubo un error al listar terapeutas.";
     public static final String therapyDetailExerciseRoutineListMsg ="Hubo un error al listar ejercicios de rutina.";
@@ -94,6 +95,8 @@ public class PreferencesData {
     public static final String medicalHistoryDiseaseSaveSuccessMsg ="enfermedades guardadas correctamente.";
 
     public static final String medicalHistoryDetailDataMessage ="Los datos para actualizar la terapia no estan completos.";
+
+    public static final String medicalHistorySelected ="Se seleccionó: ";
     public static final String medicalHistoryDetailUpdateSuccesfullMsg ="Se actualizó la historia medica exitosamente.";
     public static final String medicalHistoryDetailDefaultName ="Nombre";
     public static final String medicalHistoryDetailDefaultDescription ="Descripción";
@@ -103,7 +106,7 @@ public class PreferencesData {
     public static final String therapyDetailTherapyExerciseRoutinesListMsg ="Hubo un error al listar los ejercicios previamente seleccionados.";
     public static final String therapyDetailInstitutionListMsg ="Hubo un error al listar instituciones.";
     public static final String therapyDetailInstitutionNonExist="No se encontró la institución seleccionada.";
-    public static final String therapyCreationDescriptionFieldValue ="Nueva terapia.";
+    public static final String therapyCreationDescriptionFieldValue ="Terapia ";
 
     public static final String therapyDetailTherapistNonExist="No se encontró el terapeuta seleccionado.";
     public static final String therapyRoutineDetailDataMessage="Ingrese los valores en los parametros indicados.";

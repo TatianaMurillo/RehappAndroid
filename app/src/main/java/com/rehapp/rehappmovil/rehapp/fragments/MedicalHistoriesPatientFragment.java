@@ -85,7 +85,7 @@ public class MedicalHistoriesPatientFragment extends Fragment {
 
                             PatientMedicalHistoryViewModel medicalHistory = medicalHistories.get(position);
 
-                            Toast.makeText(mContext, "medical history selected : " + medicalHistory.getPtnt_mdcl_hstry_name(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, PreferencesData.medicalHistorySelected + medicalHistory.getPtnt_mdcl_hstry_name(), Toast.LENGTH_LONG).show();
 
                             MedicalHistoryDetailFragment fragment = new MedicalHistoryDetailFragment();
                             Bundle extras = new Bundle();

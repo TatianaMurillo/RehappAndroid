@@ -255,10 +255,9 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         {
             case R.id.save:
                 saveExerciseRoutineTherapy();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

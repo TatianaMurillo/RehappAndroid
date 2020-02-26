@@ -237,7 +237,11 @@ public class MainActivity extends AppCompatActivity
                 loadFragment(new HistoryTherapiesPatientFragment());
                 Toast.makeText(getApplicationContext(), PreferencesData.HistoryTherapiesPatientFragment,Toast.LENGTH_LONG).show();
         }else{
-                loadFragment(new TherapyDetailFragment());
+            TherapyDetailFragment fragment= new TherapyDetailFragment();
+            Bundle extras = new Bundle();
+            extras.putInt(PreferencesData.TherapySelectedId, sharedpreferences.getInt(PreferencesData.TherapyId,0));
+            fragment.setArguments(extras);
+            loadFragment(fragment);
         }
     }
 

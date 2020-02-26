@@ -23,7 +23,10 @@ import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,11 +38,15 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
     private ArrayList<TherapyViewModel> therapies = new ArrayList<>();
     private ArrayList<String> therapiesNames= new ArrayList<>();
     private String patientId;
+    private int therapySequence;
     SharedPreferences sharedpreferences;
 
     private Context mContext;
     View view;
     FragmentManager manager;
+
+    private static final DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    Calendar cal = Calendar.getInstance();
 
     public HistoryTherapiesPatientFragment() { }
 
@@ -67,7 +74,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TherapyViewModel selectedTherapy = therapies.get(position);
-                Toast.makeText(mContext, "therapy selected : " + selectedTherapy.getTherapy_description(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, PreferencesData.therapySelectionSuccessMsg + selectedTherapy.getTherapy_description(), Toast.LENGTH_LONG).show();
                 TherapyDetailFragment fragment = new TherapyDetailFragment();
                 Bundle extras = new Bundle();
                 extras.putString(PreferencesData.TherapyAction, "DETAIL");
@@ -83,6 +90,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
     }
 
 
+
     public void loadTherapies()
     {
         Call<ArrayList<TherapyViewModel>> call = TherapyApiAdapter.getApiService().getTherapiesByPatient(patientId);
@@ -92,6 +100,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
                 if(response.isSuccessful())
                 {
                     therapies=response.body();
+                    therapySequence=therapies.size()==0?1:therapies.size()+1;
                     for(TherapyViewModel therapy: therapies)
                     {
                         therapiesNames.add(therapy.getTherapy_description() + " "+ therapy.getTherapy_sequence());
@@ -156,22 +165,22 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
 
     public void createTherapyId() {
         int patientId = Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId, "0"));
+        String therapyDescription=PreferencesData.therapyCreationDescriptionFieldValue.concat(sdf.format(cal.getTime()));
         TherapyViewModel therapy = new TherapyViewModel();
         therapy.setPatient_id(patientId);
-        therapy.setTherapy_description(PreferencesData.therapyCreationDescriptionFieldValue);
+        therapy.setTherapy_description(therapyDescription);
+        therapy.setTherapy_sequence(therapySequence);
         Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
         call.enqueue(new Callback<TherapyViewModel>() {
             @Override
             public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
                 if (response.isSuccessful()) {
-                    String therapyCreatedId;
                     TherapyViewModel therapyViewModel=response.body();
-                    therapyCreatedId = String.valueOf(therapyViewModel.getTherapy_id());
-                    storeIntSharepreferences(PreferencesData.TherapyId,Integer.parseInt(therapyCreatedId));
                     Toast.makeText(mContext, PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
                     TherapyDetailFragment fragment = new TherapyDetailFragment();
                     Bundle extras = new Bundle();
                     extras.putString(PreferencesData.TherapyAction, "ADD");
+                    extras.putInt(PreferencesData.TherapySelectedId, therapyViewModel.getTherapy_id());
                     fragment.setArguments(extras);
                     loadFragment(fragment );
 
