@@ -2,9 +2,16 @@
     <string name="app_name">Rehabilitación pulmonar</string>
     <string name="document">Documento</string>
     <string name="documentTypeViewModel">Tipo de documento</string>
+    <string name="searchCreatePatientTitle">Buscar o crear un paciente</string>
+    <string name="searchPatientTitle">Información del paciente</string>
+    <string name="therapistTitle">Información del terapeuta</string>
+    <string name="createPatientTitle">Crear un paciente</string>
+    <string name="questionairesTitle">Cuestionarios</string>
+    <string name="vitalSignsTitle">Signos vitales del paciente</string>
+    <string name="routineExercisesTitle">Ejercicios de rutina</string>
+    <string name="routineDetailTitle">Información sobre rutina</string>
     <string name="patient">Paciente</string>
     <string name="phisiologicalParametersIn">Parámetros Fisiológicos al inicio de la sesión</string>
-    <string name="vitalSignsTittle">Signos vitales</string>
     <string name="phisiologicalParametersOut">Parámetros Fisiológicos al finalizar de la sesión</string>
     <string name="watchExercises"> Ver ejercicios</string>
     <string name="diseases">Enfermedades</string>
@@ -24,7 +31,8 @@
     <string name="ConfirmEmail">Confirmar correo</string>
     <string name="ConfirmPassword">Confirmar Contraseña </string>
     <string name="Save">Guardar</string>
-    <string name="name">Nombre</string>
+    <string name="name">Nombre de usuario</string>
+    <string name="userDataRegister">Registrar datos de usuario</string>
     <string name="therapistDocument">Documento</string>
     <string name="time">Hora</string>
     <string name="date">Fecha</string>

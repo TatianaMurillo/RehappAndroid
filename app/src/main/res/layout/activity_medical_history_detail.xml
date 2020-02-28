@@ -38,6 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5sp"
+                    android:textSize="@dimen/textSizeLevelTwo"
                     android:text="Fecha y hora" />
 
                     <TextView
@@ -64,7 +65,7 @@
                 android:hint="@string/medicalHistoryName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10dp"
+                android:textSize="@dimen/textSizeLevelOne"
                 android:maxLines="1"
                 android:gravity="center_horizontal" />
 
@@ -95,13 +96,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:textSize="@dimen/textSizeLevelTwo"
             android:layout_margin="10dp"
-            android:text="Patient" />
+            android:text="Paciente" />
 
             <TextView
                 android:id="@+id/tvPatientNameValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:layout_alignParentTop="true"
                 android:layout_margin="10dp" />
         </TableRow>
@@ -110,9 +113,10 @@
             android:id="@+id/tvAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeLevelTwo"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
-            android:text="Age" />
+            android:text="Edad" />
                 <TextView
                     android:id="@+id/tvAgeValue"
                     android:layout_width="wrap_content"
@@ -128,6 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Barrio"
+            android:textSize="@dimen/textSizeLevelTwo"
             android:layout_margin="10dp"/>
             <TextView
                 android:id="@+id/tvNeighborhoodValue"
@@ -150,12 +155,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:textSize="@dimen/textSizeLevelOne"
             android:text="Signos vitales" />
 
         <TextView
             android:id="@+id/tvDiseases"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/textSizeLevelOne"
             android:text="Enfermedades"
             android:layout_margin="10dp"/>
 
@@ -163,14 +170,23 @@
                 android:id="@+id/tvQuestionaries"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/textSizeLevelOne"
                 android:text="Cuestionarios"
                 android:layout_margin="10dp"/>
 
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvAdditionalInfo"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSizeLevelTwo"
+                android:text="@string/additionalInfo"
+                android:layout_margin="10dp"/>
             <EditText
                 android:id="@+id/etAdditionalInfo"
                 android:layout_width="wrap_content"

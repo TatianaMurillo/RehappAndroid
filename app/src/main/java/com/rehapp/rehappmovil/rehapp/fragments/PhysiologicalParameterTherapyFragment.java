@@ -43,6 +43,7 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
 
     private EditText editText;
     private TextView textView;
+    private TextView tvTitle;
     private GridLayout grid;
     private String physiologicalParameterAction;
     private int therapyId;
@@ -74,7 +75,7 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
         sharedpreferences=mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
         grid = view.findViewById(R.id.grid);
-
+        tvTitle=view.findViewById(R.id.tvTitle);
         recoverySendData();
         LoadData();
 
@@ -85,6 +86,11 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
 
         therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
         physiologicalParameterAction=sharedpreferences.getString(PreferencesData.PhysiologicalParameterAction,"");
+        setTitle(physiologicalParameterAction);
+    }
+    private void setTitle(String action){
+        String title=action.equals(PreferencesData.PhysiologicalParameterTherapySesionOUT)?getResources().getString(R.string.phisiologicalParametersOut):getResources().getString(R.string.phisiologicalParametersIn);
+        tvTitle.setText(title);
     }
 
     public void LoadData() {

@@ -18,6 +18,7 @@ import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
+import com.rehapp.rehappmovil.rehapp.R;
 
 import java.util.ArrayList;
 
@@ -107,8 +108,7 @@ public class UserMethods extends Activity {
         return sharedpreferences.getString(key,value);
     }
 
-        class DocumentTypes
-    {
+    class DocumentTypes {
 
         ArrayList<DocumentTypeViewModel> documentTypes;
 
@@ -139,9 +139,6 @@ public class UserMethods extends Activity {
             return documentTypes;
         }
     }
-
-
-
 
 }
 

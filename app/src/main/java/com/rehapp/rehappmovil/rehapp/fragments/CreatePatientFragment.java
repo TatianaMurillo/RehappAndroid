@@ -304,7 +304,7 @@ public class CreatePatientFragment extends Fragment {
                                              }
                                          }
 
-                                         documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
+                                         documentTypeNames.add(documentTypeViewModel.getDocument_type_name().concat(" - ").concat(documentTypeViewModel.getDocument_type_description()));
                                      }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, documentTypeNames);
                                  spnDocumentType.setAdapter(arrayAdapter);
@@ -379,7 +379,7 @@ public class CreatePatientFragment extends Fragment {
                                          }
                                      }
 
-                                     genderNames.add(genderViewModel.getGender_name());
+                                     genderNames.add(genderViewModel.getGender_name().concat(" - ").concat(genderViewModel.getGender_description()));
                                  }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, genderNames);
                                  spnGender.setAdapter(arrayAdapter);
@@ -435,9 +435,7 @@ public class CreatePatientFragment extends Fragment {
     private void setInputData() {
         dataInputString =new ArrayList();
         dataInputString.add(etfirstName.getText().toString());
-        dataInputString.add(etSecondName.getText().toString());
         dataInputString.add(etFirstLastName.getText().toString());
-        dataInputString.add(etSecondLastName.getText().toString());
         dataInputString.add(etDocument.getText().toString());
         dataInputString.add(etAddress.getText().toString());
         dataInputString.add(etCellPhone.getText().toString());

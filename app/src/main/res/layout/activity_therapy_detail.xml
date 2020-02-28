@@ -31,6 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5sp"
+                    android:textSize="@dimen/textSizeLevelTwo"
                     android:text="Fecha y hora" />
 
                 <TextView
@@ -55,7 +56,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5sp"
-                android:text="Duracion (mins)"
+                android:textSize="@dimen/textSizeLevelTwo"
+                android:text="Duración (mins)"
               />
 
             <EditText
@@ -71,6 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5sp"
+                    android:textSize="@dimen/textSizeLevelOne"
                     android:text="@string/watchExercises"
                     />
 
@@ -85,6 +88,7 @@
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
         android:text="Terapia # 1"
+        android:textSize="@dimen/textSizeLevelOne"
         android:layout_gravity="center"/>
     <TextView
         android:id="@+id/tvTherapist"
@@ -92,6 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
+        android:textSize="@dimen/textSizeLevelTwo"
         android:text="Terapeuta" />
 
         <Spinner
@@ -107,8 +112,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:textSize="@dimen/textSizeLevelTwo"
         android:layout_margin="10dp"
-        android:text="Institucion" />
+        android:text="Institución" />
 
         <Spinner
             android:id="@+id/spnInstitution"
@@ -122,6 +128,8 @@
         android:id="@+id/tvPhisiologicalParametersIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/textSizeLevelTwo"
         android:text="@string/phisiologicalParametersIn"
         android:layout_margin="10dp"/>
 
@@ -129,6 +137,9 @@
         android:id="@+id/tvPhisiologicalParametersOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textSize="@dimen/textSizeLevelTwo"
         android:text="@string/phisiologicalParametersOut"
         android:layout_margin="10dp"/>
 
@@ -138,6 +149,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/additionalInfo"
+        android:layout_marginTop="10dp"
+        android:textSize="@dimen/textSizeLevelTwo"
         android:layout_gravity="center"/>
     </LinearLayout>
 </ScrollView>

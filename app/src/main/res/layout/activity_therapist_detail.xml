@@ -15,8 +15,8 @@
             android:gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:textSize="@dimen/activity_horizontal_margin"
-            android:text="Datos del terapeuta"
+            android:textSize="@dimen/textSizeLevelOne"
+            android:text="@string/therapistTitle"
             android:layout_span="5" />
 
     <ScrollView

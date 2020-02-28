@@ -69,6 +69,7 @@ public class TherapistFragment extends Fragment {
 
     ArrayList<GenderViewModel> genders =new ArrayList<>();
     ArrayList<String> genderNames= new ArrayList<>();
+    TherapistViewModel therapist;
 
     String therapistId;
     SharedPreferences sharedpreferences;
@@ -176,10 +177,10 @@ public class TherapistFragment extends Fragment {
             public void onResponse(Call<TherapistViewModel> call, Response<TherapistViewModel> response) {
                 if(response.isSuccessful())
                 {
-                    TherapistViewModel therapist = response.body();
+                    therapist = response.body();
                     selectDocumentType(therapist);
                     selectGender(therapist);
-                    selectNeighborhood(therapist);
+                    selectNeighborhood();
                     setTherapistViewModelToView(therapist);
 
                 }else{
@@ -244,7 +245,7 @@ public class TherapistFragment extends Fragment {
                                  documentTypes= response.body();
                                  documentTypeNames.add(getResources().getString(R.string.DocumentTypeNonSelected));
                                      for (DocumentTypeViewModel documentTypeViewModel : documentTypes) {
-                                         documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
+                                         documentTypeNames.add(documentTypeViewModel.getDocument_type_name().concat(" - ").concat(documentTypeViewModel.getDocument_type_description()));
                                      }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, documentTypeNames);
                                  spnDocumentType.setAdapter(arrayAdapter);
@@ -298,7 +299,8 @@ public class TherapistFragment extends Fragment {
                                  genders= response.body();
                                  genderNames.add(getResources().getString(R.string.GenderNonSelected));
                                  for (GenderViewModel genderViewModel : genders) {
-                                     genderNames.add(genderViewModel.getGender_name());
+
+                                     genderNames.add(genderViewModel.getGender_name().concat(" - ").concat(genderViewModel.getGender_description()));
                                  }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, genderNames);
                                  spnGender.setAdapter(arrayAdapter);
@@ -343,7 +345,7 @@ public class TherapistFragment extends Fragment {
     /**
      **Se selecciona el barrio
      **/
-    private void selectNeighborhood(TherapistViewModel therapist){
+    private void selectNeighborhood(){
         int indexOfNeighborhood=-1;
 
         Object therapistNeighborhood=therapist.getNeighborhoodId();

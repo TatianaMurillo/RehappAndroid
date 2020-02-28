@@ -49,6 +49,7 @@ public class PreferencesData {
     public static final String registerUserFailedMgs ="Error al registrar usuario.";
     public static final String registerExistedUserMgs ="El terapeuta ya se encuentra registrado o presenta conflictos.";
     public static final String registerUserEmailDataMgs ="Los correos no coinciden.";
+    public static final String registerUserEmailBadPatternDataMgs ="El patrón del correo no es válido.";
     public static final String registerUserPasswordDataMgs ="Las contraseñas no coinciden.";
 
     public static final String searchTherapistPatient ="Hubo un error al buscar terapeuta.";

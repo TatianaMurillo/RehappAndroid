@@ -268,8 +268,7 @@ private String json;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu,  menu);
         showHideItems(menu);
@@ -278,12 +277,8 @@ private String json;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
         }
-
-
-
         return super.onOptionsItemSelected(item);
     }
 

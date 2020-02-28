@@ -29,7 +29,6 @@ import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
-import com.rehapp.rehappmovil.rehapp.TherapyExercisesDialog;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.text.DateFormat;
@@ -460,7 +459,5 @@ private  SharedPreferences sharedpreferences;
     public void loadFragment(Fragment fragment){
         manager.beginTransaction().replace(R.id.content,fragment).commit();
     }
-
-
 
 }

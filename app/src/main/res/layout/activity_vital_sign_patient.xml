@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="20dp"
+                android:text="@string/vitalSignsTitle"
                 android:layout_marginTop="10dp"
 
                 />

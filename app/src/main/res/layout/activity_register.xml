@@ -5,7 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginTop="30dp"
     tools:context=".Register">
+
+    <TextView
+        android:id="@+id/tvDataRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_margin="10sp"
+        android:maxLength="30"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/textSizeLevelOne"
+        android:text="@string/userDataRegister"
+        android:inputType="text" />
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_margin="10sp"
+        android:maxLength="30"
+        android:text="@string/name"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/etName"
@@ -13,7 +35,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_margin="10sp"
-        android:hint="@string/name"
+        android:maxLength="30"
+        android:minLines="2"
         android:inputType="text" />
 
     <Spinner
@@ -41,6 +64,7 @@
         android:layout_marginStart="10sp"
         android:layout_marginLeft="10sp"
         android:ems="10"
+        android:maxLength="30"
         android:hint="@string/e_mail"
         android:inputType="textEmailAddress" />
 
@@ -50,6 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10sp"
         android:ems="10"
+        android:maxLength="30"
         android:hint="@string/ConfirmEmail"
         android:inputType="textEmailAddress" />
 
@@ -80,5 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:hint="@string/Save"
+        android:textColor="@color/colorButtonText"
+        android:background="@color/colorButtonBackground"
         android:onClick="register" />
 </LinearLayout>

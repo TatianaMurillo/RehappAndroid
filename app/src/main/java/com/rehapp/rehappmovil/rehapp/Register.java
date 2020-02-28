@@ -24,10 +24,14 @@ import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
+import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -105,7 +109,7 @@ public class Register extends AppCompatActivity {
                                  documentTypes= response.body();
                                  documentTypeNames.add(getResources().getString(R.string.DocumentTypeNonSelected));
                                  for (DocumentTypeViewModel documentTypeViewModel : documentTypes) {
-                                     documentTypeNames.add(documentTypeViewModel.getDocument_type_name());
+                                     documentTypeNames.add(documentTypeViewModel.getDocument_type_name().concat(" - ").concat(documentTypeViewModel.getDocument_type_description()));
                                  }
                                  ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, documentTypeNames);
                                  spnTherapistDocumentType.setAdapter(arrayAdapter);
@@ -132,29 +136,32 @@ public class Register extends AppCompatActivity {
         confirmEmail = etConfirmarEmail.getText().toString().trim();
         password = etUserPassword.getText().toString().trim();
         confirmPassword = etConfirmPassword.getText().toString().trim();
-        ArrayList<String> data =new ArrayList<>(Arrays.asList(therapistDocument,name,email,confirmEmail,password,confirmPassword));
-        ArrayList<Integer> dataInteger =new ArrayList<>(Arrays.asList(therapistDocumentTypeId));
+        List<DataValidation> dataToValidate = new ArrayList<>();
 
-        if(!ValidateInputs.validate().ValidateStringsAndIntegers(data,dataInteger)){
+        dataToValidate.add(new DataValidation(name,"Nombre usuario").noEmptyValue().textMaxLength(30));
+        dataToValidate.add(new DataValidation(email,"Correo electrónico").noEmptyValue().textMaxLength(30).textMinLength(11));
+        dataToValidate.add(new DataValidation(String.valueOf(therapistDocumentTypeId),"Tipo de documento").selectedValue());
+        dataToValidate.add(new DataValidation(therapistDocument,"Documento").noEmptyValue().textMaxLength(30));
+        dataToValidate.add(new DataValidation(password,"Contraseña").noEmptyValue().textMaxLength(100).textMinLength(11));
 
-            Toast.makeText(getApplicationContext(),PreferencesData.registerUserDataMgs,Toast.LENGTH_LONG).show();
-
-        }else if(!email.equals(confirmEmail))
-            {
-                Toast.makeText(getApplicationContext(),PreferencesData.registerUserEmailDataMgs,Toast.LENGTH_LONG).show();
-
-            }else if(!password.equals(confirmPassword))
-            {
-
-                Toast.makeText(getApplicationContext(),PreferencesData.registerUserPasswordDataMgs,Toast.LENGTH_LONG).show();
-
-            }else
-            {
-                UserViewModel user = new UserViewModel(email, password, name,therapistDocument,documentTypeSelectedId);
+        if (!email.equals(confirmEmail)) {
+            Toast.makeText(getApplicationContext(), PreferencesData.registerUserEmailDataMgs, Toast.LENGTH_LONG).show();
+        }else if (!password.equals(confirmPassword)) {
+            Toast.makeText(getApplicationContext(), PreferencesData.registerUserPasswordDataMgs, Toast.LENGTH_LONG).show();
+        }else if(!emailValidation(email)){
+            Toast.makeText(getApplicationContext(), PreferencesData.registerUserEmailBadPatternDataMgs, Toast.LENGTH_LONG).show();
+        }else if(ValidateInputs.validate().ValidateDataObject(dataToValidate,getApplicationContext())) {
+                UserViewModel user = new UserViewModel(email, password, name, therapistDocument, documentTypeSelectedId);
                 registerUser(user);
-            }
-
         }
+    }
+    public boolean emailValidation(String email) {
+            String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(email);
+            return matcher.matches();
+    }
+
 
         private void registerUser(final UserViewModel newUser) {
 
