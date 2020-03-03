@@ -1,7 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS;
 
 import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.DiseaseApiService;
-import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.ExerciseRoutineApiService;
 import com.rehapp.rehappmovil.rehapp.Utils.GlobalApplication;
 
 import java.security.cert.CertificateException;
@@ -36,7 +35,6 @@ public class DiseaseApiAdapter {
         }
 
         return API_SERVICE;
-
 
     }
 

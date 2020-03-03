@@ -144,6 +144,7 @@ public class TherapyExercisesFragment extends Fragment {
             });
         }catch (Exception ex){}
     }
+
     private void selectExerciseRoutinesItem(int position) {
         ExerciseRoutinesViewModel model = exercises.get(position);
         exerciseRoutineSelectedIndex=position;

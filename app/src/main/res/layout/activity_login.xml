@@ -1,81 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     android:layout_centerInParent="true"
-    android:layout_marginTop="50sp"
+
     tools:context=".Login">
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="157dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:src="@mipmap/login" />
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+            <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
 
-    <ImageView
-        android:id="@+id/ivIcon"
-        android:layout_width="157dp"
-        android:layout_height="120dp"
-        android:layout_alignEnd="@+id/btnLogin"
-        android:layout_alignRight="@+id/btnLogin"
-        android:layout_alignStart="@+id/btnLogin"
-        android:layout_alignLeft="@+id/btnLogin"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="-13dp"
-        android:layout_marginRight="-13dp"
-        android:src="@mipmap/login" />
+                        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/etUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="132dp"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:hint="@string/user" />
+                    <EditText
+                        android:id="@+id/etUser"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:inputType="textEmailAddress"
+                        android:hint="@string/user" />
 
-    <EditText
-        android:id="@+id/etpassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="208dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:hint="@string/password" />
+                    <EditText
+                        android:id="@+id/etpassword"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textPassword"
+                        android:hint="@string/password" />
 
-    <Button
-        android:id="@+id/btnLogin"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="74dp"
-        android:onClick="login"
-        android:text="@string/login"
-        tools:targetApi="lollipop" />
+                    <Button
+                        android:id="@+id/btnLogin"
+                        style="@android:style/Widget.Material.Light.Button.Borderless"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="login"
+                        android:layout_gravity="center|bottom"
+                        android:text="@string/login"
+                        android:layout_marginTop="110dp"
+                        tools:targetApi="lollipop" />
+                    <TextView
+                        android:id="@+id/tvRegister"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:textSize="@dimen/textSizeLevelOne"
+                        android:layout_gravity="center"
+                        android:text="@string/register"
+                        android:onClick="registerUser"/>
 
 
-    <TextView
-        android:id="@+id/tvRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="165dp"
-        android:textSize="@dimen/textSizeLevelOne"
-        android:text="@string/register"
-        android:onClick="registerUser"/>
+                <ImageView
+                        android:id="@+id/btnSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="30dp"
+                        android:padding="@dimen/textSizeLevelTwo"
+                        android:onClick="callIpDialog"
+                        android:visibility="invisible"
+                        android:src="@drawable/settings" />
 
-    <TextView
-        android:id="@+id/tvForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="216dp"
-        android:textSize="@dimen/textSizeLevelTwo"
-        android:text="@string/forgotYourPassword" />
-</RelativeLayout>
+</LinearLayout>
+</ScrollView>
+
+
+
+</LinearLayout>

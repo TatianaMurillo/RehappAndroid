@@ -6,7 +6,6 @@ public class TherapyExcerciseRoutineViewModel {
     private int therapy_excercise_routine_id;
     private float therapy_excercise_routine_intensity;
     private float therapy_excercise_routine_duration;
-    private float therapy_excercise_routine_frequent;
     private float therapy_excercise_routine_speed;
     private String therapy_excercise_routine_observation;
     private int therapy_id;
@@ -19,7 +18,6 @@ public class TherapyExcerciseRoutineViewModel {
 
     public TherapyExcerciseRoutineViewModel() { }
 
-    public float getTherapy_excercise_routine_frequent() { return therapy_excercise_routine_frequent; }
     public int getTherapyExcerciseRoutineId() {
         return therapy_excercise_routine_id;
     }
@@ -37,15 +35,14 @@ public class TherapyExcerciseRoutineViewModel {
     public int getExerciseRoutineId() {
         return exercise_routine_id;
     }
-    public String getConditions() {
-        return conditions;
+    public String getPreConditions() {
+        return preconditions;
     }
     public float getFrequency() {
         return frequency;
     }
 
     public void setExerciseRoutineId(int exercise_routine_id) { this.exercise_routine_id = exercise_routine_id; }
-    public void setTherapy_excercise_routine_frequent(float therapy_excercise_routine_frequent) { this.therapy_excercise_routine_frequent = therapy_excercise_routine_frequent; }
     public void setTherapyId(int therapy_id) {
         this.therapy_id = therapy_id;
     }

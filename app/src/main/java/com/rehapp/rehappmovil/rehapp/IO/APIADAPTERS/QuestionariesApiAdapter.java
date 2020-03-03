@@ -1,7 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS;
 
 import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.QuestionariesApiService;
-import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.VitalSignApiService;
 import com.rehapp.rehappmovil.rehapp.Utils.GlobalApplication;
 
 import java.security.cert.CertificateException;

@@ -1,6 +1,5 @@
 package com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS;
 
-import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.DocumentTypeApiService;
 import com.rehapp.rehappmovil.rehapp.IO.APISERVICES.NeighborhoodApiService;
 import com.rehapp.rehappmovil.rehapp.Utils.GlobalApplication;
 

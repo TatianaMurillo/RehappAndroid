@@ -30,6 +30,7 @@ import com.rehapp.rehappmovil.rehapp.Models.NeighborhoodViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.R;
+import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
@@ -208,13 +209,11 @@ public class CreatePatientFragment extends Fragment {
 
     public void savePatient() {
 
-        setInputData();
+        List<Object> rpta = validateInputData();
+        boolean checked = Boolean.parseBoolean(rpta.get(0).toString());
+        String  msg = rpta.get(1).toString();
 
-        if(ValidateInputs.validate().ValidateString(dataInputString))
-
-        {
-                if(ValidateInputs.validate().ValidateIntegers(dataInputInteger)) {
-
+        if(checked) {
                     PatientViewModel patient = getPatientViewModelFromView();
 
                     Call<PatientViewModel> call = PatientApiAdapter.getApiService().createPatient(patient);
@@ -226,34 +225,29 @@ public class CreatePatientFragment extends Fragment {
                             patientResponse= response.body();
                             Toast.makeText(mContext, PreferencesData.storePatientSuccess, Toast.LENGTH_LONG).show();
                             redirectToSearchCreatePatient();
+                        }else{
+                            Toast.makeText(mContext, PreferencesData.storePatientFailed +"-"+ response.raw().code(), Toast.LENGTH_LONG).show();
                         }
                     }
-
                     @Override
                     public void onFailure(Call<PatientViewModel> call, Throwable t) {
                         Toast.makeText(mContext, PreferencesData.storePatientFailed, Toast.LENGTH_LONG).show();
                     }
                 });
-            }else{
-                    Toast.makeText(mContext, PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
-
-                }
-
         }else{
-            Toast.makeText(mContext, PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
-
+                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
         }
-
     }
 
     public void updatePatient() {
 
-        setInputData();
+        List<Object> rpta = validateInputData();
+        boolean checked = Boolean.parseBoolean(rpta.get(0).toString());
+        String  msg = rpta.get(1).toString();
 
-        if(ValidateInputs.validate().ValidateString(dataInputString))
 
-        {
-            if(ValidateInputs.validate().ValidateIntegers(dataInputInteger)) {
+        if(checked) {
+
                 String patientId=String.valueOf(patient.getPatient_id());
                 final PatientViewModel patient = getPatientViewModelFromView();
                 Call<PatientViewModel> call = PatientApiAdapter.getApiService().updatePatient(patient,patientId);
@@ -277,15 +271,8 @@ public class CreatePatientFragment extends Fragment {
                     }
                 });
             }else{
-                Toast.makeText(mContext, PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
-
+                Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
             }
-
-        }else{
-            Toast.makeText(mContext, PreferencesData.storePatientEmptyDataMsg, Toast.LENGTH_LONG).show();
-
-        }
-
     }
 
     private void loadDocumentTypes() {
@@ -432,7 +419,7 @@ public class CreatePatientFragment extends Fragment {
         return  patient;
     }
 
-    private void setInputData() {
+    private List<Object> validateInputData() {
         dataInputString =new ArrayList();
         dataInputString.add(etfirstName.getText().toString());
         dataInputString.add(etFirstLastName.getText().toString());
@@ -446,6 +433,23 @@ public class CreatePatientFragment extends Fragment {
         dataInputInteger.add(genderSelectedId);
         dataInputInteger.add(neighborhoodSelectedId);
         dataInputInteger.add(documentTypeSelectedId);
+
+        ArrayList<DataValidation>  list= new ArrayList<>();
+
+        list.add(new DataValidation(etfirstName.getText().toString(),"Primer nombre").noEmptyValue().textMaxLength(50));
+        list.add(new DataValidation(etFirstLastName.getText().toString(),"Primer apellido").noEmptyValue().textMaxLength(50));
+
+        list.add(new DataValidation(etDocument.getText().toString(),"Documento de identidad").noEmptyValue().textMaxLength(15).notZeroValue());
+        list.add(new DataValidation(etAddress.getText().toString(),"Dirección").noEmptyValue().textMaxLength(50));
+        list.add(new DataValidation(etCellPhone.getText().toString(),"Celular").noEmptyValue().textMaxLength(15).notZeroValue());
+        list.add(new DataValidation(etLandLinePhone.getText().toString(),"Telefono fijo").noEmptyValue().textMaxLength(7).notZeroValue());
+        list.add(new DataValidation(etAge.getText().toString(),"Edad").noEmptyValue().textMaxLength(3).notZeroValue());
+        list.add(new DataValidation(String.valueOf(genderSelectedId),"Género").noEmptyValue().textMaxLength(1).notZeroValue().selectedValue());
+        list.add(new DataValidation(String.valueOf(neighborhoodSelectedId),"Barrio").noEmptyValue().textMaxLength(1).notZeroValue().selectedValue());
+        list.add(new DataValidation(String.valueOf(documentTypeSelectedId),"Tipo de documento").noEmptyValue().textMaxLength(1).notZeroValue().selectedValue());
+
+
+        return  ValidateInputs.validate().ValidateDataObject(list);
     }
 
     private void redirectToSearchPatient()

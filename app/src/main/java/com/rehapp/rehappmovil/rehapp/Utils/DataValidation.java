@@ -9,7 +9,8 @@ public class DataValidation {
 
     private int maxTextValue;
     private int minTextValue;
-    private int equalsToValue;
+    private int textLengthEqualsToValue;
+    private int textNotEqualsToValue;
 
     /**
      * Indicadores de ejecución
@@ -42,7 +43,7 @@ public class DataValidation {
     }
 
     public DataValidation textLengthEqualsTo(int equalsTo) {
-        this.equalsToValue=equalsTo;
+        this.textLengthEqualsToValue=equalsTo;
         this.equalsTo = 1;
         return this;
     }
@@ -131,6 +132,6 @@ public class DataValidation {
     }
 
     public int getEqualsToValue() {
-        return equalsToValue;
+        return textLengthEqualsToValue;
     }
 }

@@ -144,15 +144,23 @@ public class Register extends AppCompatActivity {
         dataToValidate.add(new DataValidation(therapistDocument,"Documento").noEmptyValue().textMaxLength(30));
         dataToValidate.add(new DataValidation(password,"Contraseña").noEmptyValue().textMaxLength(100).textMinLength(11));
 
+
+        List<Object> rpta =ValidateInputs.validate().ValidateDataObject(dataToValidate);
+        boolean checked = Boolean.parseBoolean(rpta.get(0).toString());
+        String  msg = rpta.get(1).toString();
+
+
         if (!email.equals(confirmEmail)) {
             Toast.makeText(getApplicationContext(), PreferencesData.registerUserEmailDataMgs, Toast.LENGTH_LONG).show();
         }else if (!password.equals(confirmPassword)) {
             Toast.makeText(getApplicationContext(), PreferencesData.registerUserPasswordDataMgs, Toast.LENGTH_LONG).show();
         }else if(!emailValidation(email)){
             Toast.makeText(getApplicationContext(), PreferencesData.registerUserEmailBadPatternDataMgs, Toast.LENGTH_LONG).show();
-        }else if(ValidateInputs.validate().ValidateDataObject(dataToValidate,getApplicationContext())) {
+        }else if(checked) {
                 UserViewModel user = new UserViewModel(email, password, name, therapistDocument, documentTypeSelectedId);
                 registerUser(user);
+        }else{
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         }
     }
     public boolean emailValidation(String email) {

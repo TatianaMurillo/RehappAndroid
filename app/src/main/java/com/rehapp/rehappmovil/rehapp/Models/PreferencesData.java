@@ -16,6 +16,7 @@ public class PreferencesData {
     public static final String htmlTagToReplace="{0}";
     public static final String PatientId ="patientId";
     public static final String PatientDocument ="document";
+    public static final String CurrentIp ="currentIp";
     public static final String PatientTpoDocument ="tpoDocument";
     public static final String TherapySelectedId="TherapySelectedId";
     public static final String MedicalHistorySelectedId="MedicalHistorySelectedId";
@@ -114,6 +115,8 @@ public class PreferencesData {
 
     public static final String therapyRoutineSuccessCreationMessage="Valores de rutina actualizados correctamente.";
     public static final String therapyRoutineUpdateWithoutRowsMsg="Rutina no registrada para la terapia, por favor crear.";
+    public static final String therapyRoutineUpdateFailedMsg="Hubo un error al actualizar rutina.";
+
     public static final String therapyRoutineFailedCreationMessage="Hubo un error al actualizar rutina.";
 
     public static final String listDocumentTypesFailed="No se pudieron cargar los tipos de documento correctamente.";
@@ -133,6 +136,8 @@ public class PreferencesData {
     public static final int PhysiologicalParameterTherapyValueSize=5;
     public static final int VitalSignsTherapyValueSize=5;
     public static final String therapyDetailWatchVideo="Ver.";
+    public static final String setCurrentIpFailedtMsg ="Hubo un error guardar la ip actual. Contactar admin.";
+    public static final String setCurrentIpSuccesstMsg ="Ip guardada exitosamente.";
 
 
     /**

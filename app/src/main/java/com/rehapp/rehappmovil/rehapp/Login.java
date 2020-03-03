@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ public class Login extends AppCompatActivity {
     private Button btnLogin;
     private TextView tvForgotPassword;
     private TextView tvRegister;
+    private ImageView btnSettings;
+
 
 
 
@@ -51,8 +54,8 @@ public class Login extends AppCompatActivity {
         etUser=findViewById(R.id.etUser);
         etpassword=findViewById(R.id.etpassword);
         btnLogin = findViewById(R.id.btnLogin);
-        tvForgotPassword= findViewById(R.id.tvForgotPassword);
         tvRegister= findViewById(R.id.tvRegister);
+        btnSettings=findViewById(R.id.btnSettings);
 
         loadPreferences();
         userViewModel= ViewModelProviders.of(this).get(UserViewModel.class);
@@ -212,5 +215,8 @@ public class Login extends AppCompatActivity {
     }
 
 
-
+    public void callIpDialog(View view) {
+        SettingsDialog dialog = new SettingsDialog();
+        dialog.show(getSupportFragmentManager(),"");
+    }
 }

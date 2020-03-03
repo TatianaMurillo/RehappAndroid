@@ -79,7 +79,6 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
                 Bundle extras = new Bundle();
                 extras.putString(PreferencesData.TherapyAction, "DETAIL");
                 extras.putInt(PreferencesData.TherapySelectedId, selectedTherapy.getTherapy_id());
-
                 fragment.setArguments(extras);
                 loadFragment(fragment);
 
