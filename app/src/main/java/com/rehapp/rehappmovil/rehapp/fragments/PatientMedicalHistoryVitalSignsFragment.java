@@ -180,6 +180,7 @@ public class PatientMedicalHistoryVitalSignsFragment extends Fragment {
                 }else if(response.raw().code()!=200)
                 {
                     Toast.makeText(mContext, response.raw().message(), Toast.LENGTH_LONG).show();
+                    goToMedicalHistoryDetail();
                 }
             }
 

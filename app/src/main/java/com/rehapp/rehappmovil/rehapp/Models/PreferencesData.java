@@ -99,7 +99,8 @@ public class PreferencesData {
     public static final String medicalHistoryDetailDataMessage ="Los datos para actualizar la terapia no estan completos.";
 
     public static final String medicalHistorySelected ="Se seleccionó: ";
-    public static final String medicalHistoryDetailUpdateSuccesfullMsg ="Se actualizó la historia medica exitosamente.";
+    public static final String medicalHistoryDetailUpdateSuccesfullMsg ="Se actualizó la historia médica exitosamente.";
+    public static final String medicalHistoryCreateTherapyFailedMsg ="Hubo un error al crear historia médica.";
     public static final String medicalHistoryDetailDefaultName ="Nombre";
     public static final String medicalHistoryDetailDefaultDescription ="Descripción";
     public static final String medicalHistoryVitalSignEmptyListMsg ="No se encontraron toma de vitales para el paciente.";

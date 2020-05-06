@@ -478,12 +478,8 @@ public class CreatePatientFragment extends Fragment {
                 }else{
                     savePatient();
                 }
-
                 break;
         }
-
-
-
         return super.onOptionsItemSelected(item);
     }
 

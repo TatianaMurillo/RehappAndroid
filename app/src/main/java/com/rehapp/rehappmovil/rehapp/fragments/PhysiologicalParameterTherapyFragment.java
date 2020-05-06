@@ -2,14 +2,12 @@ package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
@@ -30,7 +28,6 @@ import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewMod
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.R;
-import com.rehapp.rehappmovil.rehapp.TherapyDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +85,7 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
         physiologicalParameterAction=sharedpreferences.getString(PreferencesData.PhysiologicalParameterAction,"");
         setTitle(physiologicalParameterAction);
     }
+
     private void setTitle(String action){
         String title=action.equals(PreferencesData.PhysiologicalParameterTherapySesionOUT)?getResources().getString(R.string.phisiologicalParametersOut):getResources().getString(R.string.phisiologicalParametersIn);
         tvTitle.setText(title);
@@ -138,14 +136,11 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
                     System.out.println("No se encontraron parametros fisiologicos para la terapia.");
                 }
             }
-
             @Override
             public void onFailure(Call<List<PhysiologicalParameterTherapyViewModel>> call, Throwable t) {
                 Toast.makeText(mContext, PreferencesData.therapyDetailPhysiologicalParameterTherapyEmptyListMsg, Toast.LENGTH_LONG).show();
             }
         });
-
-
     }
 
     private void addPhysiologicalParametersView(ArrayList<PhysiologicalParameterViewModel> physiologicalParameters) {
@@ -252,6 +247,23 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
         return 0;
     }
 
+    public void showHideItems(Menu menu) {
+        MenuItem item;
+        item = menu.findItem(R.id.save);
+        item.setVisible(true);
+        item = menu.findItem(R.id.create_therapy);
+        item.setVisible(false);
+
+    }
+
+    private void goToTherapy(){
+        loadFragment(new TherapyDetailFragment());
+    }
+
+    public void loadFragment(Fragment fragment){
+        manager.beginTransaction().replace(R.id.content,fragment).commit();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -271,30 +283,12 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
         }
     }
 
-
-    public void showHideItems(Menu menu) {
-        MenuItem item;
-        item = menu.findItem(R.id.save);
-        item.setVisible(true);
-        item = menu.findItem(R.id.create_therapy);
-        item.setVisible(false);
-
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext=context;
     }
 
-
-    private void goToTherapy(){
-        loadFragment(new TherapyDetailFragment());
-    }
-
-    public void loadFragment(Fragment fragment){
-        manager.beginTransaction().replace(R.id.content,fragment).commit();
-    }
 
 
 }

@@ -138,7 +138,7 @@ public class PatientMedicalHistoryQuestionariesFragment extends Fragment {
                 @Override
                 public void onFailure(Call<List<PatientMedicalHistoryQuestionaireOptionViewModel>> call, Throwable t) {
                     Toast.makeText(mContext, PreferencesData.questionairesOptionCreateFailedMsg, Toast.LENGTH_LONG).show();
-
+                    goToMedicalHistoryDetail();
                 }
             });
         }else{

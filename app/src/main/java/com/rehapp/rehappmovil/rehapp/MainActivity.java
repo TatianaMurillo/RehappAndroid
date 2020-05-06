@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity
                 checkTherapistFragment();
                 break;
             case R.id.logout:
-                logout();
+                IsFinish("¿Cerrar sesion?");
                 break;
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

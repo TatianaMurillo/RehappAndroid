@@ -28,7 +28,6 @@ import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

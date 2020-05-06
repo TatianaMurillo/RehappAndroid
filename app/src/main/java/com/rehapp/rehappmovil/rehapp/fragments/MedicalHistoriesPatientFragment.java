@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +25,6 @@ import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -132,12 +130,14 @@ public class MedicalHistoriesPatientFragment extends Fragment {
                     extras.putString(PreferencesData.MedicaHistoryAction, "ADD");
                     fragment.setArguments(extras);
                     loadFragment(fragment);
+                }else{
+                    Toast.makeText(mContext, PreferencesData.medicalHistoryCreateTherapyFailedMsg, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<PatientMedicalHistoryViewModel> call, Throwable t) {
-
+                Toast.makeText(mContext, PreferencesData.medicalHistoryCreateTherapyFailedMsg +" "+ t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
