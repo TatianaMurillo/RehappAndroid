@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientMedicalHistoryApiAdapter;
-import com.rehapp.rehappmovil.rehapp.MedicalHistoriesPatient;
 import com.rehapp.rehappmovil.rehapp.MedicalHistoryDiseasesDialog;
 import com.rehapp.rehappmovil.rehapp.Models.PatientMedicalHistoryViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
@@ -157,8 +156,7 @@ Calendar cal = Calendar.getInstance();
                 }else{
                     if(response.raw().code()==404) {
                         Toast.makeText(mContext, PreferencesData.searchPatientPatientNonExist, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(mContext, MedicalHistoriesPatient.class);
-                        startActivity(intent);
+                        loadFragment(new SearchCreatePatientFragment());
                     }
                 }
             }

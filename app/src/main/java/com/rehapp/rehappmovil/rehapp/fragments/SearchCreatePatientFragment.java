@@ -1,9 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,7 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.CreatePatient;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PatientApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
@@ -32,9 +29,8 @@ import com.rehapp.rehappmovil.rehapp.Models.PatientViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.SearchCreatePatientViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
-import com.rehapp.rehappmovil.rehapp.SearchPatient;
+
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import retrofit2.Call;
 import retrofit2.Callback;

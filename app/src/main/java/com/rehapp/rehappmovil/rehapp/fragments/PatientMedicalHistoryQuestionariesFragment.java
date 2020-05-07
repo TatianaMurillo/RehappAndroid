@@ -1,14 +1,12 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.QuestionariesApiAdapter;
-import com.rehapp.rehappmovil.rehapp.MedicalHistoryDetail;
 import com.rehapp.rehappmovil.rehapp.MedicalHistoryQuestionariesAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.OptionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PatientMedicalHistoryQuestionaireOptionViewModel;

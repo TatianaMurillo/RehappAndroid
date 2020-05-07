@@ -1,12 +1,8 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
