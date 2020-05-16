@@ -14,12 +14,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.GenderApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.NeighborhoodApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.GenderViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.NeighborhoodViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapistViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.UserViewModel;
 import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
+import com.rehapp.rehappmovil.rehapp.Utils.UtilMethods;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
@@ -42,12 +47,16 @@ public class Register extends AppCompatActivity {
     EditText etTherapistDocument;
     Spinner spnTherapistDocumentType;
     int documentTypeSelectedId=-1,indexDocumentTypeSelected=-1;
+    int genderSelectedId=-1;
+    int neighborhoodSelectedId=-1;
     ArrayList<DocumentTypeViewModel> documentTypes =new ArrayList<>();
     ArrayList<String> documentTypeNames= new ArrayList<>();
 
     Button btnRegister;
     private SharedPreferences sharedpreferences;
     private UserViewModel userViewModel;
+    ArrayList<GenderViewModel> genders =new ArrayList<>();
+    ArrayList<NeighborhoodViewModel> neighborhoods =new ArrayList<>();
 
 
     @Override
@@ -88,7 +97,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void loadData(){
-        loadDocumentTypes();
+        loadGenders();
     }
 
     private void loadDocumentTypes()
@@ -119,10 +128,59 @@ public class Register extends AppCompatActivity {
     }
 
 
+    private void loadGenders() {
+        Call<ArrayList<GenderViewModel>> call = GenderApiAdapter.getApiService().getGenders();
+        call.enqueue(new Callback<ArrayList<GenderViewModel>>() {
+
+                         @Override
+                         public void onResponse(Call<ArrayList<GenderViewModel>> call, Response<ArrayList<GenderViewModel>> response) {
+                             if(response.isSuccessful())
+                             {
+                                 genders= response.body();
+                                 if(genders.size()>0) {
+                                     genderSelectedId = genders.get(UtilMethods.randomValue(genders.size())).getGender_id();
+                                     loadNeigborhoods();
+                                 }
+                             }
+                         }
+                         @Override
+                         public void onFailure(Call<ArrayList<GenderViewModel>> call, Throwable t) {
+                             t.printStackTrace();
+                             Toast.makeText(getApplicationContext(), PreferencesData.FailedToLoadSomeResources, Toast.LENGTH_LONG).show();
+                         }
+                     }
+        );
+    }
+
+    private void loadNeigborhoods() {
+        Call<ArrayList<NeighborhoodViewModel>> call = NeighborhoodApiAdapter.getApiService().getNeighborhoods();
+        call.enqueue(new Callback<ArrayList<NeighborhoodViewModel>>() {
+
+                         @Override
+                         public void onResponse(Call<ArrayList<NeighborhoodViewModel>> call, Response<ArrayList<NeighborhoodViewModel>> response) {
+                             if(response.isSuccessful()) {
+                                 neighborhoods= response.body();
+                                 if(neighborhoods.size()>0) {
+                                     neighborhoodSelectedId = neighborhoods.get(UtilMethods.randomValue(neighborhoods.size())).getNeighborhood_id();
+                                     loadDocumentTypes();
+                                 }
+                             }
+                         }
+                         @Override
+                         public void onFailure(Call<ArrayList<NeighborhoodViewModel>> call, Throwable t) {
+                             t.printStackTrace();
+                             Toast.makeText(getApplicationContext(), PreferencesData.FailedToLoadSomeResources, Toast.LENGTH_LONG).show();
+                         }
+                     }
+        );
+    }
+
     public void register(View view) {
 
         String name, email,confirmEmail, password, confirmPassword,therapistDocument;
         int therapistDocumentTypeId=documentTypeSelectedId;
+        int therapistGenderId=documentTypeSelectedId;
+        int therapistNeighborhoodId=documentTypeSelectedId;
 
         therapistDocument=etTherapistDocument.getText().toString();
         name = etName.getText().toString().trim();
@@ -135,6 +193,8 @@ public class Register extends AppCompatActivity {
         dataToValidate.add(new DataValidation(name,"Nombre usuario").noEmptyValue().textMaxLength(30));
         dataToValidate.add(new DataValidation(email,"Correo electrónico").noEmptyValue().textMaxLength(30).textMinLength(11));
         dataToValidate.add(new DataValidation(String.valueOf(therapistDocumentTypeId),"Tipo de documento").selectedValue());
+        dataToValidate.add(new DataValidation(String.valueOf(therapistGenderId),"Género").selectedValue());
+        dataToValidate.add(new DataValidation(String.valueOf(therapistNeighborhoodId),"Barrio").selectedValue());
         dataToValidate.add(new DataValidation(therapistDocument,"Documento").noEmptyValue().textMaxLength(30));
         dataToValidate.add(new DataValidation(password,"Contraseña").noEmptyValue().textMaxLength(100).textMinLength(11));
 
@@ -151,7 +211,7 @@ public class Register extends AppCompatActivity {
         }else if(!emailValidation(email)){
             Toast.makeText(getApplicationContext(), PreferencesData.registerUserEmailBadPatternDataMgs, Toast.LENGTH_LONG).show();
         }else if(checked) {
-                UserViewModel user = new UserViewModel(email, password, name, therapistDocument, documentTypeSelectedId);
+                UserViewModel user = new UserViewModel(email, password, name, therapistDocument, documentTypeSelectedId,genderSelectedId,neighborhoodSelectedId);
                 registerUser(user);
         }else{
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();

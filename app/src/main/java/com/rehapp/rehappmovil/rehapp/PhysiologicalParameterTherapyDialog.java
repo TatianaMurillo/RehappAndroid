@@ -133,7 +133,7 @@ public class PhysiologicalParameterTherapyDialog extends AppCompatDialogFragment
                     }
 
                 }else if (response.raw().code()==404){
-                    System.out.println("No se encontraron parametros fisiologicos para la terapia.");
+                    Toast.makeText(mContext, PreferencesData.therapyDetailPhysiologicalParameterTherapyEmptyListMsg, Toast.LENGTH_LONG).show();
                 }
             }
 

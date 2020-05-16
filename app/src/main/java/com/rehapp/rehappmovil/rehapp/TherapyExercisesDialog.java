@@ -151,7 +151,7 @@ public class TherapyExercisesDialog extends AppCompatDialogFragment {
                             }
                         }
                     }else if(response.raw().code()==404){
-                        System.out.println(PreferencesData.therapyDetailTherapyExerciseRoutinesEmptyListMsg);
+                        Toast.makeText(mContext, PreferencesData.therapyDetailTherapyExerciseRoutinesEmptyListMsg, Toast.LENGTH_LONG).show();
                     }
                 }
                 @Override

@@ -15,6 +15,8 @@ public class UserViewModel extends ViewModel {
 
     private String therapist_document;
     private int document_type_id;
+    private int gender_id;
+    private int neighborhood_id;
 
     private UserViewModel ActualUser;
 
@@ -29,12 +31,14 @@ public class UserViewModel extends ViewModel {
 
     }
 
-    public UserViewModel(String email, String password, String name,String therapist_document,int document_type_id) {
+    public UserViewModel(String email, String password, String name,String therapist_document,int document_type_id,int gender_id,int neighborhood_id) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.therapist_document=therapist_document;
         this.document_type_id=document_type_id;
+        this.gender_id=gender_id;
+        this.neighborhood_id=neighborhood_id;
     }
 
     public UserViewModel(String token) {
@@ -84,6 +88,15 @@ public class UserViewModel extends ViewModel {
                 return document_type_id;
             }
 
+
+            public int getGender_id() {
+                return gender_id;
+            }
+
+            public int getNeighborhood_id() {
+                return neighborhood_id;
+            }
+
     /**
      *   setters
      */
@@ -108,5 +121,13 @@ public class UserViewModel extends ViewModel {
 
             public void setDocument_type_id(int document_type_id) {
                 this.document_type_id = document_type_id;
+            }
+
+            public void setGender_id(int gender_id) {
+                this.gender_id = gender_id;
+            }
+
+            public void setNeighborhood_id(int neighborhood_id) {
+                this.neighborhood_id = neighborhood_id;
             }
 }
