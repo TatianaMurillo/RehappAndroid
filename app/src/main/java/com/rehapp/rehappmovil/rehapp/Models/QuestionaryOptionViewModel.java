@@ -7,6 +7,7 @@ public class QuestionaryOptionViewModel {
 
     private String questionnaire_id;
     private String option_id;
+    private String questionnaire_option_id;
     private String questionnaire_name;
     private String questionnaire_description;
     private ArrayList<OptionViewModel> options=new ArrayList();
@@ -69,5 +70,13 @@ public class QuestionaryOptionViewModel {
 
     public void setOption_id(String option_id) {
         this.option_id = option_id;
+    }
+
+    public String getQuestionnaire_option_id() {
+        return questionnaire_option_id;
+    }
+
+    public void setQuestionnaire_option_id(String questionnaire_option_id) {
+        this.questionnaire_option_id = questionnaire_option_id;
     }
 }

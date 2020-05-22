@@ -8,6 +8,7 @@ public class PhysiologicalParameterViewModel extends ViewModel {
     private int physiological_parameter_id;
     private String physiological_parameter_name;
     private String physiological_parameter_description;
+    private String questionnaire_id;
 
 
 
@@ -40,5 +41,9 @@ public class PhysiologicalParameterViewModel extends ViewModel {
 
     public void setPhysiological_parameter_description(String physiological_parameter_description) {
         this.physiological_parameter_description = physiological_parameter_description;
+    }
+
+    public String getQuestionnaire_id() {
+        return questionnaire_id;
     }
 }

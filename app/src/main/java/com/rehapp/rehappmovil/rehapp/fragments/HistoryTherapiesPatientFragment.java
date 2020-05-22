@@ -18,15 +18,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.InstitutionApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
+import com.rehapp.rehappmovil.rehapp.Models.InstitutionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
+import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
+import com.rehapp.rehappmovil.rehapp.Utils.UtilMethods;
+import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +43,11 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
     private ListView lvTherapies;
     private ArrayList<TherapyViewModel> therapies = new ArrayList<>();
     private ArrayList<String> therapiesNames= new ArrayList<>();
-    private String patientId;
+    ArrayList<InstitutionViewModel> institutions= new ArrayList<>();
+    int patientId;
+    int institutionId=-1;
+    int therapistId=-1;
+
     private int therapySequence;
     SharedPreferences sharedpreferences;
 
@@ -68,7 +78,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
 
         lvTherapies = view.findViewById(R.id.lvTherapies);
         recoverySendData();
-        loadTherapies();
+        loadTherapies();;
 
         lvTherapies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -90,8 +100,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
 
 
 
-    public void loadTherapies()
-    {
+    public void loadTherapies() {
         Call<ArrayList<TherapyViewModel>> call = TherapyApiAdapter.getApiService().getTherapiesByPatient(patientId);
         call.enqueue(new Callback<ArrayList<TherapyViewModel>>() {
             @Override
@@ -118,7 +127,6 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
     }
 
 
-
     @Override
     public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
 
@@ -130,7 +138,8 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
     }
 
     private void recoverySendData() {
-        patientId=sharedpreferences.getString(PreferencesData.PatientId,"");
+        patientId=Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId,"0"));
+        therapistId=sharedpreferences.getInt(PreferencesData.TherapistId, 0);
     }
 
 
@@ -148,7 +157,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
             case R.id.create_therapy:
 
                 cleanPreferenceData();
-                createTherapyId();
+                listInstitutions();
                 return true;
                 default:
                     return super.onOptionsItemSelected(item);
@@ -163,37 +172,90 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
      */
 
     public void createTherapyId() {
-        int patientId = Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId, "0"));
+
+        List<Object> rpta = validateInputData();
+        boolean checked = Boolean.parseBoolean(rpta.get(0).toString());
+        String  msg = rpta.get(1).toString();
+
+        if(checked) {
+            TherapyViewModel therapy=getObjectToCreate();
+            Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
+            call.enqueue(new Callback<TherapyViewModel>() {
+                @Override
+                public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
+                    if (response.isSuccessful()) {
+                        TherapyViewModel therapyViewModel = response.body();
+                        Toast.makeText(mContext, PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
+                        TherapyDetailFragment fragment = new TherapyDetailFragment();
+                        Bundle extras = new Bundle();
+                        extras.putString(PreferencesData.TherapyAction, "ADD");
+                        extras.putInt(PreferencesData.TherapySelectedId, therapyViewModel.getTherapy_id());
+                        fragment.setArguments(extras);
+                        loadFragment(fragment);
+
+                    } else {
+                        Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TherapyViewModel> call, Throwable t) {
+                    Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void listInstitutions() {
+        Call<ArrayList<InstitutionViewModel>> call = InstitutionApiAdapter.getApiService().getInstitutions();
+        call.enqueue(new Callback<ArrayList<InstitutionViewModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<InstitutionViewModel>> call, Response<ArrayList<InstitutionViewModel>> response) {
+                if(response.isSuccessful())
+                {
+                    institutions = response.body();
+                    if(institutions.size()>0) {
+                        institutionId = institutions.get(UtilMethods.randomValue(institutions.size())).getInstitution_id();
+                        createTherapyId();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<InstitutionViewModel>> call, Throwable t) {
+                Toast.makeText(mContext, PreferencesData.therapyDetailInstitutionListMsg,Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    private List<Object> validateInputData() {
+        ArrayList<DataValidation>  list= new ArrayList<>();
+
+        list.add(new DataValidation(String.valueOf(patientId),"Datos de paciente").noEmptyValue().notZeroValue().selectedValue());
+        list.add(new DataValidation(String.valueOf(therapistId),"Datos de terapeuta").noEmptyValue().notZeroValue().selectedValue());
+        list.add(new DataValidation(String.valueOf(institutionId),"Datos de institucion").noEmptyValue().notZeroValue().selectedValue());
+
+
+        return  ValidateInputs.validate().ValidateDataObject(list);
+    }
+
+
+    public TherapyViewModel getObjectToCreate(){
+
         String therapyDescription=PreferencesData.therapyCreationDescriptionFieldValue.concat(sdf.format(cal.getTime()));
         TherapyViewModel therapy = new TherapyViewModel();
         therapy.setPatient_id(patientId);
         therapy.setTherapy_description(therapyDescription);
         therapy.setTherapy_sequence(therapySequence);
-        Call<TherapyViewModel> call = TherapyApiAdapter.getApiService().createTherapyId(therapy);
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if (response.isSuccessful()) {
-                    TherapyViewModel therapyViewModel=response.body();
-                    Toast.makeText(mContext, PreferencesData.therapyCreationIdSuccessMsg, Toast.LENGTH_LONG).show();
-                    TherapyDetailFragment fragment = new TherapyDetailFragment();
-                    Bundle extras = new Bundle();
-                    extras.putString(PreferencesData.TherapyAction, "ADD");
-                    extras.putInt(PreferencesData.TherapySelectedId, therapyViewModel.getTherapy_id());
-                    fragment.setArguments(extras);
-                    loadFragment(fragment );
+        therapy.setTherapist_id(therapistId);
+        therapy.setInstitution_id(institutionId);
 
-                } else {
-                    Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-                Toast.makeText(mContext, PreferencesData.therapyCreationIdFailedMsg, Toast.LENGTH_LONG).show();
-            }
-        });
+        return therapy;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -201,9 +263,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
         mContext=context;
     }
 
-
-    public void showHideItems(Menu menu)
-    {
+    public void showHideItems(Menu menu) {
         MenuItem item;
         item= menu.findItem(R.id.save);
         item.setVisible(false);
@@ -211,8 +271,7 @@ public class HistoryTherapiesPatientFragment extends Fragment implements Callbac
         item.setVisible(true);
     }
 
-    private void cleanPreferenceData()
-    {
+    private void cleanPreferenceData() {
         storeIntSharepreferences(PreferencesData.TherapyId,0);
     }
 

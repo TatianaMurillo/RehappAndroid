@@ -133,6 +133,7 @@ public class Login extends AppCompatActivity {
                         storeStringSharepreferences(PreferencesData.userActive,"");
                         storeStringSharepreferences(PreferencesData.loginToken, userViewModel.getToken());
                         storeStringSharepreferences(PreferencesData.userActive, userViewModel.getName());
+                        storeStringSharepreferences(PreferencesData.emailAuthenticatedUser, userViewModel.getEmail());
                         searchTherapist(user.getEmail());
 
                     }else

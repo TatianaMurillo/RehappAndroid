@@ -3,36 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TherapyDetail">
-
-<ScrollView
-
-    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/lyDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+            <LinearLayout
+                android:id="@+id/lyDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tvDateAndTimeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5sp"
-                    android:textSize="@dimen/textSizeLevelTwo"
-                    android:text="Fecha y hora" />
+                    android:text="Fecha y hora"
+                    android:textSize="@dimen/textSizeLevelTwo" />
 
                 <TextView
                     android:id="@+id/tvDateAndTime"
@@ -41,63 +37,62 @@
                     android:layout_margin="5sp"
                     android:text="" />
 
-                </LinearLayout>
+            </LinearLayout>
 
 
             <LinearLayout
                 android:id="@+id/lyOtherInfoHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="end"
-                >
-            <TextView
-                android:id="@+id/tvTherapyDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5sp"
-                android:textSize="@dimen/textSizeLevelTwo"
-                android:text="Duración (mins)"
-              />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/etTherapyDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5sp"
-                android:enabled="false"
-                android:text="" />
+                <TextView
+                    android:id="@+id/tvTherapyDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:text="Duración (mins)"
+                    android:textSize="@dimen/textSizeLevelTwo" />
+
+                <EditText
+                    android:id="@+id/etTherapyDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:enabled="false"
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/tvWatchExercises"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5sp"
-                    android:textSize="@dimen/textSizeLevelOne"
                     android:text="@string/watchExercises"
-                    />
+                    android:textSize="@dimen/textSizeLevelOne" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvTherapySequence"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:text="Terapia # 1"
-        android:textSize="@dimen/textSizeLevelOne"
-        android:layout_gravity="center"/>
-    <TextView
-        android:id="@+id/tvTherapist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:textSize="@dimen/textSizeLevelTwo"
-        android:text="Terapeuta" />
+        <TextView
+            android:id="@+id/tvTherapySequence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="Terapia # 1"
+            android:textSize="@dimen/textSizeLevelOne" />
+
+        <TextView
+            android:id="@+id/tvTherapist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="10dp"
+            android:text="Terapeuta"
+            android:textSize="@dimen/textSizeLevelTwo" />
 
         <Spinner
             android:id="@+id/spnTherapist"
@@ -105,16 +100,14 @@
             android:layout_height="42dp"
             android:layout_margin="10dp" />
 
-
-
-    <TextView
-        android:id="@+id/tvInstitucion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:textSize="@dimen/textSizeLevelTwo"
-        android:layout_margin="10dp"
-        android:text="Institución" />
+        <TextView
+            android:id="@+id/tvInstitucion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:text="Institución"
+            android:textSize="@dimen/textSizeLevelTwo" />
 
         <Spinner
             android:id="@+id/spnInstitution"
@@ -124,34 +117,60 @@
             android:layout_margin="10dp"
             android:layout_marginBottom="170dp" />
 
-    <TextView
-        android:id="@+id/tvPhisiologicalParametersIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textSize="@dimen/textSizeLevelTwo"
-        android:text="@string/phisiologicalParametersIn"
-        android:layout_margin="10dp"/>
+        <TextView
+            android:id="@+id/tvPhisiologicalParametersIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/phisiologicalParametersIn"
+            android:textSize="@dimen/textSizeLevelTwo" />
 
-    <TextView
-        android:id="@+id/tvPhisiologicalParametersOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:textSize="@dimen/textSizeLevelTwo"
-        android:text="@string/phisiologicalParametersOut"
-        android:layout_margin="10dp"/>
+        <TextView
+            android:id="@+id/tvPhisiologicalParametersOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/phisiologicalParametersOut"
+            android:textSize="@dimen/textSizeLevelTwo" />
 
+        <TextView
+            android:id="@+id/tvAdditionalInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="@string/additionalInfo"
+            android:textSize="@dimen/textSizeLevelTwo" />
 
-    <TextView
-        android:id="@+id/tvAdditionalInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/additionalInfo"
-        android:layout_marginTop="10dp"
-        android:textSize="@dimen/textSizeLevelTwo"
-        android:layout_gravity="center"/>
+        <LinearLayout
+            android:id="@+id/achieveTheGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/textSizeLevelOne"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvAchieveTheGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/textSizeLevelOne"
+                android:text="@string/achieveTheGoal"
+                android:textSize="@dimen/textSizeLevelTwo" />
+
+            <Switch
+                android:id="@+id/swtAchieveTheGoal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/textSizeLevelOne" />
+
+        </LinearLayout>
+
     </LinearLayout>
-</ScrollView>
+
 </LinearLayout>

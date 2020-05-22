@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.DocumentTypeApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.GenderApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.NeighborhoodApiAdapter;
+import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapistApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.UserApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.DocumentTypeViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.GenderViewModel;
@@ -100,8 +101,7 @@ public class Register extends AppCompatActivity {
         loadGenders();
     }
 
-    private void loadDocumentTypes()
-    {
+    private void loadDocumentTypes() {
         Call<ArrayList<DocumentTypeViewModel>> call = DocumentTypeApiAdapter.getApiService().getDocumentTypes();
         call.enqueue(new Callback<ArrayList<DocumentTypeViewModel>>() {
 
@@ -126,7 +126,6 @@ public class Register extends AppCompatActivity {
                      }
         );
     }
-
 
     private void loadGenders() {
         Call<ArrayList<GenderViewModel>> call = GenderApiAdapter.getApiService().getGenders();
@@ -217,6 +216,7 @@ public class Register extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         }
     }
+
     public boolean emailValidation(String email) {
             String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
             Pattern pattern = Pattern.compile(regex);
@@ -224,8 +224,7 @@ public class Register extends AppCompatActivity {
             return matcher.matches();
     }
 
-
-        private void registerUser(final UserViewModel newUser) {
+    private void registerUser(final UserViewModel newUser) {
 
             Call<TherapistViewModel> call = UserApiAdapter.getApiService().newUSer(newUser);
             call.enqueue(new Callback<TherapistViewModel>() {
@@ -252,8 +251,6 @@ public class Register extends AppCompatActivity {
             });
         }
 
-
-
     private void login(final UserViewModel user){
         Call<UserViewModel> call = UserApiAdapter.getApiService().login(user);
         call.enqueue(new Callback<UserViewModel>() {
@@ -272,6 +269,8 @@ public class Register extends AppCompatActivity {
                         storeStringSharepreferences(PreferencesData.loginToken, userViewModel.getToken());
                         storeStringSharepreferences(PreferencesData.userActive, userViewModel.getName());
                         storeIntSharepreferences(PreferencesData.userActiveId, userViewModel.getId());
+                        storeStringSharepreferences(PreferencesData.emailAuthenticatedUser, userViewModel.getEmail());
+                        searchTherapist(userViewModel.getEmail());
                         Intent intent = new Intent(Register.this, MainActivity.class);
                         startActivity(intent);
                     }else
@@ -286,6 +285,37 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+
+
+    public  void searchTherapist(String email) {
+
+        TherapistViewModel therapist= new TherapistViewModel();
+        therapist.setTherapist_email(email);
+        Call<TherapistViewModel> call = TherapistApiAdapter.getApiService().getTherapistByEmail(therapist);
+        call.enqueue(new Callback<TherapistViewModel>() {
+            @Override
+            public void onResponse(Call<TherapistViewModel> call, Response<TherapistViewModel> response) {
+                if(response.isSuccessful())
+                {
+                    TherapistViewModel therapist = response.body();
+                    storeIntSharepreferences(PreferencesData.TherapistId, therapist.getTherapist_id());
+                    storeStringSharepreferences(PreferencesData.TherapistName, therapist.getTherapist_first_name());
+                    storeStringSharepreferences(PreferencesData.TherapistEmail, therapist.getTherapist_email());
+                    Intent intent = new Intent(Register.this,MainActivity.class);
+                    startActivity(intent);
+
+                }else if(response.raw().code()==404) {
+                    Toast.makeText(getApplicationContext(), PreferencesData.TherapistNotFoundPatient,Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<TherapistViewModel> call, Throwable t)
+            {
+                Toast.makeText(getApplicationContext(), PreferencesData.searchTherapistPatient +" "+ t.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     private  void storeStringSharepreferences(String key, String value){
 

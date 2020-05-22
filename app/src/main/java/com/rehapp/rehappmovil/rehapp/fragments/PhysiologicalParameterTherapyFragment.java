@@ -1,6 +1,5 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,15 +16,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterTherapyApiAdapter;
+import com.rehapp.rehappmovil.rehapp.Models.OptionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.R;
 
@@ -40,11 +43,17 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
 
     private EditText editText;
     private TextView textView;
+    private TextView linkToDetail;
+    private Spinner spnOptions;
     private TextView tvTitle;
     private GridLayout grid;
+    private GridLayout gridWithCategories;
     private String physiologicalParameterAction;
     private int therapyId;
-    Dialog d;
+    private String questionnaireOptionId;
+    private int indexQuestionnaireOptionSelected;
+
+    ArrayList<String> optionsNames;
 
     private Context mContext;
     View view;
@@ -52,7 +61,7 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
 
     private SharedPreferences sharedpreferences;
 
-    ArrayList<PhysiologicalParameterViewModel> options= new ArrayList<>();
+    ArrayList<QuestionaryOptionViewModel> options= new ArrayList<>();
 
 
     @Override
@@ -72,6 +81,7 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
         sharedpreferences=mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
         grid = view.findViewById(R.id.grid);
+        gridWithCategories=view.findViewById(R.id.gridWithCategories);
         tvTitle=view.findViewById(R.id.tvTitle);
         recoverySendData();
         LoadData();
@@ -96,26 +106,25 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
     }
 
     private void loadPhysiologicalParameters() {
-        Call<ArrayList<PhysiologicalParameterViewModel>> call = PhysiologicalParameterApiAdapter.getApiService().getPhysiologicalParams();
-        call.enqueue(new Callback<ArrayList<PhysiologicalParameterViewModel>>() {
+        Call<ArrayList<QuestionaryOptionViewModel>> call = PhysiologicalParameterApiAdapter.getApiService().getPhysiologicalParams();
+        call.enqueue(new Callback<ArrayList<QuestionaryOptionViewModel>>() {
             @Override
-            public void onResponse(Call<ArrayList<PhysiologicalParameterViewModel>> call, Response<ArrayList<PhysiologicalParameterViewModel>> response) {
+            public void onResponse(Call<ArrayList<QuestionaryOptionViewModel>> call, Response<ArrayList<QuestionaryOptionViewModel>> response) {
                 if (response.isSuccessful()) {
                     options = response.body();
-                    addPhysiologicalParametersView(options);
-                    addPhysiologicalParametersTherapyToView(options);
+                    addPhysiologicalParameters(options);
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<PhysiologicalParameterViewModel>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<QuestionaryOptionViewModel>> call, Throwable t) {
                 String msg=PreferencesData.PhysiologicalParameterTherapyDataListFailed + " " +t.getMessage();
                 Toast.makeText(mContext, msg , Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void addPhysiologicalParametersTherapyToView(final ArrayList<PhysiologicalParameterViewModel> physiologicalParameters) {
+    private void addPhysiologicalParametersTherapyToView(final ArrayList<QuestionaryOptionViewModel> physiologicalParameters) {
 
         Call<List<PhysiologicalParameterTherapyViewModel>> call = PhysiologicalParameterTherapyApiAdapter.getApiService().getPhysiologicalParamsTherapy(therapyId, physiologicalParameterAction);
         call.enqueue(new Callback<List<PhysiologicalParameterTherapyViewModel>>() {
@@ -125,9 +134,9 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
                     List<PhysiologicalParameterTherapyViewModel> lPhysiologicalParametersTherapy = response.body();
 
                     for (PhysiologicalParameterTherapyViewModel physiologicalParameterTherapy : lPhysiologicalParametersTherapy) {
-                        for (PhysiologicalParameterViewModel physiologicalParameter : physiologicalParameters) {
-                            if (physiologicalParameter.getPhysiological_parameter_id() == physiologicalParameterTherapy.getPhysio_param_id()) {
-                                setPhysiolocalParametersToView(physiologicalParameter.getPhysiological_parameter_name(), physiologicalParameterTherapy.getPhysio_param_thrpy_value());
+                        for (QuestionaryOptionViewModel physiologicalParameter : physiologicalParameters) {
+                            if (Integer.parseInt(physiologicalParameter.getQuestionnaire_id()) == physiologicalParameterTherapy.getPhysio_param_id()) {
+                                setPhysiolocalParametersToView(physiologicalParameter.getQuestionnaire_id(), physiologicalParameterTherapy.getPhysio_param_thrpy_value());
                             }
                         }
                     }
@@ -144,20 +153,98 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
         });
     }
 
-    private void addPhysiologicalParametersView(ArrayList<PhysiologicalParameterViewModel> physiologicalParameters) {
-        for (PhysiologicalParameterViewModel physiologicalParameterViewModel : physiologicalParameters) {
+    private void addPhysiologicalParameters(ArrayList<QuestionaryOptionViewModel> questionnaires){
+        for (QuestionaryOptionViewModel questionnaire : questionnaires) {
+
+            if(questionnaire.getOptions().size()>0){
+                addPhysiologicalParametersWithCategoryView(questionnaire.getQuestionnaire_name(),questionnaire.getOptions());
+            }else{
+                addPhysiologicalParametersView(questionnaire.getQuestionnaire_name());
+            }
+        }
+    }
+
+
+    private void addPhysiologicalParametersView(String questionnaireName) {
+
+                linkToDetail = new TextView(mContext);
+                textView = new TextView(mContext);
+                editText = new EditText(mContext);
+                linkToDetail = new TextView(mContext);
+                linkToDetail.setText("Ver observaciones.");
+                textView.setText(questionnaireName);
+                editText.setEms(PreferencesData.PhysiologicalParameterTherapyValueSize);
+                editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(PreferencesData.PhysiologicalParameterTherapyValueSize)});
+                editText.setSingleLine(true);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+                editText.setGravity(Gravity.CENTER);
+                linkToDetail.setGravity(Gravity.CENTER_VERTICAL);
+                textView.setGravity(Gravity.CENTER_VERTICAL);
+
+                grid.addView(textView);
+                grid.addView(editText);
+                grid.addView(linkToDetail);
+
+    }
+
+    private void addPhysiologicalParametersWithCategoryView(String questionnaireName,final ArrayList<OptionViewModel> optionsToShow) {
 
             textView = new TextView(mContext);
             editText = new EditText(mContext);
+            linkToDetail = new TextView(mContext);
+            spnOptions = new Spinner(mContext);
+            spnOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                    int selectedOption=position-1;
+                    if(selectedOption>-1) {
+                        questionnaireOptionId = options.get(selectedOption).getQuestionnaire_option_id();
+                    }
+                    indexQuestionnaireOptionSelected = selectedOption;
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+            linkToDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadFragment(new PhysiologicalParameterTherapyOptionsFragment());
+                }
+            });
+            spnOptions.setLayoutParams(new Spinner.LayoutParams(Spinner.LayoutParams.WRAP_CONTENT, Spinner.LayoutParams.WRAP_CONTENT));
+            textView.setText(questionnaireName);
+            linkToDetail.setText("Ver observaciones.");
 
-            textView.setText(physiologicalParameterViewModel.getPhysiological_parameter_name());
             editText.setEms(PreferencesData.PhysiologicalParameterTherapyValueSize);
             editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(PreferencesData.PhysiologicalParameterTherapyValueSize)});
             editText.setSingleLine(true);
             editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
             editText.setGravity(Gravity.CENTER);
-            grid.addView(textView);
-            grid.addView(editText);
+            linkToDetail.setGravity(Gravity.CENTER_VERTICAL);
+            textView.setGravity(Gravity.CENTER_VERTICAL);
+            spnOptions.setGravity(Gravity.CENTER_VERTICAL);
+
+            loadOptions(optionsToShow);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, optionsNames);
+            spnOptions.setAdapter(arrayAdapter);
+
+            gridWithCategories.addView(textView);
+            gridWithCategories.addView(editText);
+            gridWithCategories.addView(spnOptions);
+            gridWithCategories.addView(linkToDetail);
+
+    }
+
+
+    private void loadOptions(ArrayList<OptionViewModel> options){
+        optionsNames= new ArrayList<>();
+        optionsNames.add(getResources().getString(R.string.OptionAnswerSelected));
+        for (OptionViewModel option:options) {
+            optionsNames.add(option.getOption_name());
         }
     }
 
@@ -240,9 +327,9 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
     }
 
     private int getIdPhysiologicalParameter(String name) {
-        for (PhysiologicalParameterViewModel physiologicalParameterTherapy : options) {
-            if (physiologicalParameterTherapy.getPhysiological_parameter_name().equals(name)) {
-                return physiologicalParameterTherapy.getPhysiological_parameter_id();
+        for (QuestionaryOptionViewModel physiologicalParameterTherapy : options) {
+            if (physiologicalParameterTherapy.getQuestionnaire_name().equals(name)) {
+                return Integer.parseInt(physiologicalParameterTherapy.getQuestionnaire_option_id());
             }
         }
         return 0;

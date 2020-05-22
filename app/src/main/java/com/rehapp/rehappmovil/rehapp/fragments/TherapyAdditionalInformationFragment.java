@@ -20,18 +20,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterApiAdapter;
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterTherapyApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyApiAdapter;
-import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterTherapyViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

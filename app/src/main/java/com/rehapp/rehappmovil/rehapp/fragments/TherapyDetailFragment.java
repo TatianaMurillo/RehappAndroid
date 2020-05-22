@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ private int therapistSelectedId=-1,indexTherapistSelected=-1;
 private EditText etTherapyDuration;
 private  TherapyViewModel therapySelected;
 private  SharedPreferences sharedpreferences;
+private Switch swtAchieveTheGoal;
 
     private Context mContext;
     View view;
@@ -97,6 +99,7 @@ private  SharedPreferences sharedpreferences;
         tvDateAndTime=view.findViewById(R.id.tvDateAndTime);
         spnTherapist = view.findViewById(R.id.spnTherapist);
         etTherapyDuration=view.findViewById(R.id.etTherapyDuration);
+        swtAchieveTheGoal=view.findViewById(R.id.swtAchieveTheGoal);
         recoverySendData();
         loadData();
 
@@ -168,6 +171,7 @@ private  SharedPreferences sharedpreferences;
     private void loadData(){
         tvDateAndTime.setText(sdf.format(cal.getTime()));
         listTherapists();
+        swtAchieveTheGoal.setChecked(false);
     }
 
     private void recoverySendData() {
@@ -200,9 +204,9 @@ private  SharedPreferences sharedpreferences;
                 {
                     therapists = response.body();
                     therapistNames.add(getResources().getString(R.string.TherapistNonSelected));
-                    for(TherapistViewModel therapistViewModel : therapists)
+                    for(TherapistViewModel therapist : therapists)
                     {
-                        therapistNames.add(therapistViewModel.getTherapist_first_lastname()+" " + therapistViewModel.getTherapist_first_name());
+                        therapistNames.add(setTherapistNameToShow(therapist.getTherapist_first_name(),therapist.getTherapist_first_lastname()));
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1,therapistNames);
                     spnTherapist.setAdapter(arrayAdapter);
@@ -214,6 +218,18 @@ private  SharedPreferences sharedpreferences;
                 Toast.makeText(mContext, PreferencesData.therapyDetailTherapistListMsg,Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private String setTherapistNameToShow(String firstName,String firstLastname){
+        String fullName="";
+        if(firstLastname==null){
+            fullName = "No registra".concat(" - ").concat(firstName);
+        }else if(firstLastname.isEmpty()) {
+            fullName = "No registra".concat(" - ").concat(firstName);
+        }else{
+            fullName= firstLastname.concat(" ").concat(firstName);
+        }
+        return fullName;
     }
 
     public void listInstitutions() {
@@ -291,6 +307,11 @@ private  SharedPreferences sharedpreferences;
                 spnTherapist.setSelection(0);
             }
     }
+
+    private void checkAchieveTheGoal(int achieveTheGoal) {
+        swtAchieveTheGoal.setChecked(achieveTheGoal>0?true:false);
+    }
+
     /**
      **Se selecciona la institucion
      **/
@@ -325,6 +346,7 @@ private  SharedPreferences sharedpreferences;
                     etTherapyDuration.setText(String.valueOf(therapySelected.getTherapy_total_duration()));
                     selectInstitution(therapySelected);
                     selectTherapist(therapySelected);
+                    checkAchieveTheGoal(therapySelected.isTherapy_achieved_the_goal());
                 }else{
                     if(response.raw().code()==404) {
                         Toast.makeText(mContext, PreferencesData.therapyDetailTherapyNonExist, Toast.LENGTH_LONG).show();
@@ -422,6 +444,7 @@ private  SharedPreferences sharedpreferences;
 
     private TherapyViewModel getTherapyData() {
         TherapyViewModel therapy = null;
+        int achieveTheGoal=swtAchieveTheGoal.isChecked()?1:0;
 
         int patientId = Integer.parseInt(sharedpreferences.getString(PreferencesData.PatientId, "0"));
            if (ValidateInputs.validate().validateNonAcceptableValueInInteger(Arrays.asList(indexInstitutionSelected, indexTherapistSelected, patientId, institutionSelectedId, therapistSelectedId))) {
@@ -429,6 +452,7 @@ private  SharedPreferences sharedpreferences;
                 therapy.setInstitution_id(institutionSelectedId);
                 therapy.setTherapist_id(therapistSelectedId);
                 therapy.setPatient_id(patientId);
+                therapy.setTherapy_achieved_the_goal(achieveTheGoal);
             }
             return therapy;
     }

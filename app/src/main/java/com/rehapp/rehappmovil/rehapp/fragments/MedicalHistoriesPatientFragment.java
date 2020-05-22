@@ -1,7 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,8 +22,11 @@ import com.rehapp.rehappmovil.rehapp.MedicalHistoriesAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PatientMedicalHistoryViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.R;
+import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
+import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,31 +118,38 @@ public class MedicalHistoriesPatientFragment extends Fragment {
 
     public void createMedicalHistory(String medicalHistoryId){
 
-        PatientMedicalHistoryViewModel object=getObjectToCreate();
-        Call<PatientMedicalHistoryViewModel> call = PatientMedicalHistoryApiAdapter.getApiService().createOrUpdateMedicalHistory(object,medicalHistoryId);
-        call.enqueue(new Callback<PatientMedicalHistoryViewModel>() {
-            @Override
-            public void onResponse(Call<PatientMedicalHistoryViewModel> call, Response<PatientMedicalHistoryViewModel> response) {
-                if(response.isSuccessful()){
-                    PatientMedicalHistoryViewModel medicalHistoryCreated=response.body();
+        List<Object> rpta = validateInputData();
+        boolean checked = Boolean.parseBoolean(rpta.get(0).toString());
+        String  msg = rpta.get(1).toString();
 
-                    MedicalHistoryDetailFragment fragment = new MedicalHistoryDetailFragment();
-                    Bundle extras = new Bundle();
-                    extras.putString(PreferencesData.MedicalHistorySelectedId, medicalHistoryCreated.getPtnt_mdcl_hstry_id());
-                    extras.putString(PreferencesData.MedicaHistoryAction, "ADD");
-                    fragment.setArguments(extras);
-                    loadFragment(fragment);
-                }else{
-                    Toast.makeText(mContext, PreferencesData.medicalHistoryCreateTherapyFailedMsg, Toast.LENGTH_LONG).show();
+        if(checked) {
+            PatientMedicalHistoryViewModel object = getObjectToCreate();
+            Call<PatientMedicalHistoryViewModel> call = PatientMedicalHistoryApiAdapter.getApiService().createOrUpdateMedicalHistory(object, medicalHistoryId);
+            call.enqueue(new Callback<PatientMedicalHistoryViewModel>() {
+                @Override
+                public void onResponse(Call<PatientMedicalHistoryViewModel> call, Response<PatientMedicalHistoryViewModel> response) {
+                    if (response.isSuccessful()) {
+                        PatientMedicalHistoryViewModel medicalHistoryCreated = response.body();
+
+                        MedicalHistoryDetailFragment fragment = new MedicalHistoryDetailFragment();
+                        Bundle extras = new Bundle();
+                        extras.putString(PreferencesData.MedicalHistorySelectedId, medicalHistoryCreated.getPtnt_mdcl_hstry_id());
+                        extras.putString(PreferencesData.MedicaHistoryAction, "ADD");
+                        fragment.setArguments(extras);
+                        loadFragment(fragment);
+                    } else {
+                        Toast.makeText(mContext, PreferencesData.medicalHistoryCreateTherapyFailedMsg, Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<PatientMedicalHistoryViewModel> call, Throwable t) {
-                Toast.makeText(mContext, PreferencesData.medicalHistoryCreateTherapyFailedMsg +" "+ t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
+                @Override
+                public void onFailure(Call<PatientMedicalHistoryViewModel> call, Throwable t) {
+                    Toast.makeText(mContext, PreferencesData.medicalHistoryCreateTherapyFailedMsg + " " + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }else{
+            Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -202,16 +211,24 @@ public class MedicalHistoriesPatientFragment extends Fragment {
     }
 
     public PatientMedicalHistoryViewModel getObjectToCreate(){
-        PatientMedicalHistoryViewModel object= new PatientMedicalHistoryViewModel();
+
+
+       PatientMedicalHistoryViewModel object= new PatientMedicalHistoryViewModel();
+
 
        object.setPatient_id(patientId);
        object.setPtnt_mdcl_hstry_addtnl_info(PreferencesData.medicalHistoryDetailDefaultDescription);
        object.setPtnt_mdcl_hstry_name(PreferencesData.medicalHistoryDetailDefaultName);
 
-        return object;
+       return object;
     }
 
+    private List<Object> validateInputData() {
+        ArrayList<DataValidation>  list= new ArrayList<>();
 
+        list.add(new DataValidation(String.valueOf(patientId),"Datos de paciente").noEmptyValue().notZeroValue().selectedValue());
+        return  ValidateInputs.validate().ValidateDataObject(list);
+    }
 
 
 }

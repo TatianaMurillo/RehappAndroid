@@ -5,6 +5,7 @@ public class PreferencesData {
     public static final String PreferenceFileName = "infoToRestore";
     public static final String loginToken = "token";
     public static final String userActive ="userActive";
+    public static final String emailAuthenticatedUser ="emailAuthenticatedUsed";
     public static final String userActiveId ="userActiveId";
 
     public static final String TherapistEmailLogin = "therapistEmailLogin";

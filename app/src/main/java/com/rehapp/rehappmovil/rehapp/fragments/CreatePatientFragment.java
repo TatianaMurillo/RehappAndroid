@@ -444,9 +444,9 @@ public class CreatePatientFragment extends Fragment {
         list.add(new DataValidation(etCellPhone.getText().toString(),"Celular").noEmptyValue().textMaxLength(15).notZeroValue());
         list.add(new DataValidation(etLandLinePhone.getText().toString(),"Telefono fijo").noEmptyValue().textMaxLength(7).notZeroValue());
         list.add(new DataValidation(etAge.getText().toString(),"Edad").noEmptyValue().textMaxLength(3).notZeroValue());
-        list.add(new DataValidation(String.valueOf(genderSelectedId),"Género").noEmptyValue().textMaxLength(1).notZeroValue().selectedValue());
-        list.add(new DataValidation(String.valueOf(neighborhoodSelectedId),"Barrio").noEmptyValue().textMaxLength(1).notZeroValue().selectedValue());
-        list.add(new DataValidation(String.valueOf(documentTypeSelectedId),"Tipo de documento").noEmptyValue().textMaxLength(1).notZeroValue().selectedValue());
+        list.add(new DataValidation(String.valueOf(genderSelectedId),"Género").noEmptyValue().notZeroValue().selectedValue());
+        list.add(new DataValidation(String.valueOf(neighborhoodSelectedId),"Barrio").noEmptyValue().notZeroValue().selectedValue());
+        list.add(new DataValidation(String.valueOf(documentTypeSelectedId),"Tipo de documento").noEmptyValue().notZeroValue().selectedValue());
 
 
         return  ValidateInputs.validate().ValidateDataObject(list);

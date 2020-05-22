@@ -10,7 +10,7 @@ import retrofit2.http.*;
 public interface TherapyApiService {
 
     @GET("therapies/showByPatient/{patientId}")
-    Call<ArrayList<TherapyViewModel>> getTherapiesByPatient(@Path("patientId") String patientId);
+    Call<ArrayList<TherapyViewModel>> getTherapiesByPatient(@Path("patientId") int patientId);
 
     @GET("therapies/showById/{therapy_id}")
     Call<TherapyViewModel> getTherapy(@Path("therapy_id") String therapyId);
