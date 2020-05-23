@@ -1,6 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
-import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.PhysiologicalParameterViewModel;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ import retrofit2.http.GET;
 public interface PhysiologicalParameterApiService {
 
 
-    @GET("physiologicalParametersOptions/getOptionsByPhysiologicalParameters")
-    Call<ArrayList<QuestionaryOptionViewModel>> getPhysiologicalParams();
+    @GET("physiologicalParameters/getPhysiologicalParameters/therapy/141/option/IN")
+    Call<ArrayList<PhysiologicalParameterViewModel>> getPhysiologicalParams();
 
 }

@@ -6,6 +6,7 @@ public class OptionViewModel {
         private String option_name;
         private String option_description;
         private String option_id;
+        private String questionnaire_option_id;
 
 
         public String getOption_name() {
@@ -30,5 +31,13 @@ public class OptionViewModel {
 
         public void setOption_id(String option_id) {
                 this.option_id = option_id;
+        }
+
+        public String getQuestionnaire_option_id() {
+                return questionnaire_option_id;
+        }
+
+        public void setQuestionnaire_option_id(String questionnaire_option_id) {
+                this.questionnaire_option_id = questionnaire_option_id;
         }
 }

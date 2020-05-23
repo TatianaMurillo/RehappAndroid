@@ -34,6 +34,7 @@ public class PreferencesData {
     public static final String PatientAction="PatientAction";
     public static final String TherapyAction="TherapyAction";
     public static final String MedicaHistoryAction="MedicaHistoryAction";
+    public static final String ParameterName="ParameterName";
     public static final String PhysiologicalParameterAction="PhysiologicalParameterAction";
     public static final String PhysiologicalParameterTherapyDataListFailed ="Hubo un error al consultar los parametros fisiológicos.";
     public static final String PhysiologicalParameterTherapyDataMgsError ="Error al diligenciar  los parametros fisiológicos. Contacte al administrador.";
@@ -139,6 +140,7 @@ public class PreferencesData {
     public static final int PhysiologicalParameterTherapyValueSize=5;
     public static final int VitalSignsTherapyValueSize=5;
     public static final String therapyDetailWatchVideo="Ver.";
+    public static final String physiologicalParameterDetail="Ver";
     public static final String setCurrentIpFailedtMsg ="Hubo un error guardar la ip actual. Contactar admin.";
     public static final String setCurrentIpSuccesstMsg ="Ip guardada exitosamente.";
 

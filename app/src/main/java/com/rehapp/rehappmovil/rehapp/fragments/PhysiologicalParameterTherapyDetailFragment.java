@@ -13,30 +13,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.PhysiologicalParameterApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class PhysiologicalParameterTherapyOptionsFragment extends Fragment {
+public class PhysiologicalParameterTherapyDetailFragment extends Fragment {
 
     private TextView tvObservations;
     private TextView tvOptionTitle;
-
+    private String physiologicalParameterAction;
     private Context mContext;
     View view;
+    private int therapyId;
     FragmentManager manager;
-
+    TextView tvTitle;
     private SharedPreferences sharedpreferences;
 
     ArrayList<QuestionaryOptionViewModel> options= new ArrayList<>();
@@ -55,45 +49,32 @@ public class PhysiologicalParameterTherapyOptionsFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         manager = this.getFragmentManager();
-        view =inflater.inflate(R.layout.activity_physiological_parameter_therapy_options,container,false);
+        view =inflater.inflate(R.layout.activity_physiological_parameter_therapy_detail,container,false);
         sharedpreferences=mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
-
+        tvTitle=view.findViewById(R.id.tvTitle);
         tvOptionTitle = view.findViewById(R.id.tvOptionTitle);
         tvObservations=view.findViewById(R.id.tvObservations);
         recoverySendData();
-        LoadData();
 
         return view;
     }
 
     private void recoverySendData() {
+        if( getArguments()!=null)
+        {
+            Bundle extras = getArguments();
+            tvOptionTitle.setText(extras.getString(PreferencesData.ParameterName));
 
+        }
+        therapyId=sharedpreferences.getInt(PreferencesData.TherapyId,0);
+        physiologicalParameterAction=sharedpreferences.getString(PreferencesData.PhysiologicalParameterAction,"");
+        setTitle(physiologicalParameterAction);
 
     }
 
     private void setTitle(String action){
-    }
-
-    public void LoadData() {
-        loadPhysiologicalParameters();
-    }
-
-    private void loadPhysiologicalParameters() {
-        Call<ArrayList<QuestionaryOptionViewModel>> call = PhysiologicalParameterApiAdapter.getApiService().getPhysiologicalParams();
-        call.enqueue(new Callback<ArrayList<QuestionaryOptionViewModel>>() {
-            @Override
-            public void onResponse(Call<ArrayList<QuestionaryOptionViewModel>> call, Response<ArrayList<QuestionaryOptionViewModel>> response) {
-                if (response.isSuccessful()) {
-                    options = response.body();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<QuestionaryOptionViewModel>> call, Throwable t) {
-                String msg=PreferencesData.PhysiologicalParameterTherapyDataListFailed + " " +t.getMessage();
-                Toast.makeText(mContext, msg , Toast.LENGTH_LONG).show();
-            }
-        });
+        String title=action.equals(PreferencesData.PhysiologicalParameterTherapySesionOUT)?getResources().getString(R.string.phisiologicalParametersOut):getResources().getString(R.string.phisiologicalParametersIn);
+        tvTitle.setText(title);
     }
 
 
