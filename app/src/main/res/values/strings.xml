@@ -60,6 +60,8 @@
     <string name="GenderNonSelected"><![CDATA[<Seleccionar género>]]></string>
     <string name="NeighborhoodNonSelected"><![CDATA[<Seleccionar barrio>]]></string>
     <string name="MedicalHistorySequence">Historia médica # </string>
+    <string name="Observations">Observaciones</string>
+    <string name="Diagnostic">Diagnóstico</string>
     <string name="title_activity_main"></string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

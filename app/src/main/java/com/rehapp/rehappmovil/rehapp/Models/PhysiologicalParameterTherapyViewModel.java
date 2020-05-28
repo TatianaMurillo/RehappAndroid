@@ -2,7 +2,6 @@ package com.rehapp.rehappmovil.rehapp.Models;
 
 import android.content.ContentValues;
 
-import com.rehapp.rehappmovil.rehapp.Utils.TherapyDBHelperEntry;
 import static com.rehapp.rehappmovil.rehapp.Utils.TherapyDBHelperEntry.PhysiologicalParameterTherapyEntry;
 public class PhysiologicalParameterTherapyViewModel {
 
@@ -13,6 +12,10 @@ public class PhysiologicalParameterTherapyViewModel {
     private int therapy_id;
     private String physio_param_thrpy_value;
     private String physio_param_thrpy_in_out;
+    private String questionnaire_option_id;
+
+
+
 
     public PhysiologicalParameterTherapyViewModel(int physio_param_thrpy_id, int physio_param_id, int therapy_id, String physio_param_thrpy_value, String physio_param_thrpy_in_out) {
         this.physio_param_thrpy_id = physio_param_thrpy_id;
@@ -60,6 +63,14 @@ public class PhysiologicalParameterTherapyViewModel {
 
     public void setPhysio_param_thrpy_in_out(String physio_param_thrpy_in_out) {
         this.physio_param_thrpy_in_out = physio_param_thrpy_in_out;
+    }
+
+    public String getQuestionnaire_option_id() {
+        return questionnaire_option_id;
+    }
+
+    public void setQuestionnaire_option_id(String questionnaire_option_id) {
+        this.questionnaire_option_id = questionnaire_option_id;
     }
 
     public static ContentValues toContentValues(PhysiologicalParameterTherapyViewModel physiologicalParameterTherapyViewModel) {

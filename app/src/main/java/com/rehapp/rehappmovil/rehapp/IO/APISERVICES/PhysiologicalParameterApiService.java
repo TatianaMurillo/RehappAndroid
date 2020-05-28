@@ -10,7 +10,7 @@ import retrofit2.http.GET;
 public interface PhysiologicalParameterApiService {
 
 
-    @GET("physiologicalParameters/getPhysiologicalParameters/therapy/141/option/IN")
+    @GET("physiologicalParameters/getPhysiologicalParameters/therapy/141/action/IN")
     Call<ArrayList<PhysiologicalParameterViewModel>> getPhysiologicalParams();
 
 }
