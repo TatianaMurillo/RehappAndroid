@@ -2,7 +2,10 @@ package com.rehapp.rehappmovil.rehapp.Models;
 
 import android.content.ContentValues;
 
+import java.util.ArrayList;
+
 import static com.rehapp.rehappmovil.rehapp.Utils.TherapyDBHelperEntry.PhysiologicalParameterTherapyEntry;
+
 public class PhysiologicalParameterTherapyViewModel {
 
 
@@ -13,9 +16,13 @@ public class PhysiologicalParameterTherapyViewModel {
     private String physio_param_thrpy_value;
     private String physio_param_thrpy_in_out;
     private String questionnaire_option_id;
+    private String unit_of_measure_name;
+    private String observations;
+
+    ArrayList<QuestionaryOptionViewModel> options= new ArrayList<>();
 
 
-
+    public PhysiologicalParameterTherapyViewModel(){}
 
     public PhysiologicalParameterTherapyViewModel(int physio_param_thrpy_id, int physio_param_id, int therapy_id, String physio_param_thrpy_value, String physio_param_thrpy_in_out) {
         this.physio_param_thrpy_id = physio_param_thrpy_id;
@@ -71,6 +78,30 @@ public class PhysiologicalParameterTherapyViewModel {
 
     public void setQuestionnaire_option_id(String questionnaire_option_id) {
         this.questionnaire_option_id = questionnaire_option_id;
+    }
+
+    public ArrayList<QuestionaryOptionViewModel> getOptions() {
+        return options;
+    }
+
+    public void setOptions(ArrayList<QuestionaryOptionViewModel> options) {
+        this.options = options;
+    }
+
+    public String getUnitOfMeasure() {
+        return unit_of_measure_name;
+    }
+
+    public void setUnitOfMeasure(String unitOfMeasure) {
+        this.unit_of_measure_name = unitOfMeasure;
+    }
+
+    public String getObservations() {
+        return observations;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
     }
 
     public static ContentValues toContentValues(PhysiologicalParameterTherapyViewModel physiologicalParameterTherapyViewModel) {

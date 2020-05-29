@@ -35,12 +35,13 @@ public class PreferencesData {
     public static final String TherapyAction="TherapyAction";
     public static final String MedicaHistoryAction="MedicaHistoryAction";
     public static final String ParameterName="ParameterName";
+    public static final String ParameterId="ParameterId";
     public static final String PhysiologicalParameterAction="PhysiologicalParameterAction";
     public static final String PhysiologicalParameterTherapyDataListFailed ="Hubo un error al consultar los parametros fisiológicos.";
-    public static final String PhysiologicalParameterTherapyDataMgsError ="Error al diligenciar  los parametros fisiológicos. Contacte al administrador.";
+    public static final String PhysiologicalParameterTherapyDataMgsError ="Error al diligenciar  el parametro fisiológico. Contacte al administrador.";
     public static final String MedicalHistoryVitalSignsDataMgsError ="Error al diligenciar los signos vitales. Contacte al administrador.";
 
-    public static final String PhysiologicalParameterTherapySuccessMgs ="Parametros fisiológicos guardados correctamente.";
+    public static final String PhysiologicalParameterTherapySuccessMgs ="Parametro fisiológico guardado correctamente.";
     public static final String MedicalHistoryVitalSignsSuccessMgs ="Signos vitales guardados correctamente.";
     public static final String PhysiologicalParameterTherapySesionIN ="IN";
     public static final String PhysiologicalParameterTherapySesionOUT ="OUT";

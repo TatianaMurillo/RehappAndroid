@@ -55,8 +55,6 @@ public class CreatePatientFragment extends Fragment {
     private Spinner  spnGender;
     private Spinner  spnDocumentType;
     private Spinner  spnNeighborhood;
-    List<String> dataInputString;
-    List<Integer> dataInputInteger;
     private int documentTypeSelectedId=-1,indexDocumentTypeSelected=-1;
     private int genderSelectedId=-1,indexGenderSelected=-1;
     private int neighborhoodSelectedId=-1,indexNeighborhoodSelected=-1;
@@ -111,17 +109,14 @@ public class CreatePatientFragment extends Fragment {
         spnDocumentType = view.findViewById(R.id.spnDocumentType);
         spnGender = view.findViewById(R.id.spnGender);
 
-        spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spnDocumentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 documentTypeSelectedId = documentTypes.get(position).getDocument_type_id();
                 indexDocumentTypeSelected=position;
             }
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -139,31 +134,24 @@ public class CreatePatientFragment extends Fragment {
             }
         });
 
-        spnNeighborhood.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spnNeighborhood.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 neighborhoodSelectedId = neighborhoods.get(position).getNeighborhood_id();
                 indexNeighborhoodSelected=position;
             }
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
         recoverySendData();
-
         return view;
     }
-
 
     private void recoverySendData() {
         documentPatient=sharedpreferences.getString(PreferencesData.PatientDocument,"");
         patientTypeDocument=sharedpreferences.getString(PreferencesData.PatientTpoDocument,"");
-        if( getArguments()!=null)
-        {
+        if( getArguments()!=null) {
             Bundle extras = getArguments();
             action= extras.getString(PreferencesData.PatientAction);
 
@@ -184,8 +172,7 @@ public class CreatePatientFragment extends Fragment {
         call.enqueue(new Callback<PatientViewModel>() {
             @Override
             public void onResponse(Call<PatientViewModel> call, Response<PatientViewModel> response) {
-                if(response.isSuccessful())
-                {
+                if(response.isSuccessful()) {
                     patient = response.body();
                     setPatientViewModelToView(patient);
                     loadNeigborhoods();
@@ -200,15 +187,13 @@ public class CreatePatientFragment extends Fragment {
                 }
             }
             @Override
-            public void onFailure(Call<PatientViewModel> call, Throwable t)
-            {
+            public void onFailure(Call<PatientViewModel> call, Throwable t) {
                 Toast.makeText(mContext, PreferencesData.searchPatientPatient +" "+ t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
 
     public void savePatient() {
-
         List<Object> rpta = validateInputData();
         boolean checked = Boolean.parseBoolean(rpta.get(0).toString());
         String  msg = rpta.get(1).toString();
@@ -245,9 +230,7 @@ public class CreatePatientFragment extends Fragment {
         boolean checked = Boolean.parseBoolean(rpta.get(0).toString());
         String  msg = rpta.get(1).toString();
 
-
         if(checked) {
-
                 String patientId=String.valueOf(patient.getPatient_id());
                 final PatientViewModel patient = getPatientViewModelFromView();
                 Call<PatientViewModel> call = PatientApiAdapter.getApiService().updatePatient(patient,patientId);
@@ -420,20 +403,6 @@ public class CreatePatientFragment extends Fragment {
     }
 
     private List<Object> validateInputData() {
-        dataInputString =new ArrayList();
-        dataInputString.add(etfirstName.getText().toString());
-        dataInputString.add(etFirstLastName.getText().toString());
-        dataInputString.add(etDocument.getText().toString());
-        dataInputString.add(etAddress.getText().toString());
-        dataInputString.add(etCellPhone.getText().toString());
-        dataInputString.add(etLandLinePhone.getText().toString());
-        dataInputString.add(etAge.getText().toString());
-
-        dataInputInteger =new ArrayList();
-        dataInputInteger.add(genderSelectedId);
-        dataInputInteger.add(neighborhoodSelectedId);
-        dataInputInteger.add(documentTypeSelectedId);
-
         ArrayList<DataValidation>  list= new ArrayList<>();
 
         list.add(new DataValidation(etfirstName.getText().toString(),"Primer nombre").noEmptyValue().textMaxLength(50));
@@ -469,11 +438,9 @@ public class CreatePatientFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case  R.id.save:
-                if("DETAIL".equals(action))
-                {
+                if("DETAIL".equals(action)) {
                     updatePatient();
                 }else{
                     savePatient();
@@ -503,7 +470,6 @@ public class CreatePatientFragment extends Fragment {
     }
 
     private  void storeStringSharepreferences(String key, String value){
-
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(key, value);
         editor.commit();

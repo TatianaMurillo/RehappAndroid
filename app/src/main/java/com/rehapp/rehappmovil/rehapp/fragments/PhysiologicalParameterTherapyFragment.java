@@ -83,7 +83,7 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
     }
 
     private void loadPhysiologicalParameters() {
-        Call<ArrayList<PhysiologicalParameterViewModel>> call = PhysiologicalParameterApiAdapter.getApiService().getPhysiologicalParams();
+        Call<ArrayList<PhysiologicalParameterViewModel>> call = PhysiologicalParameterApiAdapter.getApiService().getPhysiologicalParams(therapyId,physiologicalParameterAction);
         call.enqueue(new Callback<ArrayList<PhysiologicalParameterViewModel>>() {
             @Override
             public void onResponse(Call<ArrayList<PhysiologicalParameterViewModel>> call, Response<ArrayList<PhysiologicalParameterViewModel>> response) {
@@ -99,6 +99,7 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
                             PhysiologicalParameterTherapyDetailFragment fragment=new PhysiologicalParameterTherapyDetailFragment();
                             Bundle extras = new Bundle();
                             extras.putString(PreferencesData.ParameterName, parameters.get(position).getPhysiological_parameter_name());
+                            extras.putString(PreferencesData.ParameterId, parameters.get(position).getPhysiological_parameter_id());
                             fragment.setArguments(extras);
                             loadFragment(fragment);
                         }

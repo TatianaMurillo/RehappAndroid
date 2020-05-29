@@ -12,7 +12,7 @@ public class PhysiologicalParameterViewModel extends ViewModel {
     private String physiological_parameter_id;
     private String unit_of_measure_name;
     private ArrayList<PhysiologicalParameterTherapyViewModel> therapy_value = new ArrayList<>();
-    private ArrayList<OptionViewModel> option_name= new ArrayList<>();
+    private ArrayList<OptionViewModel> option_selected= new ArrayList<>();
 
 
     public String getPhysiological_parameter_name() {
@@ -56,11 +56,11 @@ public class PhysiologicalParameterViewModel extends ViewModel {
     }
 
     public ArrayList<OptionViewModel> getOption_name() {
-        return option_name;
+        return option_selected;
     }
 
     public void setOption_name(ArrayList<OptionViewModel> option_name) {
-        this.option_name = option_name;
+        this.option_selected = option_name;
     }
 
 }

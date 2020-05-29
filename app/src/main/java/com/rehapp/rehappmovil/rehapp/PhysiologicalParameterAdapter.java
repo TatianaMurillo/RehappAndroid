@@ -61,9 +61,9 @@ public class PhysiologicalParameterAdapter extends BaseAdapter{
             final PhysiologicalParameterViewModel model = parameters.get(position);
 
             holder.tvName.setText(getValue(model.getPhysiological_parameter_name()));
-            holder.tvValue.setText(getValue(model.getTherapy_value().size()>0?model.getTherapy_value().get(0).getPhysio_param_thrpy_value():""));
+            holder.tvValue.setText(getValue(model.getTherapy_value().size()>0?model.getTherapy_value().get(0).getPhysio_param_thrpy_value():"---"));
             holder.tvUnitMeasure.setText(getValue(model.getUnit_of_measure_name()));
-            holder.tvCategory.setText(getValue(model.getOption_name().size()>0?model.getOption_name().get(0).getOption_name():""));
+            holder.tvCategory.setText(getValue(model.getOption_name().size()>0?model.getOption_name().get(0).getOption_name():"---"));
 
             return view;
         }
@@ -85,7 +85,7 @@ public class PhysiologicalParameterAdapter extends BaseAdapter{
     }
     private String getValue(String value){
         if(value==null){
-            return "-";
+            return "---";
         }
         return value;
     }
