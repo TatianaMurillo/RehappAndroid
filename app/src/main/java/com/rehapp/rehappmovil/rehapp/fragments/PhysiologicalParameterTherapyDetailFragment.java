@@ -157,19 +157,24 @@ public class PhysiologicalParameterTherapyDetailFragment extends Fragment {
                 if (response.isSuccessful()) {
                     paramDetail=response.body();
                     String value=paramDetail.getPhysio_param_thrpy_value()!=null?paramDetail.getPhysio_param_thrpy_value():"";
-                    String unitOfMeasue=paramDetail.getUnitOfMeasure()!=null?paramDetail.getUnitOfMeasure():"---";
+                    String unitOfMeasue=paramDetail.getUnitOfMeasure()!=null?paramDetail.getUnitOfMeasure():"";
                     String observation=paramDetail.getObservations()!=null?paramDetail.getObservations():"";
                     etValue.setText(value);
                     tvUnitOfMeasure.setText(unitOfMeasue);
                     etObservations.setText(observation);
                     options = paramDetail.getOptions();
                     loadOptions();
+                }else{
+                    Toast.makeText(mContext,response.raw().message(),Toast.LENGTH_LONG).show();
+                    goToParameterList();
                 }
             }
 
             @Override
             public void onFailure(Call<PhysiologicalParameterTherapyViewModel> call, Throwable t) {
-
+                String msg = PreferencesData.PhysiologicalParameterTherapyDetailLoadDataError.concat(" ").concat(t.getMessage());
+                Toast.makeText(mContext,msg,Toast.LENGTH_LONG).show();
+                goToParameterList();
             }
         });
     }

@@ -38,6 +38,7 @@ public class PreferencesData {
     public static final String ParameterId="ParameterId";
     public static final String PhysiologicalParameterAction="PhysiologicalParameterAction";
     public static final String PhysiologicalParameterTherapyDataListFailed ="Hubo un error al consultar los parametros fisiológicos.";
+    public static final String PhysiologicalParameterTherapyDetailLoadDataError ="Error al cargar detalle del parámetro";
     public static final String PhysiologicalParameterTherapyDataMgsError ="Error al diligenciar  el parametro fisiológico. Contacte al administrador.";
     public static final String MedicalHistoryVitalSignsDataMgsError ="Error al diligenciar los signos vitales. Contacte al administrador.";
 

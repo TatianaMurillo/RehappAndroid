@@ -122,7 +122,7 @@ public class PhysiologicalParameterTherapyFragment extends Fragment {
     public void showHideItems(Menu menu) {
         MenuItem item;
         item = menu.findItem(R.id.save);
-        item.setVisible(true);
+        item.setVisible(false);
         item = menu.findItem(R.id.create_therapy);
         item.setVisible(false);
 
