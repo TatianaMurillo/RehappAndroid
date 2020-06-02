@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -13,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
     <TextView
         android:id="@+id/tvRoutineData"
         android:layout_width="wrap_content"
@@ -21,6 +20,7 @@
         android:text="@string/routineDetailTitle"
         android:textSize="@dimen/textSizeLevelOne"
         android:layout_marginTop="10dp"/>
+
     <TextView
         android:id="@+id/tvExerciseVideo"
         android:layout_width="wrap_content"
@@ -42,15 +42,34 @@
                 android:text="Velocidad"
                 android:layout_span="1"
                 android:layout_margin="10sp"/>
-            <EditText
-               android:id="@+id/etExerciseSpeed"
+
+        </TableRow>
+        <TableRow>
+            <TextView
+               android:id="@+id/tvExerciseSpeed"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:inputType="numberDecimal"
                 android:layout_span="2"
                android:layout_margin="10sp" />
+            <TextView
+                android:id="@+id/tvSpeedUnitOfMeasure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:layout_span="2"
+                android:layout_margin="10sp" />
+            <TextView
+                android:id="@+id/tvSpeedLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:layout_span="2"
+                android:layout_margin="10sp" />
+
         </TableRow>
     </TableLayout>
+
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,15 +82,25 @@
                 android:text="Frecuencia"
                 android:layout_span="1"
                 android:layout_margin="10sp"/>
-            <EditText
-                android:id="@+id/etExerciseFrequent"
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/tvExerciseFrequentValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:layout_span="2"
                 android:layout_margin="10sp" />
+            <TextView
+                android:id="@+id/tvFrequentUnitOfMeasure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_span="1"
+                android:layout_margin="10sp"/>
         </TableRow>
     </TableLayout>
+
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,8 +113,10 @@
                 android:text="Intensidad"
                 android:layout_span="1"
                 android:layout_margin="10sp"/>
-            <EditText
-                android:id="@+id/etExerciseIntensity"
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/tvExerciseIntensity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
@@ -93,6 +124,7 @@
                 android:layout_margin="10sp" />
         </TableRow>
     </TableLayout>
+
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,6 +146,7 @@
                 android:layout_margin="10sp" />
         </TableRow>
     </TableLayout>
+
     <TextView
         android:id="@+id/tvExercisePreconditions"
         android:layout_width="match_parent"
@@ -131,7 +164,6 @@
         android:inputType="textMultiLine"
         android:layout_margin="10sp" />
 
-
     <TextView
         android:id="@+id/tvExerciseObservations"
         android:layout_width="match_parent"
@@ -139,15 +171,17 @@
         android:text="Observaciones"
         android:layout_span="1"
         android:layout_margin="10sp"/>
+
     <EditText
-        android:id="@+id/etObservations"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_span="2"
-        android:minLines="1"
-        android:maxLines="4"
-        android:inputType="textMultiLine"
-        android:layout_margin="10sp" />
+            android:id="@+id/etObservations"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="10sp"
+            android:layout_span="2"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:minLines="1" />
+
     </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,27 +38,28 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TherapyExcerciseRoutineFragment extends Fragment {
+public class TherapyExcerciseRoutineDetailFragment extends Fragment {
 
 
     private Context mContext;
     View view;
     FragmentManager manager;
     private SharedPreferences sharedpreferences;
-    TextView tvExerciseVideo;
-    TextView tvExerciseSpeed;
-    TextView tvSpeedUnitOfMeasure;
-    TextView tvSpeedLevel;
-    TextView tvExerciseFrequentValue;
-    TextView tvFrequentUnitOfMeasure;
-    TextView tvExerciseIntensity;
-    EditText etDuration;
+
+
+    TableLayout tlValue;
+    EditText etValue;
+    TableLayout tlCategory;
+    Spinner spnCategory;
     EditText etPreConditions;
     EditText etObservations;
+    TextView tvTitle;
+    TextView tvUnitOfMeasure;
 
-
+    String viewOptions;
     String routineUrl;
     int routineId;
+    int selectedCategoryId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,30 +74,26 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
 
         manager = this.getFragmentManager();
-        view = inflater.inflate(R.layout.activity_therapy_exercise_detail, container, false);
+        view = inflater.inflate(R.layout.activity_therapy_exercise_routine_detail, container, false);
         sharedpreferences = mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
-        tvExerciseVideo=view.findViewById(R.id.tvExerciseVideo);
-        tvExerciseSpeed=view.findViewById(R.id.tvExerciseSpeed);
-        tvSpeedUnitOfMeasure=view.findViewById(R.id.tvSpeedUnitOfMeasure);
-        tvSpeedLevel=view.findViewById(R.id.tvSpeedLevel);
-        tvExerciseFrequentValue=view.findViewById(R.id.tvExerciseFrequentValue);
-        tvFrequentUnitOfMeasure=view.findViewById(R.id.tvFrequentUnitOfMeasure);
-        tvExerciseIntensity=view.findViewById(R.id.tvExerciseIntensity);
 
+
+        tlValue=view.findViewById(R.id.tlValue);
+        etValue=view.findViewById(R.id.etValue);
+        tlCategory=view.findViewById(R.id.tlCategory);
+        spnCategory=view.findViewById(R.id.spnCategory);
         etPreConditions=view.findViewById(R.id.etPreConditions);
         etObservations=view.findViewById(R.id.etObservations);
-        etDuration=view.findViewById(R.id.etDuration);
+        tvTitle=view.findViewById(R.id.tvTitle);
+        tvUnitOfMeasure=view.findViewById(R.id.tvUnitOfMeasure);
+
+
 
         recoverySendData();
+        setView();
         searchRoutineDetail();
 
-        tvExerciseVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                watchVideo();
-            }
-        });
         return  view;
     }
 
@@ -127,13 +126,12 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     private void recoverySendData() {
         if( getArguments()!=null)
         {
-
             Bundle extras = getArguments();
             routineUrl =extras.getString(PreferencesData.ExerciseRoutineUrl);
             routineId=extras.getInt(PreferencesData.ExerciseRoutineId);
+            viewOptions = extras.getString(PreferencesData.ViewOption);
             storeStringSharepreferences(PreferencesData.ExerciseRoutineUrl, routineUrl);
             storeIntSharepreferences(PreferencesData.ExerciseRoutineId, routineId);
-
         }
     }
 
@@ -207,7 +205,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
     private List<Object> getDataFromView(){
         TherapyExcerciseRoutineViewModel therapyExcerciseRoutine= new TherapyExcerciseRoutineViewModel();
-        float duration;
+        String value;float frequent;float intensity;float duration;
         String preconditions; String observation;
 
 
@@ -216,14 +214,17 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         String  msg = rpta.get(1).toString();
 
         if(checked) {
-            duration = Float.parseFloat(etDuration.getText().toString());
+            value = etValue.getText().toString();
+            intensity =selectedCategoryId;
             preconditions = etPreConditions.getText().toString();
             observation = etObservations.getText().toString();
 
             int routineId=sharedpreferences.getInt(PreferencesData.ExerciseRoutineId,0);
 
-            therapyExcerciseRoutine.setTherapyExcerciseRoutineDuration(duration);
+            therapyExcerciseRoutine.setFrequency(0);
             therapyExcerciseRoutine.setExerciseRoutineId(routineId);
+            therapyExcerciseRoutine.setFrequency(0);
+            therapyExcerciseRoutine.setTherapyExcerciseRoutineIntensity(intensity);
             therapyExcerciseRoutine.setPreconditions(preconditions);
             therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation(observation);
         }else{
@@ -234,20 +235,37 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
     private void setDataToView(TherapyExcerciseRoutineViewModel therapyExcerciseRoutine){
 
-        etDuration.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineDuration()));
+        etValue.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineSpeed()));
+        selectLevelOption();
         etPreConditions.setText(therapyExcerciseRoutine.getPreConditions());
         etObservations.setText(therapyExcerciseRoutine.getTherapyExcerciseRoutineObservation());
+    }
+
+    private void selectLevelOption(){
+
+    }
+
+    private void setView(){
+
+        switch (viewOptions){
+            case PreferencesData.Intensity:
+                tlValue.setVisibility(View.INVISIBLE);
+                break;
+            case PreferencesData.Frequency:
+                tlCategory.setVisibility(View.INVISIBLE);
+                break;
+        }
     }
 
     private List<Object> validateDataFromView(){
 
         List<DataValidation> dataInput= new ArrayList<>();
         int routineId=sharedpreferences.getInt(PreferencesData.ExerciseRoutineId,0);
-        dataInput.add(new DataValidation(etDuration.getText().toString(),"Duración").textMaxLength(10).notZeroValue().noEmptyValue());
+
+        dataInput.add(new DataValidation(etValue.getText().toString(),"Valor").textMaxLength(10).notZeroValue().noEmptyValue());
         dataInput.add(new DataValidation(etPreConditions.getText().toString(),"Precondiciones").textMaxLength(200).noEmptyValue());
         dataInput.add(new DataValidation(etObservations.getText().toString(),"Observaciones").textMaxLength(200).noEmptyValue());
-        dataInput.add(new DataValidation(String.valueOf(routineId),"identificador de rutina").notZeroValue().noEmptyValue());
-
+        dataInput.add(new DataValidation(String.valueOf(selectedCategoryId),"Nivel").noEmptyValue().notZeroValue().selectedValue());
 
         return ValidateInputs.validate().ValidateDataObject(dataInput);
     }

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="747dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvRoutineData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="@string/routineDetailTitle"
+                android:textSize="@dimen/textSizeLevelOne" />
+
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10sp"
+                android:layout_span="3"
+                android:text="Velocidad" />
+            <TextView
+                android:id="@+id/tvUnitOfMeasure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10sp"
+                android:layout_span="3"
+                android:text="m/s" />
+
+
+            <TableLayout
+                android:id="@+id/tlValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/textSizeLevelTwo"
+                android:background="@drawable/border_table_layout"
+                android:stretchColumns="*">
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/tvSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10sp"
+                        android:layout_span="1"
+                        android:text="Valor" />
+
+                    <EditText
+                        android:id="@+id/etExerciseSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10sp"
+                        android:layout_span="2"
+                        android:inputType="numberDecimal" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:id="@+id/tlCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/textSizeLevelTwo"
+                android:background="@drawable/border_table_layout"
+                android:stretchColumns="*">
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/tvLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10sp"
+                        android:layout_span="1"
+                        android:text="Nivel" />
+
+                    <Spinner
+                        android:id="@+id/spnCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10sp"
+                        android:layout_span="2" />
+                </TableRow>
+            </TableLayout>
+
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/textSizeLevelTwo"
+                android:background="@drawable/border_table_layout"
+                android:stretchColumns="*">
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/tvExercisePreconditions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10sp"
+                        android:layout_span="1"
+                        android:text="Precondiciones" />
+                </TableRow>
+
+                <TableRow>
+
+                    <EditText
+                        android:id="@+id/etPreConditions"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="10sp"
+                        android:layout_span="2"
+                        android:inputType="textMultiLine"
+                        android:maxLines="4"
+                        android:minLines="1" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/textSizeLevelTwo"
+                android:background="@drawable/border_table_layout"
+                android:stretchColumns="*">
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/tvExerciseObservations"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10sp"
+                        android:layout_span="1"
+                        android:text="Observaciones" />
+                </TableRow>
+
+                <TableRow>
+
+                    <EditText
+                        android:id="@+id/etObservations"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="10sp"
+                        android:layout_span="2"
+                        android:inputType="textMultiLine"
+                        android:maxLines="4"
+                        android:minLines="1" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
