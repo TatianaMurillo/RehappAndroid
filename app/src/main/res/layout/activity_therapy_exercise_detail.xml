@@ -39,7 +39,7 @@
                 android:id="@+id/tvSpeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Velocidad"
+                android:text=""
                 android:layout_span="1"
                 android:layout_margin="10sp"/>
 
@@ -49,7 +49,6 @@
                android:id="@+id/tvExerciseSpeed"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:inputType="numberDecimal"
                 android:layout_span="2"
                android:layout_margin="10sp" />
             <TextView
@@ -79,7 +78,7 @@
                 android:id="@+id/tvFrequent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Frecuencia"
+                android:text=""
                 android:layout_span="1"
                 android:layout_margin="10sp"/>
         </TableRow>
@@ -105,21 +104,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:stretchColumns="*">
+
         <TableRow>
+
             <TextView
                 android:id="@+id/tvIntensity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Intensidad"
+                android:layout_margin="10sp"
                 android:layout_span="1"
-                android:layout_margin="10sp"/>
+                android:text="" />
         </TableRow>
         <TableRow>
             <TextView
                 android:id="@+id/tvExerciseIntensity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
                 android:layout_span="2"
                 android:layout_margin="10sp" />
         </TableRow>

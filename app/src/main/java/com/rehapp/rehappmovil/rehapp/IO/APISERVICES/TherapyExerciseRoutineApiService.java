@@ -1,5 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
+import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 
@@ -21,6 +22,9 @@ public interface TherapyExerciseRoutineApiService {
 
     @GET("therapyExerciseRoutines/showRoutineByTherapy/{therapyId}/{routineId}")
     Call<TherapyExcerciseRoutineViewModel> getTherapyExerciseRoutine(@Path("therapyId") String therapyId,@Path("routineId") String routineId);
+
+    @GET("exerciseRoutineDetail/getTherapyDetailRoutine/list/{list}/detail/{routineDetailId}")
+    Call<TherapyExcerciseRoutineDetailViewModel> getTherapyDetailRoutine(@Path("list") String listName, @Path("routineDetailId") int routineDetailId);
 
 
     @POST("therapyExerciseRoutines/saveRoutines/{therapyId}")

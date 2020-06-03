@@ -56,6 +56,7 @@
     <string name="TherapySequence">Terapia # </string>
     <string name="TherapistNonSelected"><![CDATA[<Seleccionar terapeuta>]]></string>
     <string name="DocumentTypeNonSelected"><![CDATA[<Seleccionar tipo documento>]]></string>
+    <string name="CategoryNonSelected"><![CDATA[<Seleccionar categoria>]]></string>
     <string name="OptionAnswerSelected"><![CDATA[<Seleccionar categoria>]]></string>
     <string name="GenderNonSelected"><![CDATA[<Seleccionar género>]]></string>
     <string name="NeighborhoodNonSelected"><![CDATA[<Seleccionar barrio>]]></string>

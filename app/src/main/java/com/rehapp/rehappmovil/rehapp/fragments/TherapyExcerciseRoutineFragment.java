@@ -44,12 +44,22 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     FragmentManager manager;
     private SharedPreferences sharedpreferences;
     TextView tvExerciseVideo;
+
+
+
+    TextView tvSpeed;
     TextView tvExerciseSpeed;
     TextView tvSpeedUnitOfMeasure;
     TextView tvSpeedLevel;
+
+    TextView tvFrequent;
     TextView tvExerciseFrequentValue;
     TextView tvFrequentUnitOfMeasure;
+
+    TextView tvIntensity;
     TextView tvExerciseIntensity;
+
+
     EditText etDuration;
     EditText etPreConditions;
     EditText etObservations;
@@ -74,17 +84,23 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         view = inflater.inflate(R.layout.activity_therapy_exercise_detail, container, false);
         sharedpreferences = mContext.getSharedPreferences(PreferencesData.PreferenceFileName, Context.MODE_PRIVATE);
 
-        tvExerciseVideo=view.findViewById(R.id.tvExerciseVideo);
+        tvSpeed=view.findViewById(R.id.tvSpeed);
         tvExerciseSpeed=view.findViewById(R.id.tvExerciseSpeed);
         tvSpeedUnitOfMeasure=view.findViewById(R.id.tvSpeedUnitOfMeasure);
         tvSpeedLevel=view.findViewById(R.id.tvSpeedLevel);
+
+        tvFrequent=view.findViewById(R.id.tvFrequent);
         tvExerciseFrequentValue=view.findViewById(R.id.tvExerciseFrequentValue);
         tvFrequentUnitOfMeasure=view.findViewById(R.id.tvFrequentUnitOfMeasure);
+
+        tvIntensity=view.findViewById(R.id.tvIntensity);
         tvExerciseIntensity=view.findViewById(R.id.tvExerciseIntensity);
 
-        etPreConditions=view.findViewById(R.id.etPreConditions);
         etObservations=view.findViewById(R.id.etObservations);
+        etPreConditions=view.findViewById(R.id.etPreConditions);
         etDuration=view.findViewById(R.id.etDuration);
+
+        tvExerciseVideo=view.findViewById(R.id.tvExerciseVideo);
 
         recoverySendData();
         searchRoutineDetail();

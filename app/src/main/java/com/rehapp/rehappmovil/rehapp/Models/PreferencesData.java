@@ -23,6 +23,7 @@ public class PreferencesData {
     public static final String MedicalHistorySelectedId="MedicalHistorySelectedId";
     public static final String ExerciseRoutineUrl="exerciseRoutineUrl";
     public static final String TherapyExerciseRoutineId="therapyExerciseRoutineId";
+    public static final String TherapyExerciseRoutineDetailId="therapyExerciseRoutineDetailId";
     public static final String ExerciseRoutineId="exerciseRoutineId";
     public static final String ViewOption="viewOption";
     public static final String Speed="speed";

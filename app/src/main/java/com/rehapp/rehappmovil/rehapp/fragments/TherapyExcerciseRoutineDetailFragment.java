@@ -1,7 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -23,12 +24,13 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
-import com.rehapp.rehappmovil.rehapp.YoutubeVideo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,12 +56,16 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
     EditText etPreConditions;
     EditText etObservations;
     TextView tvTitle;
+    TextView tvValue;
     TextView tvUnitOfMeasure;
 
     String viewOptions;
-    String routineUrl;
-    int routineId;
-    int selectedCategoryId;
+    int therapyExerciseRoutineId;
+    String selectedCategoryId;
+    int indexCategorySelected;
+
+    ArrayList< QuestionaryOptionViewModel > options= new ArrayList<>();
+    ArrayList<String> optionNames= new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,15 +86,30 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
 
 
         tlValue=view.findViewById(R.id.tlValue);
-        etValue=view.findViewById(R.id.etValue);
         tlCategory=view.findViewById(R.id.tlCategory);
+        etValue=view.findViewById(R.id.etValue);
         spnCategory=view.findViewById(R.id.spnCategory);
         etPreConditions=view.findViewById(R.id.etPreConditions);
         etObservations=view.findViewById(R.id.etObservations);
         tvTitle=view.findViewById(R.id.tvTitle);
         tvUnitOfMeasure=view.findViewById(R.id.tvUnitOfMeasure);
+        tvValue=view.findViewById(R.id.tvValue);
 
-
+        spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                /**se le resta  uno porque se esta agregando una opción por defecto al spinner cuando se  llena**/
+                int selectedOption=position-1;
+                if(selectedOption>-1) {
+                    selectedCategoryId = options.get(selectedOption).getQuestionnaire_option_id();
+                }
+                indexCategorySelected = selectedOption;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
 
         recoverySendData();
         setView();
@@ -98,26 +119,24 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
     }
 
     private void searchRoutineDetail(){
-        String routineId=String.valueOf(sharedpreferences.getInt(PreferencesData.ExerciseRoutineId,0));
-        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-        Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().getTherapyExerciseRoutine(therapyId,routineId);
-        call.enqueue(new Callback<TherapyExcerciseRoutineViewModel>() {
+        Call<TherapyExcerciseRoutineDetailViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().getTherapyDetailRoutine(viewOptions,therapyExerciseRoutineId);
+        call.enqueue(new Callback<TherapyExcerciseRoutineDetailViewModel>() {
             @Override
-            public void onResponse(Call<TherapyExcerciseRoutineViewModel> call, Response<TherapyExcerciseRoutineViewModel> response) {
+            public void onResponse(Call<TherapyExcerciseRoutineDetailViewModel> call, Response<TherapyExcerciseRoutineDetailViewModel> response) {
 
                 if(response.isSuccessful())
                 {
-                    TherapyExcerciseRoutineViewModel therapyRoutine=response.body();
-                    int therapyExerciseRoutineId=therapyRoutine.getTherapyExcerciseRoutineId();
-                    storeIntSharepreferences(PreferencesData.TherapyExerciseRoutineId,therapyExerciseRoutineId);
-                    setDataToView(therapyRoutine);
+                    TherapyExcerciseRoutineDetailViewModel therapyRoutineDetail=response.body();
+                    loadQuestionnaireOptions(therapyRoutineDetail.getOptions());
+                    storeIntSharepreferences(PreferencesData.TherapyExerciseRoutineDetailId,therapyExerciseRoutineId);
+                    setDataToView(therapyRoutineDetail);
                 }else{
 
                 }
             }
 
             @Override
-            public void onFailure(Call<TherapyExcerciseRoutineViewModel> call, Throwable t) {
+            public void onFailure(Call<TherapyExcerciseRoutineDetailViewModel> call, Throwable t) {
 
             }
         });
@@ -127,21 +146,18 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
         if( getArguments()!=null)
         {
             Bundle extras = getArguments();
-            routineUrl =extras.getString(PreferencesData.ExerciseRoutineUrl);
-            routineId=extras.getInt(PreferencesData.ExerciseRoutineId);
+            therapyExerciseRoutineId=extras.getInt(PreferencesData.TherapyExerciseRoutineId);
             viewOptions = extras.getString(PreferencesData.ViewOption);
-            storeStringSharepreferences(PreferencesData.ExerciseRoutineUrl, routineUrl);
-            storeIntSharepreferences(PreferencesData.ExerciseRoutineId, routineId);
         }
     }
 
-    public void watchVideo() {
-        String routineUrl=sharedpreferences.getString(PreferencesData.ExerciseRoutineUrl,"");
-        Bundle extras = new Bundle();
-        Intent intent = new Intent(mContext, YoutubeVideo.class);
-        extras.putString(PreferencesData.ExerciseRoutineUrl,routineUrl);
-        intent.putExtras(extras);
-        startActivity(intent);
+    public void loadQuestionnaireOptions(ArrayList< QuestionaryOptionViewModel > options) {
+        optionNames.add(getResources().getString(R.string.CategoryNonSelected));
+        for (QuestionaryOptionViewModel option : options) {
+            optionNames.add(option.getOption_name());
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, optionNames);
+        spnCategory.setAdapter(arrayAdapter);
 
     }
 
@@ -205,7 +221,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
 
     private List<Object> getDataFromView(){
         TherapyExcerciseRoutineViewModel therapyExcerciseRoutine= new TherapyExcerciseRoutineViewModel();
-        String value;float frequent;float intensity;float duration;
+        String value;
         String preconditions; String observation;
 
 
@@ -215,7 +231,6 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
 
         if(checked) {
             value = etValue.getText().toString();
-            intensity =selectedCategoryId;
             preconditions = etPreConditions.getText().toString();
             observation = etObservations.getText().toString();
 
@@ -224,7 +239,6 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
             therapyExcerciseRoutine.setFrequency(0);
             therapyExcerciseRoutine.setExerciseRoutineId(routineId);
             therapyExcerciseRoutine.setFrequency(0);
-            therapyExcerciseRoutine.setTherapyExcerciseRoutineIntensity(intensity);
             therapyExcerciseRoutine.setPreconditions(preconditions);
             therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation(observation);
         }else{
@@ -233,15 +247,33 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
         return Arrays.asList(therapyExcerciseRoutine,true,msg);
     }
 
-    private void setDataToView(TherapyExcerciseRoutineViewModel therapyExcerciseRoutine){
+    private void setDataToView(TherapyExcerciseRoutineDetailViewModel therapyExcerciseDetailRoutine){
 
-        etValue.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineSpeed()));
-        selectLevelOption();
-        etPreConditions.setText(therapyExcerciseRoutine.getPreConditions());
-        etObservations.setText(therapyExcerciseRoutine.getTherapyExcerciseRoutineObservation());
+        tvTitle.setText(String.valueOf(therapyExcerciseDetailRoutine.getQuestionnaireName()));
+        tvUnitOfMeasure.setText(String.valueOf(therapyExcerciseDetailRoutine.getUnit_of_measure_name()));
+        etValue.setText(String.valueOf(therapyExcerciseDetailRoutine.getTherapy_exercise_routine_value()));
+        selectLevelOption(therapyExcerciseDetailRoutine.getTherapy_exercise_routine_option_id());
+        etPreConditions.setText(therapyExcerciseDetailRoutine.getTherapy_exercise_routine_preconditions());
+        etObservations.setText(therapyExcerciseDetailRoutine.getTherapy_exercise_routine_observation());
     }
 
-    private void selectLevelOption(){
+    private void selectLevelOption(String questionnaireOptionId){
+        int indexOfCategory=-1;
+
+        if(questionnaireOptionId!=null) {
+            for (QuestionaryOptionViewModel option : options) {
+                if (option.getQuestionnaire_option_id().equals(questionnaireOptionId)) {
+                    /**se le suma  uno porque se esta agregando una opciòn por defecto al spinner cuando se  llena**/
+                    indexOfCategory = options.indexOf(option) + 1;
+                }
+            }
+        }
+        if (indexOfCategory != -1) {
+            spnCategory.setSelection(indexOfCategory);
+        }else {
+            /**se selecciona al menos la opcion que se crea por defecto**/
+            spnCategory.setSelection(0);
+        }
 
     }
 
