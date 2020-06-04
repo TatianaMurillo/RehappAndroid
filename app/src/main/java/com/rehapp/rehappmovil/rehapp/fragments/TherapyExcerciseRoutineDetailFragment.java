@@ -26,7 +26,6 @@ import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAda
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineDetailViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
@@ -61,8 +60,9 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
 
     String viewOptions;
     int therapyExerciseRoutineId;
+    int therapyExerciseRoutineDetailId;
     String selectedCategoryId;
-    int indexCategorySelected;
+    int indexCategorySelected=-1;
 
     ArrayList< QuestionaryOptionViewModel > options= new ArrayList<>();
     ArrayList<String> optionNames= new ArrayList<>();
@@ -128,7 +128,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
                 {
                     TherapyExcerciseRoutineDetailViewModel therapyRoutineDetail=response.body();
                     loadQuestionnaireOptions(therapyRoutineDetail.getOptions());
-                    storeIntSharepreferences(PreferencesData.TherapyExerciseRoutineDetailId,therapyExerciseRoutineId);
+                    storeIntSharepreferences(PreferencesData.TherapyExerciseRoutineDetailId,therapyExerciseRoutineDetailId);
                     setDataToView(therapyRoutineDetail);
                 }else{
 
@@ -161,19 +161,19 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
 
     }
 
-    private void saveExerciseRoutineTherapy(){
-        String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
+    private void saveExerciseRoutineDetailTherapy(){
+        String therapyExerciseRoutineDetailId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyExerciseRoutineDetailId,0));
         List<Object> dataToSave=getDataFromView();
 
         boolean isDataRight=(Boolean)dataToSave.get(1);
-        TherapyExcerciseRoutineViewModel objectData=(TherapyExcerciseRoutineViewModel)dataToSave.get(0);
+        TherapyExcerciseRoutineDetailViewModel objectData=(TherapyExcerciseRoutineDetailViewModel)dataToSave.get(0);
         String msg =dataToSave.get(2).toString();
 
         if(isDataRight) {
-            Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().updateRoutine(objectData, therapyId);
-            call.enqueue(new Callback<TherapyExcerciseRoutineViewModel>() {
+            Call<TherapyExcerciseRoutineDetailViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().updateRoutineDetail(objectData, therapyExerciseRoutineDetailId);
+            call.enqueue(new Callback<TherapyExcerciseRoutineDetailViewModel>() {
                 @Override
-                public void onResponse(Call<TherapyExcerciseRoutineViewModel> call, Response<TherapyExcerciseRoutineViewModel> response) {
+                public void onResponse(Call<TherapyExcerciseRoutineDetailViewModel> call, Response<TherapyExcerciseRoutineDetailViewModel> response) {
 
                     if (response.isSuccessful()) {
                         saveTherapyTotalDuration();
@@ -187,7 +187,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<TherapyExcerciseRoutineViewModel> call, Throwable t) {
+                public void onFailure(Call<TherapyExcerciseRoutineDetailViewModel> call, Throwable t) {
                     Toast.makeText(mContext, PreferencesData.therapyRoutineFailedCreationMessage, Toast.LENGTH_LONG).show();
                 }
             });
@@ -220,7 +220,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
     }
 
     private List<Object> getDataFromView(){
-        TherapyExcerciseRoutineViewModel therapyExcerciseRoutine= new TherapyExcerciseRoutineViewModel();
+        TherapyExcerciseRoutineDetailViewModel therapyExcerciseRoutineDetail= new TherapyExcerciseRoutineDetailViewModel();
         String value;
         String preconditions; String observation;
 
@@ -234,17 +234,23 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
             preconditions = etPreConditions.getText().toString();
             observation = etObservations.getText().toString();
 
-            int routineId=sharedpreferences.getInt(PreferencesData.ExerciseRoutineId,0);
+            int therapyExerciseRoutineDetailId=sharedpreferences.getInt(PreferencesData.TherapyExerciseRoutineDetailId,0);
 
-            therapyExcerciseRoutine.setFrequency(0);
-            therapyExcerciseRoutine.setExerciseRoutineId(routineId);
-            therapyExcerciseRoutine.setFrequency(0);
-            therapyExcerciseRoutine.setPreconditions(preconditions);
-            therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation(observation);
+            therapyExcerciseRoutineDetail.setTherapy_exercise_routine_value(value);
+
+            therapyExcerciseRoutineDetail.setTherapy_exercise_routine_observation(observation);
+            therapyExcerciseRoutineDetail.setTherapy_exercise_routine_preconditions(preconditions);
+            therapyExcerciseRoutineDetail.setTherapy_exercise_routine_id(String.valueOf(therapyExerciseRoutineId));
+            therapyExcerciseRoutineDetail.setTherapy_exercise_routine_detail_id(therapyExerciseRoutineDetailId);
+
+            if(indexCategorySelected>-1){
+                therapyExcerciseRoutineDetail.setTherapy_exercise_routine_option_id(selectedCategoryId);
+            }
+
         }else{
-            return Arrays.asList(therapyExcerciseRoutine,false,msg);
+            return Arrays.asList(therapyExcerciseRoutineDetail,false,msg);
         }
-        return Arrays.asList(therapyExcerciseRoutine,true,msg);
+        return Arrays.asList(therapyExcerciseRoutineDetail,true,msg);
     }
 
     private void setDataToView(TherapyExcerciseRoutineDetailViewModel therapyExcerciseDetailRoutine){
@@ -292,12 +298,16 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
     private List<Object> validateDataFromView(){
 
         List<DataValidation> dataInput= new ArrayList<>();
-        int routineId=sharedpreferences.getInt(PreferencesData.ExerciseRoutineId,0);
+        int therapyExerciseRoutineDetailId=sharedpreferences.getInt(PreferencesData.TherapyExerciseRoutineDetailId,0);
+
 
         dataInput.add(new DataValidation(etValue.getText().toString(),"Valor").textMaxLength(10).notZeroValue().noEmptyValue());
         dataInput.add(new DataValidation(etPreConditions.getText().toString(),"Precondiciones").textMaxLength(200).noEmptyValue());
         dataInput.add(new DataValidation(etObservations.getText().toString(),"Observaciones").textMaxLength(200).noEmptyValue());
         dataInput.add(new DataValidation(String.valueOf(selectedCategoryId),"Nivel").noEmptyValue().notZeroValue().selectedValue());
+        dataInput.add(new DataValidation(String.valueOf(therapyExerciseRoutineId),"Rutina de terapia").noEmptyValue().notZeroValue().selectedValue());
+        dataInput.add(new DataValidation(String.valueOf(therapyExerciseRoutineDetailId),"Id detalle de rutina de terapia").noEmptyValue().notZeroValue().selectedValue());
+
 
         return ValidateInputs.validate().ValidateDataObject(dataInput);
     }
@@ -313,7 +323,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
         switch (item.getItemId())
         {
             case R.id.save:
-                saveExerciseRoutineTherapy();
+                saveExerciseRoutineDetailTherapy();
                 break;
         }
         return super.onOptionsItemSelected(item);

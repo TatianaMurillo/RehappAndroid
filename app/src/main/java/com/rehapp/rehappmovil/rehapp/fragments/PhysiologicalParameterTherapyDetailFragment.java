@@ -51,7 +51,7 @@ public class PhysiologicalParameterTherapyDetailFragment extends Fragment {
     TextView tvUnitOfMeasure;
     Spinner spnCategories;
     String categorySelectedId;
-    int indexCategorySelectedId;
+    int indexCategorySelectedId=-1;;
 
     FragmentManager manager;
     TextView tvTitle;

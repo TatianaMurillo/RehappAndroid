@@ -1,5 +1,7 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
+import java.util.ArrayList;
+
 public class TherapyExcerciseRoutineViewModel {
 
 
@@ -12,6 +14,7 @@ public class TherapyExcerciseRoutineViewModel {
     private int exercise_routine_id;
     private String preconditions;
     private float frequency;
+    private ArrayList<QuestionaryOptionViewModel> options= new ArrayList<>();
 
 
 
@@ -54,5 +57,13 @@ public class TherapyExcerciseRoutineViewModel {
     }
     public void setFrequency(float frequency) {
         this.frequency = frequency;
+    }
+
+    public ArrayList<QuestionaryOptionViewModel> getOptions() {
+        return options;
+    }
+
+    public void setOptions(ArrayList<QuestionaryOptionViewModel> options) {
+        this.options = options;
     }
 }

@@ -83,13 +83,14 @@
                 android:layout_margin="10sp"/>
         </TableRow>
         <TableRow>
+
             <TextView
                 android:id="@+id/tvExerciseFrequentValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
+                android:layout_margin="10sp"
                 android:layout_span="2"
-                android:layout_margin="10sp" />
+                android:inputType="numberDecimal" />
             <TextView
                 android:id="@+id/tvFrequentUnitOfMeasure"
                 android:layout_width="wrap_content"

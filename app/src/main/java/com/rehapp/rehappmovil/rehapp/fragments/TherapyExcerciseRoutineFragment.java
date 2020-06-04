@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
+import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
@@ -117,7 +118,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     private void searchRoutineDetail(){
         String routineId=String.valueOf(sharedpreferences.getInt(PreferencesData.ExerciseRoutineId,0));
         String therapyId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-        Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().getTherapyExerciseRoutine(therapyId,routineId);
+        Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().getTherapyExerciseRoutine(therapyId,routineId,"I-S-F");
         call.enqueue(new Callback<TherapyExcerciseRoutineViewModel>() {
             @Override
             public void onResponse(Call<TherapyExcerciseRoutineViewModel> call, Response<TherapyExcerciseRoutineViewModel> response) {
@@ -250,12 +251,50 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
     private void setDataToView(TherapyExcerciseRoutineViewModel therapyExcerciseRoutine){
 
+        ArrayList<QuestionaryOptionViewModel> options = therapyExcerciseRoutine.getOptions();
+
+        QuestionaryOptionViewModel speedData=null;
+        QuestionaryOptionViewModel intensityData=null;
+        QuestionaryOptionViewModel frequencyData=null;
+
+        for (QuestionaryOptionViewModel option:options) {
+            switch (option.getQuestionnaire_name())
+                {
+                    case "Velocidad":
+                        speedData=option;
+                        break;
+                    case "Intensidad":
+                        intensityData=option;
+                        break;
+                    case "Frecuencia":
+                        frequencyData=option;
+                        break;
+                        default:
+                            Toast.makeText(mContext, PreferencesData.therapyRoutineFailedToLoadDetailDataMgs, Toast.LENGTH_LONG).show();
+                            break;
+                }
+        }
+
+        tvSpeed.setText(speedData.getQuestionnaire_name());
+        tvExerciseSpeed.setText(speedData.getValue());
+        tvSpeedUnitOfMeasure.setText(speedData.getUnit_of_measure_name()==null?"":speedData.getUnit_of_measure_name());
+        tvSpeedLevel.setText(speedData.getOption_name());
+
+        tvIntensity.setText(intensityData.getQuestionnaire_name());
+        tvExerciseIntensity.setText(intensityData.getOption_name());
+
+        tvFrequent.setText(frequencyData.getQuestionnaire_name());
+        tvExerciseFrequentValue.setText(frequencyData.getValue());
+        tvFrequentUnitOfMeasure.setText(frequencyData.getUnit_of_measure_name()==null?"":frequencyData.getUnit_of_measure_name());
+
+
+
         etDuration.setText(String.valueOf(therapyExcerciseRoutine.getTherapyExcerciseRoutineDuration()));
         etPreConditions.setText(therapyExcerciseRoutine.getPreConditions());
         etObservations.setText(therapyExcerciseRoutine.getTherapyExcerciseRoutineObservation());
     }
 
-    private List<Object> validateDataFromView(){
+    private List<Object>  validateDataFromView(){
 
         List<DataValidation> dataInput= new ArrayList<>();
         int routineId=sharedpreferences.getInt(PreferencesData.ExerciseRoutineId,0);

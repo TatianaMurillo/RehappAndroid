@@ -20,8 +20,8 @@ public interface TherapyExerciseRoutineApiService {
     @GET("therapyExerciseRoutines/showbyTherapy/{therapyId}")
     Call<ArrayList<TherapyExcerciseRoutineViewModel>> getTherapyExerciseRoutines(@Path("therapyId") String therapyId);
 
-    @GET("therapyExerciseRoutines/showRoutineByTherapy/{therapyId}/{routineId}")
-    Call<TherapyExcerciseRoutineViewModel> getTherapyExerciseRoutine(@Path("therapyId") String therapyId,@Path("routineId") String routineId);
+    @GET("therapyExerciseRoutines/showRoutine/therapy/{therapyId}/routine/{routineId}/views/{views}")
+    Call<TherapyExcerciseRoutineViewModel> getTherapyExerciseRoutine(@Path("therapyId") String therapyId,@Path("routineId") String routineId,@Path("views") String views);
 
     @GET("exerciseRoutineDetail/getTherapyDetailRoutine/list/{list}/detail/{routineDetailId}")
     Call<TherapyExcerciseRoutineDetailViewModel> getTherapyDetailRoutine(@Path("list") String listName, @Path("routineDetailId") int routineDetailId);
@@ -32,6 +32,11 @@ public interface TherapyExerciseRoutineApiService {
 
     @POST("therapyExerciseRoutines/updateRoutine/{therapyId}")
     Call<TherapyExcerciseRoutineViewModel> updateRoutine(@Body TherapyExcerciseRoutineViewModel therapyExcerciseRoutine, @Path("therapyId") String therapyId);
+
+
+    @PUT("exerciseRoutineDetail/createOrUpdateTherapyDetail/{therapyRoutineDetailId}")
+    Call<TherapyExcerciseRoutineDetailViewModel> updateRoutineDetail(@Body TherapyExcerciseRoutineDetailViewModel therapyExcerciseRoutineDetail, @Path("therapyRoutineDetailId") String therapyRoutineDetailId);
+
 
     @PUT("therapyExerciseRoutines/updateDurationFromTherapyExerciseRoutine/{therapyId}")
     Call<TherapyViewModel> updateTherapyDuration(@Path("therapyId") String therapyId);

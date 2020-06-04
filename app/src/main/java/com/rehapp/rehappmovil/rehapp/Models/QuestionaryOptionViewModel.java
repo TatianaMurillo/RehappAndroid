@@ -11,6 +11,8 @@ public class QuestionaryOptionViewModel {
     private String questionnaire_name;
     private String questionnaire_description;
     private String option_name;
+    private String unit_of_measure_name;
+    private String value;
     private ArrayList<OptionViewModel> options=new ArrayList();
     private String created_at;
     private String updated_at;
@@ -87,5 +89,21 @@ public class QuestionaryOptionViewModel {
 
     public void setOption_name(String option_name) {
         this.option_name = option_name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getUnit_of_measure_name() {
+        return unit_of_measure_name;
+    }
+
+    public void setUnit_of_measure_name(String unit_of_measure_name) {
+        this.unit_of_measure_name = unit_of_measure_name;
     }
 }

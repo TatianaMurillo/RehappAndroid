@@ -128,6 +128,7 @@ public class PreferencesData {
     public static final String therapyRoutineUpdateFailedMsg="Hubo un error al actualizar rutina.";
 
     public static final String therapyRoutineFailedCreationMessage="Hubo un error al actualizar rutina.";
+    public static final String therapyRoutineFailedToLoadDetailDataMgs="Hubo un error al cargar el detalle de la rutina.";
 
     public static final String listDocumentTypesFailed="No se pudieron cargar los tipos de documento correctamente.";
     public static final String listNeighborhoodFailed="No se pudieron cargar los barrios correctamente.";
