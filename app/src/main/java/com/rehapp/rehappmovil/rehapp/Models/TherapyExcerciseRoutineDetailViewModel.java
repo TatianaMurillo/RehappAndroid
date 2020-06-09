@@ -13,7 +13,7 @@ public class TherapyExcerciseRoutineDetailViewModel {
     private String  therapy_exercise_routine_preconditions;
     private String  therapy_exercise_routine_id;
 
-    private String  questionnaireId;
+    private String questionnaire_id;
     private String  questionnaireName;
     private String  unit_of_measure_name;
     private ArrayList<QuestionaryOptionViewModel> options = new ArrayList<>();
@@ -70,11 +70,11 @@ public class TherapyExcerciseRoutineDetailViewModel {
     }
 
     public String getQuestionnaireId() {
-        return questionnaireId;
+        return 	questionnaire_id;
     }
 
     public void setQuestionnaireId(String questionnaireId) {
-        this.questionnaireId = questionnaireId;
+        this.	questionnaire_id = questionnaireId;
     }
 
     public String getUnit_of_measure_name() {

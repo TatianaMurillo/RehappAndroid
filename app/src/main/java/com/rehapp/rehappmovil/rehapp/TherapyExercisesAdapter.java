@@ -1,16 +1,18 @@
 package com.rehapp.rehappmovil.rehapp;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
@@ -25,12 +27,14 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
     List<ExerciseRoutinesViewModel> exercises;
     FragmentManager fragment;
     LayoutInflater inflater;
+    Context context;
 
-    public TherapyExercisesAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises, FragmentManager fragment) {
+    public TherapyExercisesAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises, FragmentManager fragment,Context context) {
         this.activity = activity;
         this.exercises = exercises;
         inflater = activity.getLayoutInflater();
         this.fragment=fragment;
+        this.context=context;
     }
 
 
@@ -59,6 +63,7 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
             holder.tvExerciseName=view.findViewById(R.id.tvExerciseName);
             holder.ivCheckbox= view.findViewById(R.id.ivCheckbox);
             holder.tvVideoUrl=view.findViewById(R.id.tvExerciseUrl);
+            holder.ibtnDelete=view.findViewById(R.id.ibtnDelete);
 
             view.setTag(holder);
         }else {
@@ -67,7 +72,6 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
             final ExerciseRoutinesViewModel model = exercises.get(position);
 
             holder.tvExerciseName.setText(model.getExerciseName());
-            holder.tvVideoUrl.setText(PreferencesData.therapyDetailWatchVideo);
 
             holder.tvVideoUrl.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,6 +84,12 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
                     fragment.setArguments(extras);
                     loadFragment(fragment);
 
+                }
+            });
+            holder.ibtnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isDelete("Al borrar este elemento se borrará todo el detalle relacionado.");
                 }
             });
 
@@ -102,8 +112,9 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
     class ViewHolder
     {
         TextView tvExerciseName;
-        ImageView ivCheckbox;
-        TextView tvVideoUrl;
+        ImageButton ivCheckbox;
+        ImageButton tvVideoUrl;
+        ImageButton ibtnDelete;
     }
 
 
@@ -112,5 +123,29 @@ public class TherapyExercisesAdapter  extends BaseAdapter{
         fragmentTransaction.replace(R.id.content,fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+
+    public void isDelete(String alertmessage) {
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(alertmessage)
+                .setPositiveButton("De acuerdo.", dialogClickListener).show();
+
     }
 }

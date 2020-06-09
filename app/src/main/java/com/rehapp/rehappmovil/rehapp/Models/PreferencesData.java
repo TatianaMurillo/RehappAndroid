@@ -26,9 +26,9 @@ public class PreferencesData {
     public static final String TherapyExerciseRoutineDetailId="therapyExerciseRoutineDetailId";
     public static final String ExerciseRoutineId="exerciseRoutineId";
     public static final String ViewOption="viewOption";
-    public static final String Speed="speed";
-    public static final String Frequency="frequency";
-    public static final String Intensity="intensity";
+    public static final String Speed="S";
+    public static final String Frequency="F";
+    public static final String Intensity="I";
 
     public static final String TherapyId="TherapyId";
     public static final String TherapistId="TherapistId";

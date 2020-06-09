@@ -24,7 +24,7 @@ public interface TherapyExerciseRoutineApiService {
     Call<TherapyExcerciseRoutineViewModel> getTherapyExerciseRoutine(@Path("therapyId") String therapyId,@Path("routineId") String routineId,@Path("views") String views);
 
     @GET("exerciseRoutineDetail/getTherapyDetailRoutine/list/{list}/detail/{routineDetailId}")
-    Call<TherapyExcerciseRoutineDetailViewModel> getTherapyDetailRoutine(@Path("list") String listName, @Path("routineDetailId") int routineDetailId);
+    Call<TherapyExcerciseRoutineDetailViewModel> getTherapyDetailRoutine(@Path("list") String listName, @Path("routineDetailId") String routineDetailId);
 
 
     @POST("therapyExerciseRoutines/saveRoutines/{therapyId}")

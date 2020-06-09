@@ -1,12 +1,15 @@
 package com.rehapp.rehappmovil.rehapp.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,10 +25,9 @@ import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAda
 import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyMasterDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
-import com.rehapp.rehappmovil.rehapp.TherapyExercisesAdapter;
+import com.rehapp.rehappmovil.rehapp.TherapyRoutinesListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +37,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class TherapyExercisesFragment extends Fragment {
+public class TherapyExercisesFragment extends Fragment implements TherapyRoutinesListAdapter.OnVideoClickListener{
 
-
-    private ListView lvExercises;
+    RecyclerView recyclerView;
     private ArrayList<ExerciseRoutinesViewModel> exercises = new ArrayList<>();
     private ArrayList<TherapyExcerciseRoutineViewModel> therapyExerciseRoutines = new ArrayList<>();
     private int  exerciseRoutineSelectedIndex=-1;
     private String therapyId;
-    TherapyExercisesAdapter adapter;
+    TherapyRoutinesListAdapter rvAdapter;
     FragmentManager manager;
 
     private Context mContext;
@@ -62,10 +63,14 @@ public class TherapyExercisesFragment extends Fragment {
 
         manager = this.getFragmentManager();
         therapyId=getArguments().getString(PreferencesData.TherapyId);
-        adapter=null;
+        rvAdapter=null;
         View view = inflater.inflate(R.layout.activity_therapy_exercises,null);
 
-        lvExercises= view.findViewById(R.id.lvExercises);
+        recyclerView= view.findViewById(R.id.recyclerView);
+
+        recyclerView=view.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
         recoverySendData();
         loadData();
@@ -84,25 +89,16 @@ public class TherapyExercisesFragment extends Fragment {
     }
 
 
-    private void listExercisesRoutines()
-    {
+    private void listExercisesRoutines() {
         Call<ArrayList<ExerciseRoutinesViewModel>> call = ExerciseRoutineApiAdapter.getApiService().getExerciseRoutines();
         call.enqueue(new Callback<ArrayList<ExerciseRoutinesViewModel>>() {
             @Override
             public void onResponse(Call<ArrayList<ExerciseRoutinesViewModel>> call, Response<ArrayList<ExerciseRoutinesViewModel>> response) {
                 if (response.isSuccessful()) {
                     exercises = response.body();
-                    adapter = new TherapyExercisesAdapter(getActivity(),exercises,getFragmentManager());
-                    lvExercises.setAdapter(adapter);
+                    rvAdapter = new TherapyRoutinesListAdapter(getActivity(),exercises,getFragmentManager(),TherapyExercisesFragment.this);
+                    recyclerView.setAdapter(rvAdapter);
                     listTherapyExercisesRoutines();
-
-                    lvExercises.setOnItemClickListener(new AdapterView.OnItemClickListener()
-                    {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            selectExerciseRoutinesItem(position);
-                        }
-                    });
 
                 } else {
                         Toast.makeText(mContext, PreferencesData.therapyDetailExerciseRoutineListMsg, Toast.LENGTH_LONG).show();
@@ -154,7 +150,7 @@ public class TherapyExercisesFragment extends Fragment {
             model.setSelected(true);
         }
         exercises.set(position, model);
-        adapter.updateRecords(exercises);
+        rvAdapter.updateRecords(exercises);
     }
 
     @Override
@@ -195,7 +191,6 @@ public class TherapyExercisesFragment extends Fragment {
                 therapyExcerciseRoutine.setTherapyExcerciseRoutineIntensity(exerciseRoutine.getIntensity());
                 therapyExcerciseRoutine.setTherapyExcerciseRoutineDuration(exerciseRoutine.getDuration());
                 therapyExcerciseRoutine.setTherapy_excercise_routine_speed(exerciseRoutine.getSpeed());
-                therapyExcerciseRoutine.setConditions(exerciseRoutine.getConditions());
                 therapyExcerciseRoutine.setPreconditions(exerciseRoutine.getPreconditions());
                 therapyExcerciseRoutine.setFrequency(exerciseRoutine.getFrequency());
                 therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation(exerciseRoutine.getObservations());
@@ -253,5 +248,53 @@ public class TherapyExercisesFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext=context;
+    }
+
+    @Override
+    public void onVideoClick(int position, int option) {
+        switch (option){
+            case 1:
+                selectExerciseRoutinesItem(position);
+                break;
+            case 2:
+                redirectToTherapyExerciseRoutine(position);
+                break;
+            case 3:
+                isDelete("Al borrar este elemento se borrará todo el detalle relacionado.");
+                break;
+        }
+    }
+
+    private void redirectToTherapyExerciseRoutine(int position){
+        TherapyExcerciseRoutineFragment fragment=new TherapyExcerciseRoutineFragment();
+        Bundle extras = new Bundle();
+        extras.putString(PreferencesData.ExerciseRoutineUrl, exercises.get(position).getExercise_routine_url());
+        extras.putInt(PreferencesData.ExerciseRoutineId, exercises.get(position).getExercise_routine_id());
+        fragment.setArguments(extras);
+        loadFragment(fragment);
+    }
+
+
+    public void isDelete(String alertMessage) {
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage(alertMessage)
+                .setPositiveButton("De acuerdo.", dialogClickListener).show();
+
     }
 }

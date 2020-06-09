@@ -16,12 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
+import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
@@ -60,6 +62,11 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     TextView tvIntensity;
     TextView tvExerciseIntensity;
 
+
+
+    ImageButton ibtnEditSpeed;
+    ImageButton ibtnEditFrequent;
+    ImageButton ibtnEditIntensity;
 
     EditText etDuration;
     EditText etPreConditions;
@@ -103,6 +110,31 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
         tvExerciseVideo=view.findViewById(R.id.tvExerciseVideo);
 
+
+        ibtnEditSpeed=view.findViewById(R.id.ibtnEditSpeed);
+        ibtnEditFrequent=view.findViewById(R.id.ibtnEditFrequent);
+        ibtnEditIntensity=view.findViewById(R.id.ibtnEditIntensity);
+
+        ibtnEditSpeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editOption(v);
+            }
+        });
+        ibtnEditFrequent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editOption(v);
+            }
+        });
+        ibtnEditIntensity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editOption(v);
+            }
+        });
+
+
         recoverySendData();
         searchRoutineDetail();
 
@@ -130,13 +162,13 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
                     storeIntSharepreferences(PreferencesData.TherapyExerciseRoutineId,therapyExerciseRoutineId);
                     setDataToView(therapyRoutine);
                 }else{
-
+                    Toast.makeText(mContext, response.raw().message(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TherapyExcerciseRoutineViewModel> call, Throwable t) {
-
+                Toast.makeText(mContext,  t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -334,6 +366,31 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
      *
      * Metodos utiles
      */
+
+
+    public void editOption(View view) {
+        String option="S";
+        switch (view.getId()){
+            case R.id.ibtnEditSpeed:
+                option="S";
+                break;
+            case R.id.ibtnEditFrequent:
+                option="F";
+                break;
+            case R.id.ibtnEditIntensity:
+                option="I";
+                break;
+        }
+
+        String therapyExerciseRoutineId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyExerciseRoutineId,0));
+        TherapyExcerciseRoutineDetailFragment fragment = new TherapyExcerciseRoutineDetailFragment();
+        Bundle extras = new Bundle();
+        extras.putString(PreferencesData.ViewOption, option);
+        extras.putString(PreferencesData.TherapyExerciseRoutineId, therapyExerciseRoutineId);
+        fragment.setArguments(extras);
+        loadFragment(fragment);
+    }
+
     public void showHideItems(Menu menu) {
         MenuItem item;
 

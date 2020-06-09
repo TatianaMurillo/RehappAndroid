@@ -26,7 +26,6 @@ import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAda
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
 import com.rehapp.rehappmovil.rehapp.Models.QuestionaryOptionViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineDetailViewModel;
-import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
 import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.Utils.DataValidation;
 import com.rehapp.rehappmovil.rehapp.Utils.ValidateInputs;
@@ -59,11 +58,11 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
     TextView tvUnitOfMeasure;
 
     String viewOptions;
-    int therapyExerciseRoutineId;
-    int therapyExerciseRoutineDetailId;
+    String therapyExerciseRoutineId;
     String selectedCategoryId;
     int indexCategorySelected=-1;
 
+    TherapyExcerciseRoutineDetailViewModel therapyRoutineDetail;
     ArrayList< QuestionaryOptionViewModel > options= new ArrayList<>();
     ArrayList<String> optionNames= new ArrayList<>();
 
@@ -126,18 +125,19 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
 
                 if(response.isSuccessful())
                 {
-                    TherapyExcerciseRoutineDetailViewModel therapyRoutineDetail=response.body();
-                    loadQuestionnaireOptions(therapyRoutineDetail.getOptions());
-                    storeIntSharepreferences(PreferencesData.TherapyExerciseRoutineDetailId,therapyExerciseRoutineDetailId);
+                    therapyRoutineDetail=response.body();
+                    options=therapyRoutineDetail.getOptions();
+                    loadQuestionnaireOptions(options);
+                    storeIntSharepreferences(PreferencesData.TherapyExerciseRoutineDetailId,therapyRoutineDetail.getTherapy_exercise_routine_detail_id());
                     setDataToView(therapyRoutineDetail);
                 }else{
-
+                    Toast.makeText(mContext, response.raw().message(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<TherapyExcerciseRoutineDetailViewModel> call, Throwable t) {
-
+                Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -146,7 +146,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
         if( getArguments()!=null)
         {
             Bundle extras = getArguments();
-            therapyExerciseRoutineId=extras.getInt(PreferencesData.TherapyExerciseRoutineId);
+            therapyExerciseRoutineId=extras.getString(PreferencesData.TherapyExerciseRoutineId);
             viewOptions = extras.getString(PreferencesData.ViewOption);
         }
     }
@@ -162,6 +162,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
     }
 
     private void saveExerciseRoutineDetailTherapy(){
+
         String therapyExerciseRoutineDetailId=String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyExerciseRoutineDetailId,0));
         List<Object> dataToSave=getDataFromView();
 
@@ -176,7 +177,8 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
                 public void onResponse(Call<TherapyExcerciseRoutineDetailViewModel> call, Response<TherapyExcerciseRoutineDetailViewModel> response) {
 
                     if (response.isSuccessful()) {
-                        saveTherapyTotalDuration();
+                        Toast.makeText(mContext, PreferencesData.therapyRoutineSuccessCreationMessage, Toast.LENGTH_LONG).show();
+                        loadFragment(new TherapyExcerciseRoutineFragment());
                     }else if(response.raw().code()==404){
                         Toast.makeText(mContext, PreferencesData.therapyRoutineUpdateWithoutRowsMsg, Toast.LENGTH_LONG).show();
                         loadFragment(new TherapyDetailFragment());
@@ -196,32 +198,9 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
         }
     }
 
-    private void saveTherapyTotalDuration(){
-        String therapyId= String.valueOf(sharedpreferences.getInt(PreferencesData.TherapyId,0));
-        Call<TherapyViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().updateTherapyDuration(therapyId);
-        call.enqueue(new Callback<TherapyViewModel>() {
-            @Override
-            public void onResponse(Call<TherapyViewModel> call, Response<TherapyViewModel> response) {
-                if(response.isSuccessful()) {
-                    Toast.makeText(mContext, PreferencesData.therapyRoutineSuccessCreationMessage, Toast.LENGTH_LONG).show();
-                    loadFragment(new TherapyDetailFragment());
-                }else if(response.raw().code()==404){
-                    Toast.makeText(mContext, PreferencesData.therapyNotFoundMsg, Toast.LENGTH_LONG).show();
-                    loadFragment(new TherapyDetailFragment());
-                }else{
-                    Toast.makeText(mContext, PreferencesData.therapyRoutineFailedCreationMessage, Toast.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<TherapyViewModel> call, Throwable t) {
-                Toast.makeText(mContext, PreferencesData.therapyDetailSaveExerciseRoutineFailedMsg, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     private List<Object> getDataFromView(){
         TherapyExcerciseRoutineDetailViewModel therapyExcerciseRoutineDetail= new TherapyExcerciseRoutineDetailViewModel();
-        String value;
+        String value="0.0";
         String preconditions; String observation;
 
 
@@ -230,7 +209,9 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
         String  msg = rpta.get(1).toString();
 
         if(checked) {
-            value = etValue.getText().toString();
+            if(!"I".equals(viewOptions)) {
+                value=  etValue.getText().toString();
+            }
             preconditions = etPreConditions.getText().toString();
             observation = etObservations.getText().toString();
 
@@ -242,6 +223,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
             therapyExcerciseRoutineDetail.setTherapy_exercise_routine_preconditions(preconditions);
             therapyExcerciseRoutineDetail.setTherapy_exercise_routine_id(String.valueOf(therapyExerciseRoutineId));
             therapyExcerciseRoutineDetail.setTherapy_exercise_routine_detail_id(therapyExerciseRoutineDetailId);
+            therapyExcerciseRoutineDetail.setQuestionnaireId(therapyRoutineDetail.getQuestionnaireId());
 
             if(indexCategorySelected>-1){
                 therapyExcerciseRoutineDetail.setTherapy_exercise_routine_option_id(selectedCategoryId);
@@ -256,7 +238,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
     private void setDataToView(TherapyExcerciseRoutineDetailViewModel therapyExcerciseDetailRoutine){
 
         tvTitle.setText(String.valueOf(therapyExcerciseDetailRoutine.getQuestionnaireName()));
-        tvUnitOfMeasure.setText(String.valueOf(therapyExcerciseDetailRoutine.getUnit_of_measure_name()));
+        tvUnitOfMeasure.setText(therapyExcerciseDetailRoutine.getUnit_of_measure_name()==null?"":therapyExcerciseDetailRoutine.getUnit_of_measure_name());
         etValue.setText(String.valueOf(therapyExcerciseDetailRoutine.getTherapy_exercise_routine_value()));
         selectLevelOption(therapyExcerciseDetailRoutine.getTherapy_exercise_routine_option_id());
         etPreConditions.setText(therapyExcerciseDetailRoutine.getTherapy_exercise_routine_preconditions());
@@ -299,15 +281,17 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
 
         List<DataValidation> dataInput= new ArrayList<>();
         int therapyExerciseRoutineDetailId=sharedpreferences.getInt(PreferencesData.TherapyExerciseRoutineDetailId,0);
-
-
-        dataInput.add(new DataValidation(etValue.getText().toString(),"Valor").textMaxLength(10).notZeroValue().noEmptyValue());
+        String value="0.1";
+        if(!"I".equals(viewOptions)) {
+            value=  etValue.getText().toString();
+        }
+        dataInput.add(new DataValidation(value, "Valor").textMaxLength(10).notZeroValue().noEmptyValue());
         dataInput.add(new DataValidation(etPreConditions.getText().toString(),"Precondiciones").textMaxLength(200).noEmptyValue());
         dataInput.add(new DataValidation(etObservations.getText().toString(),"Observaciones").textMaxLength(200).noEmptyValue());
         dataInput.add(new DataValidation(String.valueOf(selectedCategoryId),"Nivel").noEmptyValue().notZeroValue().selectedValue());
         dataInput.add(new DataValidation(String.valueOf(therapyExerciseRoutineId),"Rutina de terapia").noEmptyValue().notZeroValue().selectedValue());
-        dataInput.add(new DataValidation(String.valueOf(therapyExerciseRoutineDetailId),"Id detalle de rutina de terapia").noEmptyValue().notZeroValue().selectedValue());
-
+        dataInput.add(new DataValidation(String.valueOf(therapyExerciseRoutineDetailId),"Id detalle de rutina de terapia").noEmptyValue().selectedValue());
+        dataInput.add(new DataValidation(therapyRoutineDetail.getQuestionnaireId(),"Id del questionario").notZeroValue().selectedValue().noEmptyValue());
 
         return ValidateInputs.validate().ValidateDataObject(dataInput);
     }
@@ -339,6 +323,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
      *
      * Metodos utiles
      */
+
     public void showHideItems(Menu menu) {
         MenuItem item;
 
