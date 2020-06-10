@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TherapyRoutinesListAdapter extends RecyclerView.Adapter<TherapyRoutinesListAdapter.TherapyRoutineListItemHolder> {
@@ -112,6 +113,7 @@ public class TherapyRoutinesListAdapter extends RecyclerView.Adapter<TherapyRout
 
         }
     }
+
 
     public void updateRecords(List<ExerciseRoutinesViewModel> exercises)
     {

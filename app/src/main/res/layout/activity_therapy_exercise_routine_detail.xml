@@ -25,6 +25,16 @@
                 android:textSize="@dimen/textSizeLevelOne" />
 
             <TextView
+                android:id="@+id/tvRoutineName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_margin="10sp"
+                android:layout_span="3"
+                android:text="" />
+
+            <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

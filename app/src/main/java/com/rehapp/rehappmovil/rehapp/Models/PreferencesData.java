@@ -25,6 +25,7 @@ public class PreferencesData {
     public static final String TherapyExerciseRoutineId="therapyExerciseRoutineId";
     public static final String TherapyExerciseRoutineDetailId="therapyExerciseRoutineDetailId";
     public static final String ExerciseRoutineId="exerciseRoutineId";
+    public static final String ExerciseRoutineName="exerciseRoutineName";
     public static final String ViewOption="viewOption";
     public static final String Speed="S";
     public static final String Frequency="F";
@@ -99,7 +100,10 @@ public class PreferencesData {
     public static final String routinesFragmentNotInternet ="No detectó conexion a internet.";
 
 
-
+    public static final String therapyRoutineDeleteExerciseFailedMsg="Hubo un error al eliminar rutina de terapia.";
+    public static final String therapyRoutineDeleteExerciseSucessMsg="La rutina de  terapia se eliminó correctamente.";
+    public static final String therapyRoutineDeleteExerciseWithoutSave="Debe agregar la rutina a la terapia.";
+    public static final String therapyRoutineDeleteExercise="Al borrar este elemento se borrará todo el detalle relacionado.";
     public static final String therapyDetailSaveExerciseRoutineFailedMsg ="Hubo un error al guardar ejercicios de terapia.";
     public static final String medicalHistoryDiseaseSaveFailedMsg ="Hubo un error al guardar las enfermedades.";
     public static final String therapyDetailSaveExerciseRoutineSuccessMsg ="Ejercicios de terapia guardados correctamente.";

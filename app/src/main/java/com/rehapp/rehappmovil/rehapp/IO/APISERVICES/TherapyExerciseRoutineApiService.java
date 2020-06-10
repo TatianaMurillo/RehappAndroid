@@ -42,7 +42,7 @@ public interface TherapyExerciseRoutineApiService {
     Call<TherapyViewModel> updateTherapyDuration(@Path("therapyId") String therapyId);
 
 
-    @GET("exerciseRoutines")
-    Call<ArrayList<ExerciseRoutinesViewModel>> getExerciseRoutines();
+    @POST("therapyExerciseRoutines/deleteRoutine/therapy/{therapyId}/routine/{routineId}")
+    Call<TherapyExcerciseRoutineViewModel> deleteRoutine(@Path("therapyId") String therapyId,@Path("routineId") int routineId);
 
 }

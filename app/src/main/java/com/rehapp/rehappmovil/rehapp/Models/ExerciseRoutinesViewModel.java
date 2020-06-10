@@ -1,6 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.Models;
 
-public class ExerciseRoutinesViewModel {
+public class ExerciseRoutinesViewModel implements Comparable<ExerciseRoutinesViewModel>{
 
     private int exercise_routine_id;
     private String exercise_routine_url;
@@ -153,5 +153,15 @@ public class ExerciseRoutinesViewModel {
 
     public String getTherapy_id() {
         return therapy_id;
+    }
+
+    @Override
+    public int compareTo(ExerciseRoutinesViewModel o) {
+        if (o.isSelected)
+            // give node higher preference
+            return 100;
+        else
+            // give node lower preference
+            return -1;
     }
 }

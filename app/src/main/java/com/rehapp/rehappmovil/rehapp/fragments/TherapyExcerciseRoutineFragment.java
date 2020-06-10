@@ -61,6 +61,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
     TextView tvIntensity;
     TextView tvExerciseIntensity;
+    TextView tvRoutineName;
 
 
 
@@ -72,7 +73,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
     EditText etPreConditions;
     EditText etObservations;
 
-
+    String routineName;
     String routineUrl;
     int routineId;
 
@@ -100,6 +101,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
         tvFrequent=view.findViewById(R.id.tvFrequent);
         tvExerciseFrequentValue=view.findViewById(R.id.tvExerciseFrequentValue);
         tvFrequentUnitOfMeasure=view.findViewById(R.id.tvFrequentUnitOfMeasure);
+        tvRoutineName=view.findViewById(R.id.tvRoutineName);
 
         tvIntensity=view.findViewById(R.id.tvIntensity);
         tvExerciseIntensity=view.findViewById(R.id.tvExerciseIntensity);
@@ -137,6 +139,7 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
 
         recoverySendData();
         searchRoutineDetail();
+        loadData();
 
         tvExerciseVideo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,10 +183,19 @@ public class TherapyExcerciseRoutineFragment extends Fragment {
             Bundle extras = getArguments();
             routineUrl =extras.getString(PreferencesData.ExerciseRoutineUrl);
             routineId=extras.getInt(PreferencesData.ExerciseRoutineId);
+            routineName=extras.getString(PreferencesData.ExerciseRoutineName);
+            storeStringSharepreferences(PreferencesData.ExerciseRoutineName, routineName);
             storeStringSharepreferences(PreferencesData.ExerciseRoutineUrl, routineUrl);
             storeIntSharepreferences(PreferencesData.ExerciseRoutineId, routineId);
 
         }
+
+    }
+
+    private void loadData() {
+        String routineName=sharedpreferences.getString(PreferencesData.ExerciseRoutineName,"N/A");
+        tvRoutineName.setText(routineName);
+
     }
 
     public void watchVideo() {

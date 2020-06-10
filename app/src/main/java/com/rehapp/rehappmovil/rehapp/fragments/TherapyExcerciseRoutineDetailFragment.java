@@ -56,6 +56,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
     TextView tvTitle;
     TextView tvValue;
     TextView tvUnitOfMeasure;
+    TextView tvRoutineName;
 
     String viewOptions;
     String therapyExerciseRoutineId;
@@ -93,6 +94,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
         tvTitle=view.findViewById(R.id.tvTitle);
         tvUnitOfMeasure=view.findViewById(R.id.tvUnitOfMeasure);
         tvValue=view.findViewById(R.id.tvValue);
+        tvRoutineName=view.findViewById(R.id.tvRoutineName);
 
         spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -113,6 +115,7 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
         recoverySendData();
         setView();
         searchRoutineDetail();
+        loadData();
 
         return  view;
     }
@@ -140,6 +143,12 @@ public class TherapyExcerciseRoutineDetailFragment extends Fragment {
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void loadData() {
+        String routineName=sharedpreferences.getString(PreferencesData.ExerciseRoutineName,"N/A");
+        tvRoutineName.setText(routineName);
+
     }
 
     private void recoverySendData() {

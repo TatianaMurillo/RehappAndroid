@@ -27,6 +27,7 @@ import com.rehapp.rehappmovil.rehapp.R;
 import com.rehapp.rehappmovil.rehapp.TherapyRoutinesListAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,7 +39,6 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
 
     RecyclerView recyclerView;
     private ArrayList<ExerciseRoutinesViewModel> exercises = new ArrayList<>();
-    private int  exerciseRoutineSelectedIndex=-1;
     private String therapyId;
     TherapyRoutinesListAdapter rvAdapter;
     FragmentManager manager;
@@ -89,7 +89,7 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
             @Override
             public void onResponse(Call<ArrayList<ExerciseRoutinesViewModel>> call, Response<ArrayList<ExerciseRoutinesViewModel>> response) {
                 if (response.isSuccessful()) {
-                    exercises = response.body();
+                    exercises = orderListByBoolean(response.body());
                     rvAdapter = new TherapyRoutinesListAdapter(getActivity(),exercises,getFragmentManager(),TherapyExercisesFragment.this);
                     recyclerView.setAdapter(rvAdapter);
 
@@ -106,7 +106,6 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
 
     private void selectExerciseRoutinesItem(int position) {
         ExerciseRoutinesViewModel model = exercises.get(position);
-        exerciseRoutineSelectedIndex=position;
         if (model.isSelected()) {
             model.setSelected(false);
         } else {
@@ -175,6 +174,48 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
 
     }
 
+    private ArrayList<ExerciseRoutinesViewModel> orderListByBoolean(List<ExerciseRoutinesViewModel> exercises){
+        ArrayList<ExerciseRoutinesViewModel> orderedList =  new ArrayList<>();
+
+        for (ExerciseRoutinesViewModel routine:exercises) {
+            if(routine.getTherapy_id()!=null){
+                orderedList.add(routine);
+            }
+        }
+        for (ExerciseRoutinesViewModel routine:exercises) {
+            if(orderedList.indexOf(routine)==-1){
+                orderedList.add(routine);
+            }
+        }
+        return orderedList;
+    }
+
+    public  void deleteExercise(int position) {
+
+      if(exercises.get(position).getTherapy_id()!=null){
+      String therapyId  = exercises.get(position).getTherapy_id();
+      int routineId = exercises.get(position).getExercise_routine_id();
+
+        Call<TherapyExcerciseRoutineViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().deleteRoutine(therapyId,routineId);
+        call.enqueue(new Callback<TherapyExcerciseRoutineViewModel>() {
+            @Override
+            public void onResponse(Call<TherapyExcerciseRoutineViewModel> call, Response<TherapyExcerciseRoutineViewModel> response) {
+                if(response.isSuccessful())
+                {
+                    Toast.makeText(mContext, PreferencesData.therapyRoutineDeleteExerciseSucessMsg, Toast.LENGTH_LONG).show();
+                    listExercisesRoutines();
+                }
+            }
+            @Override
+            public void onFailure(Call<TherapyExcerciseRoutineViewModel> call, Throwable t) {
+                Toast.makeText(mContext, PreferencesData.therapyRoutineDeleteExerciseFailedMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+      }else{
+          Toast.makeText(mContext, PreferencesData.therapyRoutineDeleteExerciseWithoutSave, Toast.LENGTH_LONG).show();
+      }
+
+    }
 
     private void saveTherapyTotalDuration(){
         Call<TherapyViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().updateTherapyDuration(therapyId);
@@ -218,7 +259,7 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
                 redirectToTherapyExerciseRoutine(position);
                 break;
             case 3:
-                isDelete("Al borrar este elemento se borrará todo el detalle relacionado.");
+                isDelete(PreferencesData.therapyRoutineDeleteExercise,position);
                 break;
         }
     }
@@ -228,11 +269,12 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
         Bundle extras = new Bundle();
         extras.putString(PreferencesData.ExerciseRoutineUrl, exercises.get(position).getExercise_routine_url());
         extras.putInt(PreferencesData.ExerciseRoutineId, exercises.get(position).getExercise_routine_id());
+        extras.putString(PreferencesData.ExerciseRoutineName, exercises.get(position).getExercise_routine_name());
         fragment.setArguments(extras);
         loadFragment(fragment);
     }
 
-    public void isDelete(String alertMessage) {
+    public void isDelete(String alertMessage, final int  position) {
 
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -240,7 +282,7 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
 
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-
+                            deleteExercise(position);
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -251,7 +293,10 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setMessage(alertMessage)
-                .setPositiveButton("De acuerdo.", dialogClickListener).show();
+                .setPositiveButton("De acuerdo.", dialogClickListener)
+                .setNegativeButton("Cancelar.", dialogClickListener).show();
 
     }
+
+
 }
