@@ -27,7 +27,6 @@ public class TherapyRoutinesListAdapter extends RecyclerView.Adapter<TherapyRout
     public TherapyRoutinesListAdapter(Activity activity, List<ExerciseRoutinesViewModel> exercises, FragmentManager fragment, OnVideoClickListener onVideoClickListener) {
         this.exercises = exercises;
         this.activity = activity;
-        this.exercises = exercises;
         inflater = activity.getLayoutInflater();
         this.fragment=fragment;
         this.onVideoClickListener=onVideoClickListener;
@@ -45,13 +44,17 @@ public class TherapyRoutinesListAdapter extends RecyclerView.Adapter<TherapyRout
     @Override
     public void onBindViewHolder(@NonNull TherapyRoutinesListAdapter.TherapyRoutineListItemHolder therapyRoutineListItem, int i) {
         therapyRoutineListItem.tvExerciseName.setText(exercises.get(i).getExercise_routine_name());
-        if(exercises.get(i).isSelected())
+        if(exercises.get(i).isSelected() || !checkTherapyId(i))
         {
             therapyRoutineListItem.ivCheckbox.setBackgroundResource(R.drawable.checked);
         }else
         {
             therapyRoutineListItem.ivCheckbox.setBackgroundResource(R.drawable.unchecked);
         }
+    }
+
+    private boolean checkTherapyId(int position){
+       return exercises.get(position).getTherapy_id()==null;
     }
 
     @Override

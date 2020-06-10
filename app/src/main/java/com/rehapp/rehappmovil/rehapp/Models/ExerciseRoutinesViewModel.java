@@ -15,7 +15,7 @@ public class ExerciseRoutinesViewModel {
     private float intensity;
     private String observations;
     boolean isSelected;
-
+    private String therapy_id;
 
     public ExerciseRoutinesViewModel() { }
 
@@ -87,6 +87,9 @@ public class ExerciseRoutinesViewModel {
         this.exercise_routine_name = exercise_routine_name;
     }
 
+    public void setTherapy_id(String therapy_id) {
+        this.therapy_id = therapy_id;
+    }
 
     public String getHtml() {
         return html;
@@ -148,6 +151,7 @@ public class ExerciseRoutinesViewModel {
         return exercise_routine_url;
     }
 
-
-
+    public String getTherapy_id() {
+        return therapy_id;
+    }
 }

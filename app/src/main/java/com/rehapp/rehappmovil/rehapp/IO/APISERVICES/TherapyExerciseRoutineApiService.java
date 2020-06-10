@@ -1,5 +1,6 @@
 package com.rehapp.rehappmovil.rehapp.IO.APISERVICES;
 
+import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineDetailViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyExcerciseRoutineViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.TherapyViewModel;
@@ -17,8 +18,8 @@ import retrofit2.http.Path;
 public interface TherapyExerciseRoutineApiService {
 
 
-    @GET("therapyExerciseRoutines/showbyTherapy/{therapyId}")
-    Call<ArrayList<TherapyExcerciseRoutineViewModel>> getTherapyExerciseRoutines(@Path("therapyId") String therapyId);
+    @GET("therapyExerciseRoutines/showByTherapy/{therapyId}")
+    Call<ArrayList<ExerciseRoutinesViewModel>> getTherapyExerciseRoutines(@Path("therapyId") String therapyId);
 
     @GET("therapyExerciseRoutines/showRoutine/therapy/{therapyId}/routine/{routineId}/views/{views}")
     Call<TherapyExcerciseRoutineViewModel> getTherapyExerciseRoutine(@Path("therapyId") String therapyId,@Path("routineId") String routineId,@Path("views") String views);
@@ -26,9 +27,8 @@ public interface TherapyExerciseRoutineApiService {
     @GET("exerciseRoutineDetail/getTherapyDetailRoutine/list/{list}/detail/{routineDetailId}")
     Call<TherapyExcerciseRoutineDetailViewModel> getTherapyDetailRoutine(@Path("list") String listName, @Path("routineDetailId") String routineDetailId);
 
-
-    @POST("therapyExerciseRoutines/saveRoutines/{therapyId}")
-    Call<List<TherapyExcerciseRoutineViewModel>> saveTherapyExerciseRoutines(@Body List<TherapyExcerciseRoutineViewModel> therapyExcerciseRoutines, @Path("therapyId") String therapyId);
+    @POST("therapyExerciseRoutines/saveRoutines")
+    Call<List<TherapyExcerciseRoutineViewModel>> saveTherapyExerciseRoutines(@Body List<TherapyExcerciseRoutineViewModel> therapyExcerciseRoutines);
 
     @POST("therapyExerciseRoutines/updateRoutine/{therapyId}")
     Call<TherapyExcerciseRoutineViewModel> updateRoutine(@Body TherapyExcerciseRoutineViewModel therapyExcerciseRoutine, @Path("therapyId") String therapyId);
@@ -40,5 +40,9 @@ public interface TherapyExerciseRoutineApiService {
 
     @PUT("therapyExerciseRoutines/updateDurationFromTherapyExerciseRoutine/{therapyId}")
     Call<TherapyViewModel> updateTherapyDuration(@Path("therapyId") String therapyId);
+
+
+    @GET("exerciseRoutines")
+    Call<ArrayList<ExerciseRoutinesViewModel>> getExerciseRoutines();
 
 }

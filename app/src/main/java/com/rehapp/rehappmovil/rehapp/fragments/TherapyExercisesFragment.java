@@ -16,11 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.ExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.IO.APIADAPTERS.TherapyExerciseRoutineApiAdapter;
 import com.rehapp.rehappmovil.rehapp.Models.ExerciseRoutinesViewModel;
 import com.rehapp.rehappmovil.rehapp.Models.PreferencesData;
@@ -41,7 +38,6 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
 
     RecyclerView recyclerView;
     private ArrayList<ExerciseRoutinesViewModel> exercises = new ArrayList<>();
-    private ArrayList<TherapyExcerciseRoutineViewModel> therapyExerciseRoutines = new ArrayList<>();
     private int  exerciseRoutineSelectedIndex=-1;
     private String therapyId;
     TherapyRoutinesListAdapter rvAdapter;
@@ -80,17 +76,15 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
         return view;
     }
 
-    private void recoverySendData()
-    {
-    }
+    private void recoverySendData() {}
+
     private void loadData()
     {
         listExercisesRoutines();
     }
 
-
     private void listExercisesRoutines() {
-        Call<ArrayList<ExerciseRoutinesViewModel>> call = ExerciseRoutineApiAdapter.getApiService().getExerciseRoutines();
+        Call<ArrayList<ExerciseRoutinesViewModel>> call = TherapyExerciseRoutineApiAdapter.getApiService().getTherapyExerciseRoutines(therapyId);
         call.enqueue(new Callback<ArrayList<ExerciseRoutinesViewModel>>() {
             @Override
             public void onResponse(Call<ArrayList<ExerciseRoutinesViewModel>> call, Response<ArrayList<ExerciseRoutinesViewModel>> response) {
@@ -98,7 +92,6 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
                     exercises = response.body();
                     rvAdapter = new TherapyRoutinesListAdapter(getActivity(),exercises,getFragmentManager(),TherapyExercisesFragment.this);
                     recyclerView.setAdapter(rvAdapter);
-                    listTherapyExercisesRoutines();
 
                 } else {
                         Toast.makeText(mContext, PreferencesData.therapyDetailExerciseRoutineListMsg, Toast.LENGTH_LONG).show();
@@ -109,36 +102,6 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
                 Toast.makeText(mContext, PreferencesData.therapyDetailExerciseRoutineListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    private void listTherapyExercisesRoutines() {
-        try {
-            Call<ArrayList<TherapyExcerciseRoutineViewModel>> callTherapyExcerciseRoutines = TherapyExerciseRoutineApiAdapter.getApiService().getTherapyExerciseRoutines(therapyId);
-            callTherapyExcerciseRoutines.enqueue(new Callback<ArrayList<TherapyExcerciseRoutineViewModel>>() {
-                @Override
-                public void onResponse(Call<ArrayList<TherapyExcerciseRoutineViewModel>> call, Response<ArrayList<TherapyExcerciseRoutineViewModel>> response) {
-                    if (response.isSuccessful()) {
-
-                        therapyExerciseRoutines = response.body();
-                        for (TherapyExcerciseRoutineViewModel therapyExerciseRoutines:therapyExerciseRoutines ) {
-                            for (ExerciseRoutinesViewModel exercise:exercises )
-                            {
-                                if(exercise.getExercise_routine_id()==therapyExerciseRoutines.getExerciseRoutineId())
-                                {
-                                    selectExerciseRoutinesItem(exercises.indexOf(exercise));
-                                }
-                            }
-                        }
-                    }else if(response.raw().code()==404){
-                        Toast.makeText(mContext, PreferencesData.therapyDetailTherapyExerciseRoutinesEmptyListMsg, Toast.LENGTH_LONG).show();
-                    }
-                }
-                @Override
-                public void onFailure(Call<ArrayList<TherapyExcerciseRoutineViewModel>> call, Throwable t) {
-                    Toast.makeText(mContext, PreferencesData.therapyDetailTherapyExerciseRoutinesListMsg.concat(t.getMessage()), Toast.LENGTH_LONG).show();
-                }
-            });
-        }catch (Exception ex){}
     }
 
     private void selectExerciseRoutinesItem(int position) {
@@ -186,21 +149,15 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
         List<TherapyExcerciseRoutineViewModel> therapyExcerciseRoutines=new ArrayList<>();
         TherapyExcerciseRoutineViewModel therapyExcerciseRoutine;
         for (ExerciseRoutinesViewModel exerciseRoutine: exercises) {
-            if(exerciseRoutine.isSelected()) {
+            if(exerciseRoutine.isSelected() && exerciseRoutine.getTherapy_id()==null) {
                 therapyExcerciseRoutine = new TherapyExcerciseRoutineViewModel();
-                therapyExcerciseRoutine.setTherapyExcerciseRoutineIntensity(exerciseRoutine.getIntensity());
-                therapyExcerciseRoutine.setTherapyExcerciseRoutineDuration(exerciseRoutine.getDuration());
-                therapyExcerciseRoutine.setTherapy_excercise_routine_speed(exerciseRoutine.getSpeed());
-                therapyExcerciseRoutine.setPreconditions(exerciseRoutine.getPreconditions());
-                therapyExcerciseRoutine.setFrequency(exerciseRoutine.getFrequency());
-                therapyExcerciseRoutine.setTherapyExcerciseRoutineObservation(exerciseRoutine.getObservations());
                 therapyExcerciseRoutine.setTherapyId(Integer.parseInt(therapyId));
                 therapyExcerciseRoutine.setExerciseRoutineId(exerciseRoutine.getExercise_routine_id());
                 therapyExcerciseRoutines.add(therapyExcerciseRoutine);
             }
         }
 
-            Call<List<TherapyExcerciseRoutineViewModel>> call = TherapyExerciseRoutineApiAdapter.getApiService().saveTherapyExerciseRoutines(therapyExcerciseRoutines,therapyId);
+            Call<List<TherapyExcerciseRoutineViewModel>> call = TherapyExerciseRoutineApiAdapter.getApiService().saveTherapyExerciseRoutines(therapyExcerciseRoutines);
             call.enqueue(new Callback<List<TherapyExcerciseRoutineViewModel>>() {
                 @Override
                 public void onResponse(Call<List<TherapyExcerciseRoutineViewModel>> call, Response<List<TherapyExcerciseRoutineViewModel>> response) {
@@ -217,6 +174,7 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
             });
 
     }
+
 
     private void saveTherapyTotalDuration(){
         Call<TherapyViewModel> call = TherapyExerciseRoutineApiAdapter.getApiService().updateTherapyDuration(therapyId);
@@ -273,7 +231,6 @@ public class TherapyExercisesFragment extends Fragment implements TherapyRoutine
         fragment.setArguments(extras);
         loadFragment(fragment);
     }
-
 
     public void isDelete(String alertMessage) {
 
